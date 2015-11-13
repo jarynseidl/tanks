@@ -1,5 +1,6 @@
-// Import the users model
+// Import the games model
 require('./models/users');
+require('./models/games');
 
 // setup Express
 var app = require('./models/express.js');

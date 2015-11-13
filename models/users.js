@@ -1,12 +1,15 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Tanks = require('./tanks.js');
+
+var TankSchema = new Schema({
+    name: String,
+    code: String
+});
 
 var UserSchema = new Schema({
-    username: String,
+    userName: String,
     password: String,
-    //tanks: [Tanks]
-    tanks: [{name: String, code: String}]
+    tanks: [TankSchema]
 });
 
 mongoose.model('Users', UserSchema);
