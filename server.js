@@ -17,7 +17,9 @@ var db = mongoose.connection;
 db.on('error', function () {
     throw new Error('unable to connect to database at ' + mongoUri);
 });
-console.log("Connected to mongodb");
+db.once('open', function () {
+    console.log("Connected to mongodb");
+});
 
 // start the server
 var server = app.listen(3000, function() {
