@@ -14,5 +14,5 @@ module.exports = function(app) {
     app.get('/api/users/:userid/tanks/:tankid', tanks.findById);
     app.post('/api/users/:userid/tanks', jsonParser, tanks.add);
     app.put('/api/users/:userid/tanks/:tankid', jsonParser, tanks.update);
-    app.get('/api/users/:userid/tanks/:tankid', tanks.delete);
+    app.delete('/api/users/:userid/tanks/:tankid', tanks.delete);
 }

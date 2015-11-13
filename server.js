@@ -11,7 +11,7 @@ routes(app);
 // setup Mongo connection
 var mongoose = require('mongoose');
 var fs = require('fs');
-var mongoUri = 'mongodb://127.0.0.1:27017/tanks';
+var mongoUri = 'mongodb://127.0.0.1:27018/tanks';
 mongoose.connect(mongoUri);
 var db = mongoose.connection;
 db.on('error', function () {

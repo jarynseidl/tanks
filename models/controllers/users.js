@@ -8,12 +8,14 @@ exports.findAll = function(req, res) {
         return res.send(results);
     });
 };
+
 exports.findById = function(req, res) {
     var id = req.params.id;
     Users.findOne({'_id':id}, function(err, result) {
         return res.send(result);
     });
 };
+
 exports.add = function(req, res) {
     console.log(req.body);
     Users.create(req.body, function (err, user) {
@@ -21,6 +23,7 @@ exports.add = function(req, res) {
         return res.send(user);
     });
 };
+
 exports.update = function(req, res) {
     var id = req.params.id;
     var updates = req.body;
@@ -28,10 +31,10 @@ exports.update = function(req, res) {
     Users.update({"_id":id}, req.body,
         function (err, numberAffected) {
             if (err) return console.log(err);
-            console.log('Updated %d users', parseInt(numberAffected));
             return res.sendStatus(202);
         });
 };
+
 exports.delete = function(req, res) {
     var id = req.params.id;
     Users.remove({'_id':id}, function(result) {
