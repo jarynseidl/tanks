@@ -15,4 +15,12 @@ module.exports = function(app) {
     app.post('/api/users/:userid/tanks', jsonParser, tanks.add);
     app.put('/api/users/:userid/tanks/:tankid', jsonParser, tanks.update);
     app.delete('/api/users/:userid/tanks/:tankid', tanks.delete);
+
+    var games = require('../controllers/games.js');
+    app.get('/api/games/', games.findAll);
+    app.get('/api/games/:gameid', games.findById);
+    app.post('/api/games', games.add);
+    app.post('/api/games/:gameid/tanks', games.addTank);
+    app.get('/api/games/:gameid/tanks', games.listTanks);
+    app.delete('/api/games/:gameid/tanks/:tankid', games.delete);
 }

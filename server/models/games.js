@@ -25,9 +25,11 @@ var GameTank = new Schema({
     tankName: String
 });
 
-var Game = new Schema({
+var GameSchema = new Schema({
     log: {messages: [GameMessage]},
     users: [GameUser],
     tanks: [GameTank],
     board: [[String]],
 })
+
+mongoose.model('Games', GameSchema);
