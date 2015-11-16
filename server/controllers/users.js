@@ -16,6 +16,13 @@ exports.findById = function(req, res) {
     });
 };
 
+exports.findByUsername = function(req, res) {
+    var username = req.params.username;
+    Users.findOne({'username': username}, function(err, result) {
+        return res.send(result);
+    });
+};
+
 exports.add = function(req, res) {
     Users.create(req.body, function (err, user) {
         if (err) return console.log(err);

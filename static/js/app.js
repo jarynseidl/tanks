@@ -23523,13 +23523,165 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":76}],209:[function(require,module,exports){
-// For ReactRouter 1.0.0
-//var Router = ReactRouter.Router;
 var Router = require('react-router').Router
 var Route = require('react-router').Route
 var Link = require('react-router').Link
-var Navigation = require('react-router').Navigation
+var Register = require('./register.js');
+var User = require('./user.js');
+var Home = require('./home.js');
 
+var App = React.createClass({displayName: "App",
+  render: function() {
+    return (
+      React.createElement("div", null, 
+        React.createElement("div", {className: "master"}, 
+            React.createElement("nav", {className: "navbar navbar-default"}, 
+                  React.createElement("div", {className: "container-fluid"}, 
+                    React.createElement("div", {className: "navbar-header"}, 
+                      React.createElement("button", {type: "button", className: "navbar-toggle collapsed", "data-toggle": "collapse", "data-target": "#bs-navbar", "aria-expanded": "false"}, 
+                        React.createElement("span", {className: "sr-only"}, "Toggle navigation"), 
+                        React.createElement("span", {className: "icon-bar"}), 
+                        React.createElement("span", {className: "icon-bar"}), 
+                        React.createElement("span", {className: "icon-bar"})
+                      ), 
+                      React.createElement("a", {className: "navbar-brand", href: "#"}, 
+                        React.createElement("img", {alt: "Brand", src: "/images/brand.png", height: "24"})
+                      )
+                    ), 
+
+                    React.createElement("div", {className: "collapse navbar-collapse", id: "bs-navbar"}, 
+                      React.createElement("ul", {className: "nav navbar-nav"}, 
+                        React.createElement("li", null, React.createElement(Link, {to: "home"}, "Home")), 
+                        React.createElement("li", null, React.createElement(Link, {to: "register"}, "Register"))
+                      )
+                    )
+                  )
+                )
+        ), 
+        React.createElement("div", {className: "mainContent"}, 
+          this.props.children
+        )
+      )
+    );
+  }
+}) ;
+
+var routes = (
+        React.createElement(Router, null, 
+            React.createElement(Route, {name: "app", path: "/", component: App}, 
+                React.createElement(Route, {name: "register", path: "/register", component: Register}), 
+                React.createElement(Route, {name: "user", path: "/user/:userId", component: User}), 
+                React.createElement(Route, {path: "*", component: Home})
+            )
+        )
+        );
+
+ReactDOM.render(routes, document.getElementById('appContainer'));
+
+},{"./home.js":210,"./register.js":212,"./user.js":213,"react-router":46}],210:[function(require,module,exports){
+var Login = require('./login.js');
+var Register = require('./register.js');
+
+var Home = React.createClass({displayName: "Home",
+    render: function() {
+        return (
+            React.createElement("div", null, 
+                React.createElement("h1", null, "Home"), 
+                React.createElement(Login, {history: this.props.history}), 
+                React.createElement(Register, {history: this.props.history})
+            )
+            );
+    }
+});
+
+module.exports = Home;
+
+},{"./login.js":211,"./register.js":212}],211:[function(require,module,exports){
+var Login = React.createClass({displayName: "Login",
+    handleSubmit: function (e) {
+                      e.preventDefault();
+                      var username = this.refs.username.value.trim();
+                      $.ajax({
+                          url: '/api/users/searchByUsername/' + username,
+                          contentType: 'application/json',
+                          type: 'GET',
+                          success: function(data) {
+                              this.props.history.pushState(null, '/user/' + data._id);
+                          }.bind(this),
+                          error: function(xhr, status, err) {
+                                     // Todo: handle no user exception here
+                                 }.bind(this)
+                      });
+                  },
+    render: function() {
+                return (
+                    React.createElement("div", {className: "registerUser"}, 
+                        React.createElement("h1", null, "Login"), 
+                        React.createElement("form", {onSubmit: this.handleSubmit}, 
+                            React.createElement("div", {className: "input-group"}, 
+                                React.createElement("span", {className: "input-group-addon"}, "Username:"), 
+                                React.createElement("input", {ref: "username", type: "text", className: "form-control"})
+                            ), 
+                            React.createElement("div", {className: "input-group"}, 
+                                React.createElement("span", {className: "input-group-addon"}, "Password:"), 
+                                React.createElement("input", {ref: "password", type: "password", className: "form-control"})
+                            ), 
+                            React.createElement("div", {className: "input-group"}, 
+                                React.createElement("input", {type: "submit", className: "btn btn-primary", value: "Login"})
+                            )
+                        )
+                    )
+                    );
+            }
+});
+module.exports = Login;
+
+},{}],212:[function(require,module,exports){
+var Register = React.createClass({displayName: "Register",
+    handleSubmit: function(e) {
+                      e.preventDefault();
+                      $.ajax({
+                          url: '/api/users/',
+                          contentType: 'application/json',
+                          type: 'POST',
+                          data: JSON.stringify({
+                              'username': this.refs.username.value.trim(),
+                              'password': this.refs.password.value.trim()
+                          }),
+                          processData: false,
+                          success: function(data) {
+                              this.props.history.pushState(null, '/user/' + data._id);
+                          }.bind(this),
+                          error: function(xhr, status, err) {
+                              console.error('/api/users/', status, err.toString());
+                          }.bind(this)
+                      });
+                  },
+    render: function() { 
+                return (
+                        React.createElement("div", {className: "registerUser"}, 
+                            React.createElement("h1", null, "Register User"), 
+                            React.createElement("form", {onSubmit: this.handleSubmit}, 
+                                React.createElement("div", {className: "input-group"}, 
+                                    React.createElement("span", {className: "input-group-addon"}, "Username:"), 
+                                    React.createElement("input", {ref: "username", type: "text", className: "form-control"})
+                                ), 
+                                React.createElement("div", {className: "input-group"}, 
+                                    React.createElement("span", {className: "input-group-addon"}, "Password:"), 
+                                    React.createElement("input", {ref: "password", type: "password", className: "form-control"})
+                                ), 
+                                React.createElement("div", {className: "input-group"}, 
+                                    React.createElement("input", {type: "submit", className: "btn btn-primary", value: "Register"})
+                                )
+                            )
+                        )
+                       )
+            }
+});
+
+module.exports = Register;
+
+},{}],213:[function(require,module,exports){
 var User = React.createClass({displayName: "User",
     getInitialState: function() {
         return {
@@ -23555,112 +23707,6 @@ var User = React.createClass({displayName: "User",
             )}
 });
 
+module.exports = User;
 
-                          //dataType: 'json',
-var Register = React.createClass({displayName: "Register",
-    handleSubmit: function(e) {
-                      e.preventDefault();
-                      $.ajax({
-                          url: '/api/users/',
-                          contentType: 'application/json',
-                          type: 'POST',
-                          data: JSON.stringify({
-                              'username': this.refs.username.value.trim(),
-                              'password': this.refs.password.value.trim()
-                          }),
-                          processData: false,
-                          success: function(data) {
-                              this.props.history.pushState({}, '/user/' + data._id, {});
-                          }.bind(this),
-                          error: function(xhr, status, err) {
-                              console.error('/api/users/', status, err.toString());
-                          }.bind(this)
-                      });
-                      this.props.history.pushState({}, '/', {});
-                      //Navigation.transitionTo('/crazylady');
-                  },
-    render: function() { 
-                return (
-                        React.createElement("div", {className: "registerUser"}, 
-                            React.createElement("h1", null, "Register User"), 
-                            React.createElement("form", {onSubmit: this.handleSubmit}, 
-                                React.createElement("div", {className: "input-group"}, 
-                                    React.createElement("span", {className: "input-group-addon"}, "Username:"), 
-                                    React.createElement("input", {ref: "username", type: "text", className: "form-control"})
-                                ), 
-                                React.createElement("div", {className: "input-group"}, 
-                                    React.createElement("span", {className: "input-group-addon"}, "Password:"), 
-                                    React.createElement("input", {ref: "password", type: "password", className: "form-control"})
-                                ), 
-                                React.createElement("div", {className: "input-group"}, 
-                                    React.createElement("input", {type: "submit", className: "btn btn-primary", value: "Register"})
-                                )
-                            )
-                        )
-                       )
-            }
-});
-
-var App = React.createClass({displayName: "App",
-  render: function() {
-    return (
-      React.createElement("div", null, 
-        React.createElement("div", {className: "master"}, 
-            React.createElement("nav", {className: "navbar navbar-default"}, 
-                  React.createElement("div", {className: "container-fluid"}, 
-                    React.createElement("div", {className: "navbar-header"}, 
-                      React.createElement("button", {type: "button", className: "navbar-toggle collapsed", "data-toggle": "collapse", "data-target": "#bs-navbar", "aria-expanded": "false"}, 
-                        React.createElement("span", {className: "sr-only"}, "Toggle navigation"), 
-                        React.createElement("span", {className: "icon-bar"}), 
-                        React.createElement("span", {className: "icon-bar"}), 
-                        React.createElement("span", {className: "icon-bar"})
-                      ), 
-                      React.createElement("a", {className: "navbar-brand", href: "#"}, 
-                        React.createElement("img", {alt: "Brand", src: "/images/brand.png", height: "24"})
-                      )
-                    ), 
-
-                    React.createElement("div", {className: "collapse navbar-collapse", id: "bs-navbar"}, 
-                      React.createElement("ul", {className: "nav navbar-nav"}, 
-                        React.createElement("li", null, React.createElement(Link, {to: "home"}, "Home")), 
-                        React.createElement("li", null, React.createElement(Link, {to: "page"}, "Page")), 
-                        React.createElement("li", null, React.createElement(Link, {to: "register"}, "Register"))
-                      )
-                    )
-                  )
-                )
-        ), 
-        React.createElement("div", {className: "mainContent"}, 
-          this.props.children
-        )
-      )
-    );
-  }
-}) ;
-
-var Page = React.createClass({displayName: "Page",
-    render: function() {
-        return (React.createElement("h1", null, "Page"));
-    }
-});
-
-var Home= React.createClass({displayName: "Home",
-    render: function() {
-        return (React.createElement("h1", null, "Home"));
-    }
-});
-
-var routes = (
-        React.createElement(Router, null, 
-            React.createElement(Route, {name: "app", path: "/", component: App}, 
-                React.createElement(Route, {name: "register", path: "/register", component: Register}), 
-                React.createElement(Route, {name: "page", path: "/page", component: Page}), 
-                React.createElement(Route, {name: "user", path: "/user/:userId", component: User}), 
-                React.createElement(Route, {path: "*", component: Home})
-            )
-        )
-        );
-
-ReactDOM.render(routes, document.getElementById('appContainer'));
-
-},{"react-router":46}]},{},[209]);
+},{}]},{},[209]);

@@ -5,6 +5,7 @@ module.exports = function(app) {
     var users = require('../controllers/users.js');
     app.get('/api/users', users.findAll);
     app.get('/api/users/:id', users.findById);
+    app.get('/api/users/searchByUsername/:username', users.findByUsername);
     app.post('/api/users', jsonParser, users.add);
     app.put('/api/users/:id', jsonParser, users.update);
     app.delete('/api/users/:id', users.delete);
