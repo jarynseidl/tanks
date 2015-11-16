@@ -7,7 +7,7 @@ var TankSchema = new Schema({
 });
 
 var UserSchema = new Schema({
-    userName: String,
+    username: String,
     password: String,
     tanks: [TankSchema]
 });

@@ -17,7 +17,15 @@
   },
   "homepage": "https://github.com/nathand8/tanks#readme",
   "dependencies": {
+    "browserify": "^12.0.1",
     "express": "^4.13.3",
-    "mongoose": "^4.2.5"
+    "gulp-batch": "^1.0.5",
+    "gulp-watch": "^4.3.5",
+    "history": "^1.13.1",
+    "mongoose": "^4.2.5",
+    "react": "^0.14.2",
+    "react-router": "^1.0.0",
+    "reactify": "^1.1.1",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
