@@ -4,14 +4,15 @@
   "description": "Tank game for CS 360",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nathand8/tanks.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "BSD",
   "bugs": {
     "url": "https://github.com/nathand8/tanks/issues"
   },
@@ -31,5 +32,8 @@
     "reactify": "^1.1.1",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1"
+  },
+  "devDependencies": {
+    "gulp-browserify": "~0.5.1"
   }
 }

@@ -4,6 +4,8 @@ var Link = require('react-router').Link
 var Register = require('./register.js');
 var User = require('./user.js');
 var Home = require('./home.js');
+var ArenaHome = require('./arena_home.js');
+var UploadTank = require('./upload_tank.js');
 
 var App = React.createClass({
   render: function() {
@@ -28,6 +30,7 @@ var App = React.createClass({
                       <ul className="nav navbar-nav">
                         <li><Link to="home">Home</Link></li>
                         <li><Link to="register">Register</Link></li>
+                        <li><Link to="arena_home">Arena Home</Link></li>
                       </ul>
                     </div>
                   </div>
@@ -46,6 +49,8 @@ var routes = (
             <Route name="app" path="/" component={App}>
                 <Route name="register" path="/register" component={Register} />
                 <Route name="user" path="/user/:userId" component={User} />
+                <Route name ="arena_home" path="/arena_home" component={ArenaHome} />
+                <Route name ="upload_tank" path="/upload_tank" component={UploadTank} />
                 <Route path="*" component={Home} />
             </Route>
         </Router>
