@@ -6,6 +6,8 @@ var User = require('./user.js');
 var Home = require('./home.js');
 var ArenaHome = require('./arena_home.js');
 var UploadTank = require('./upload_tank.js');
+var GetStarted = require('./get_started.js');
+var YourGames = require('./your_games.js')
 
 var App = React.createClass({
   render: function() {
@@ -51,6 +53,8 @@ var routes = (
                 <Route name="user" path="/user/:userId" component={User} />
                 <Route name ="arena_home" path="/arena_home" component={ArenaHome} />
                 <Route name ="upload_tank" path="/upload_tank" component={UploadTank} />
+                <Route name ="get_started" path="/get_started" component={GetStarted} />
+                <Route name ="your_games" path="/your_games" component={YourGames} />
                 <Route path="*" component={Home} />
             </Route>
         </Router>

@@ -1,10 +1,19 @@
 var ArenaHome = React.createClass({
-	handleClick: function (e) {
+	addTank: function (e) {
                       e.preventDefault();
-                      console.log(e)
                       $.ajax({
                           success: function(data) {
                               this.props.history.pushState(null, '/upload_tank');
+                          }.bind(this),
+                          error: function(xhr, status, err) {
+                                 }.bind(this)
+                      });
+                  },
+    seeGames: function (e) {
+                      e.preventDefault();
+                      $.ajax({
+                          success: function(data) {
+                              this.props.history.pushState(null, '/your_games');
                           }.bind(this),
                           error: function(xhr, status, err) {
                                  }.bind(this)
@@ -14,27 +23,22 @@ var ArenaHome = React.createClass({
         return (
             <div className="registerUser">
                 <h1>Arena Home</h1>
-                <form onClick={this.handleClick}>
+                <form onClick={this.addTank}>
                     <div className="input-group">
                         <input type="submit" className="btn btn-primary" value="Upload a New Tank" />
                     </div>
                 </form>
-                <form onClick={this.handleClick}>
+                <form onClick={this.addTank}>
                     <div className="input-group">
                         <input type="submit" className="btn btn-primary" value="Join a Fight" />
                     </div>
                 </form>
-                <form onClick={this.handleClick}>
+                <form onClick={this.seeGames}>
                     <div className="input-group">
                         <input type="submit" className="btn btn-primary" value="See Your Games" />
                     </div>
                 </form>
-                <form onClick={this.handleClick}>
-                    <div className="input-group">
-                        <input type="submit" className="btn btn-primary" value="See Current Game" />
-                    </div>
-                </form>
-                <form onClick={this.handleClick}>
+                <form onClick={this.addTank}>
                     <div className="input-group">
                         <input type="submit" className="btn btn-primary" value="Edit Your Tanks" />
                     </div>
