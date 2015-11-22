@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var fs = require('fs');
-var mongoUri = 'mongodb://127.0.0.1:27018/tanks';
+var mongoUri = 'mongodb://127.0.0.1:27017/tanks';
 mongoose.connect(mongoUri);
 var db = mongoose.connection;
 db.on('error', function () {
@@ -9,3 +9,8 @@ db.on('error', function () {
 db.once('open', function () {
     console.log("Connected to mongodb");
 });
+
+
+
+
+

@@ -1,5 +1,6 @@
 var Router = require('react-router').Router
 var Route = require('react-router').Route
+var DefaultRoute = require('react-router').DefaultRoute
 var Link = require('react-router').Link
 var Register = require('./register.js');
 var User = require('./user.js');

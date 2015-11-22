@@ -10,7 +10,7 @@ var routes = require('./server/configs/routes');
 routes(app);
 
 // setup Mongo connection
-//require('./server/configs/mongo');
+require('./server/configs/mongo');
 
 // start the server
 var server = app.listen(3000, function() {

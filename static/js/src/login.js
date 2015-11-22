@@ -1,17 +1,16 @@
+var Auth = require('./authentication.js');
+
 var Login = React.createClass({
     handleSubmit: function (e) {
                       e.preventDefault();
                       var username = this.refs.username.value.trim();
-                      $.ajax({
-                          url: '/api/users/searchByUsername/' + username,
-                          contentType: 'application/json',
-                          type: 'GET',
-                          success: function(data) {
+                      var password = this.refs.password.value.trim();
+                      Auth.register(username, password, function(success) {
+                          if (success) {
                               this.props.history.pushState(null, '/user/' + data._id);
-                          }.bind(this),
-                          error: function(xhr, status, err) {
-                                     // Todo: handle no user exception here
-                                 }.bind(this)
+                          } else {
+                              alert('I don\'t think you be gottin gud cradenshals. Why don\'t u try dat one mor time.');
+                          }
                       });
                   },
     render: function() {

@@ -1,22 +1,19 @@
+var Auth = require('./authentication.js');
+
 var Register = React.createClass({
     handleSubmit: function(e) {
                       e.preventDefault();
-                      $.ajax({
-                          url: '/api/users/',
-                          contentType: 'application/json',
-                          type: 'POST',
-                          data: JSON.stringify({
-                              'username': this.refs.username.value.trim(),
-                              'password': this.refs.password.value.trim()
-                          }),
-                          processData: false,
-                          success: function(data) {
-                              this.props.history.pushState(null, '/user/' + data._id);
-                          }.bind(this),
-                          error: function(xhr, status, err) {
-                              console.error('/api/users/', status, err.toString());
-                          }.bind(this)
-                      });
+                      var username = this.refs.username.value.trim();
+                      var password = this.refs.password.value.trim();
+                      Auth.register(username, password, function(success) {
+                          debugger;
+                          if (success) {
+                              debugger;
+                              this.props.history.pushState(null, '/user/');
+                          } else {
+                              alert('oops there was kind of a little problem with you registering. Maybe try again?');
+                          }
+                      }.bind(this));
                   },
     render: function() { 
                 return (

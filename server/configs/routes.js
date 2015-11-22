@@ -24,4 +24,8 @@ module.exports = function(app) {
     app.post('/api/games/:gameid/tanks', games.addTank);
     app.get('/api/games/:gameid/tanks', games.listTanks);
     app.delete('/api/games/:gameid/tanks/:tankid', games.delete);
+
+    var auth = require('../controllers/authentication.js');
+    app.post('/api/users/register', jsonParser, auth.register);
+    app.post('/api/users/login', jsonParser, auth.login);
 }
