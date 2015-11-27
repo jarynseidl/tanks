@@ -19,8 +19,11 @@ exports.findById = function(req, res) {
 };
 
 exports.add = function(req, res) {
-    var userid = req.params.userid;
-    Users.findOne({'_id':userid}, function(err, user) {
+    var username = req.params.username;
+    console.log("Adding a tank");
+    console.log(username);
+    console.log(req.body);
+    Users.findOne({'username':username}, function(err, user) {
         user.tanks.push(req.body);
         user.save(function (err) {
             if (!err) return res.sendStatus(202);
