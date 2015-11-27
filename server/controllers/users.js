@@ -3,6 +3,7 @@ var exports = module.exports = {};
 var mongoose = require('mongoose');
 var Users = mongoose.model('Users');
 
+/*
 exports.findAll = function(req, res) {
     Users.find({}, function(err, results) {
         return res.send(results);
@@ -10,12 +11,12 @@ exports.findAll = function(req, res) {
 };
 
 exports.findById = function(req, res) {
-    var id = req.params.id;
-    Users.findOne({'_id':id}, function(err, result) {
+    var username = req.params.username;
+    Users.findOne({'username':username}, function(err, result) {
         return res.send(result);
     });
 };
-
+*/
 exports.findByUsername = function(req, res) {
     var username = req.params.username;
     Users.findOne({'username': username}, function(err, result) {
@@ -23,6 +24,7 @@ exports.findByUsername = function(req, res) {
     });
 };
 
+/*
 exports.add = function(req, res) {
     Users.create(req.body, function (err, user) {
         if (err) return console.log(err);
@@ -31,10 +33,10 @@ exports.add = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    var id = req.params.id;
+    var username = req.params.username;
     var updates = req.body;
 
-    Users.update({"_id":id}, req.body,
+    Users.update({"username":username}, req.body,
         function (err, numberAffected) {
             if (err) return console.log(err);
             return res.sendStatus(202);
@@ -42,8 +44,9 @@ exports.update = function(req, res) {
 };
 
 exports.delete = function(req, res) {
-    var id = req.params.id;
-    Users.remove({'_id':id}, function(result) {
+    var username = req.params.username;
+    Users.remove({'username':username}, function(result) {
         return res.send(result);
     });
 };
+*/

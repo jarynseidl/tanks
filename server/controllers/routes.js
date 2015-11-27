@@ -3,12 +3,7 @@ var jsonParser = bodyParser.json()
 
 module.exports = function(app) {
     var users = require('./users.js');
-    app.get('/api/users', users.findAll);
-    app.get('/api/users/:username', users.findById);
-    app.get('/api/users/searchByUsername/:username', users.findByUsername);
-    app.post('/api/users', jsonParser, users.add);
-    app.put('/api/users/:username', jsonParser, users.update);
-    app.delete('/api/users/:username', users.delete);
+    app.get('/api/users/:username', users.findByUsername);
 
     var tanks = require('./tanks.js');
     app.get('/api/users/:username/tanks', tanks.findAll);

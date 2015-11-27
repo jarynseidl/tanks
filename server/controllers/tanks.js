@@ -4,25 +4,22 @@ var mongoose = require('mongoose');
 var Users = mongoose.model('Users');
 
 exports.findAll = function(req, res) {
-    var userid = req.params.userid;
-    Users.findOne({'_id':userid}, function(err, user) {
+    var username = req.params.username;
+    Users.findOne({'username':username}, function(err, user) {
         return res.send(user.tanks);
     });
 };
 
 exports.findById = function(req, res) {
-    var userid = req.params.userid;
+    var username = req.params.username;
     var tankid = req.params.tankid;
-    Users.findOne({'_id':userid}, function(err, user) {
+    Users.findOne({'username':username}, function(err, user) {
         return res.send(user.tanks.id(tankid));
     });
 };
 
 exports.add = function(req, res) {
     var username = req.params.username;
-    console.log("Adding a tank");
-    console.log(username);
-    console.log(req.body);
     Users.findOne({'username':username}, function(err, user) {
         user.tanks.push(req.body);
         user.save(function (err) {
@@ -32,9 +29,9 @@ exports.add = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    var userid = req.params.userid;
+    var username = req.params.username;
     var tankid = req.params.tankid;
-    Users.findById(userid, function(err, user) {
+    Users.findById(username, function(err, user) {
         var tank = user.tanks.id(tankid);
 
         Object.keys(req.body).forEach(function(key){
@@ -49,9 +46,9 @@ exports.update = function(req, res) {
 };
 
 exports.delete = function(req, res) {
-    var userid = req.params.userid;
+    var username = req.params.username;
     var tankid = req.params.tankid;
-    Users.findById(userid, function(err, user) {
+    Users.findById(username, function(err, user) {
         if (err) return console.log(err);
         user.tanks.pull(tankid);
         user.save( function(err) {
