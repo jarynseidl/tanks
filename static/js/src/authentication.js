@@ -56,6 +56,7 @@ var auth = {
             success: function(res) {
                 // on success, store a login token
                 localStorage.token = res.token;
+                localStorage.username = res.username;
                 debugger;
                 if (cb)
                     cb(true);

@@ -8,7 +8,8 @@ var Home = require('./home.js');
 var ArenaHome = require('./arena_home.js');
 var UploadTank = require('./upload_tank.js');
 var GetStarted = require('./get_started.js');
-var YourGames = require('./your_games.js')
+var YourGames = require('./your_games.js');
+var Logout = require('./logout.js');
 
 var App = React.createClass({
   render: function() {
@@ -34,6 +35,9 @@ var App = React.createClass({
                         <li><Link to="home">Home</Link></li>
                         <li><Link to="register">Register</Link></li>
                         <li><Link to="arena_home">Arena Home</Link></li>
+                      </ul>
+                      <ul className="nav navbar-nav navbar-right">
+                        <li><Logout history={this.props.history} /></li>
                       </ul>
                     </div>
                   </div>
