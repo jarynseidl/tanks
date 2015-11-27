@@ -18,8 +18,8 @@ gulp.task('browserify', function() {
         .bundle()
         //Pass desired output filename to vinyl-source-stream
         .pipe(source('./static/js/app.js'))
-        .pipe(buffer()) // prepare to be minified
-        .pipe(uglify()) // minify
+//        .pipe(buffer()) // prepare to be minified
+//        .pipe(uglify()) // minify
         // Start piping stream to tasks!
         .pipe(gulp.dest('./'));
 });

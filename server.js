@@ -6,7 +6,7 @@ require('./server/models/games');
 var app = require('./server/configs/express');
 
 // setup API
-var routes = require('./server/configs/routes');
+var routes = require('./server/controllers/routes');
 routes(app);
 
 // setup Mongo connection
