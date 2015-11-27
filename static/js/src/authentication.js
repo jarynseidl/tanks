@@ -15,6 +15,7 @@ var auth = {
             success: function(res) {
                          debugger;
                 localStorage.token = res.token;
+                localStorage.username = res.username;
                 debugger;
                 if (cb)
                     cb(true);
@@ -23,6 +24,7 @@ var auth = {
             error: function(xhr, status, err) {
                 // if there is an error, remove any login token
                 delete localStorage.token;
+                delete localStorage.username;
                 if (cb)
                     cb(false);
                 this.onChange(false);
@@ -72,9 +74,13 @@ var auth = {
     getToken: function() {
         return localStorage.token;
     },
+    getUsername: function() {
+        return localStorage.username;
+    },
     // logout the user, call the callback when complete
     logout: function(cb) {
         delete localStorage.token;
+        delete localStorage.username;
         if (cb) cb();
         this.onChange(false);
     },

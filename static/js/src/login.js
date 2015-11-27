@@ -5,7 +5,7 @@ var Login = React.createClass({
                       e.preventDefault();
                       var username = this.refs.username.value.trim();
                       var password = this.refs.password.value.trim();
-                      Auth.register(username, password, function(success) {
+                      Auth.login(username, password, function(success) {
                           if (success) {
                               this.props.history.pushState(null, '/user/' + data._id);
                           } else {
