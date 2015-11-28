@@ -14,9 +14,10 @@ module.exports = function(app) {
 
     var games = require('./games.js');
     app.get('/api/games/', games.findAll);
+    app.get('/api/games/open', games.listOpen);
     app.get('/api/games/:gameid', games.findById);
-    app.post('/api/games', games.add);
-    app.post('/api/games/:gameid/tanks', games.addTank);
+    app.post('/api/games', jsonParser, games.add);
+    app.post('/api/games/:gameid/tanks', jsonParser, games.addTank);
     app.get('/api/games/:gameid/tanks', games.listTanks);
     app.delete('/api/games/:gameid/tanks/:tankid', games.delete);
 

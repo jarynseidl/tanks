@@ -9,6 +9,17 @@ exports.findAll = function (req, res) {
     });
 };
 
+exports.listOpen = function (req, res) {
+    Games.find({ 
+        $or: [ 
+            { $where: "this.tankIds.length < 4" }, 
+            {tankIds: {$exists: false}}
+    ]}, 
+    function(err, results) {
+        return res.send(results);
+    });
+};
+
 exports.findById = function (req, res) {
     var gameid = req.params.gameid;
     Games.findById(gameid, function(err, result) {
@@ -26,7 +37,7 @@ exports.add = function (req, res) {
 exports.addTank = function (req, res) {
     var gameid = req.params.gameid;
     Games.findById(gameid, function(err, game) {
-        game.tanks.push(req.body);
+        game.tankIds.push(req.body.tankId);
         game.save(function (err) {
             if (err) return console.log(err);
             return res.sendStatus(202);

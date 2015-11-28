@@ -1,3 +1,5 @@
+var Auth = require('./authentication.js');
+
 var ArenaHome = React.createClass({
 	addTank: function (e) {
                       e.preventDefault();
@@ -19,16 +21,29 @@ var ArenaHome = React.createClass({
                                  }.bind(this)
                       });
                   },
+    userProfile: function (e) {
+                     e.preventDefault();
+                     this.props.history.pushState(null, '/user/' + Auth.getUsername());
+                 },
+    joinGames: function (e) {
+                     e.preventDefault();
+                     this.props.history.pushState(null, '/games');
+                 },
     render: function() {
         return (
             <div className="registerUser">
                 <h1>Arena Home</h1>
+                <form onClick={this.userProfile}>
+                    <div className="input-group">
+                        <input type="submit" className="btn btn-primary" value="View your tanks" />
+                    </div>
+                </form>
                 <form onClick={this.addTank}>
                     <div className="input-group">
                         <input type="submit" className="btn btn-primary" value="Upload a New Tank" />
                     </div>
                 </form>
-                <form onClick={this.addTank}>
+                <form onClick={this.joinGames}>
                     <div className="input-group">
                         <input type="submit" className="btn btn-primary" value="Join a Fight" />
                     </div>

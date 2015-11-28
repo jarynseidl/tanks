@@ -10,6 +10,7 @@ var UploadTank = require('./upload_tank.js');
 var GetStarted = require('./get_started.js');
 var YourGames = require('./your_games.js');
 var Logout = require('./logout.js');
+var OpenGames = require('./open_games.js');
 
 var App = React.createClass({
   render: function() {
@@ -60,6 +61,7 @@ var routes = (
                 <Route name ="upload_tank" path="/upload_tank" component={UploadTank} />
                 <Route name ="get_started" path="/get_started" component={GetStarted} />
                 <Route name ="your_games" path="/your_games" component={YourGames} />
+                <Route name ="open_games" path="/games" component={OpenGames} />
                 <Route path="*" component={Home} />
             </Route>
         </Router>

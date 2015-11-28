@@ -26,9 +26,11 @@ var GameTank = new Schema({
 });
 
 var GameSchema = new Schema({
+    name: String,
     log: {messages: [GameMessage]},
     users: [GameUser],
     tanks: [GameTank],
+    tankIds: [ObjectId],
     board: [[String]],
 })
 
