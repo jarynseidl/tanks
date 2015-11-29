@@ -11,6 +11,7 @@ var GetStarted = require('./get_started.js');
 var YourGames = require('./your_games.js');
 var Logout = require('./logout.js');
 var OpenGames = require('./open_games.js');
+var WatchGame = require('./watch_game.js');
 
 var App = React.createClass({
   render: function() {
@@ -62,6 +63,7 @@ var routes = (
                 <Route name ="get_started" path="/get_started" component={GetStarted} />
                 <Route name ="your_games" path="/your_games" component={YourGames} />
                 <Route name ="open_games" path="/games" component={OpenGames} />
+                <Route name ="watch_game" path="/games/:gameId/watch" component={WatchGame} />
                 <Route path="*" component={Home} />
             </Route>
         </Router>

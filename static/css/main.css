@@ -9,3 +9,12 @@ div.registerUser {
 div.registerUser .input-group {
     margin-top: 10px;
 }
+
+table.gameBoard {
+    background-image: url("/images/DirtBackground.jpg");
+    background-repeat: repeat;
+}
+
+table.gameBoard td {
+    padding: 10px;
+}

@@ -1,15 +1,7 @@
 var YourGames = React.createClass({
-	uploadText: function (e) {
+	watchGame: function (gameId, e) {
                       e.preventDefault();
-                      $.ajax({
-                          success: function(data) {
-                              this.props.history.pushState(null, '/arena_home');
-                          }.bind(this),
-                          error: function(xhr, status, err) {
-                                 }.bind(this)
-                      });
-                      //TODO: Add code to send the textarea's input to the server. Then display a success or failure.
-
+                      this.props.history.pushState(null, '/games/' + gameId + '/watch');
                   },
     render: function() {
         return (
@@ -29,13 +21,13 @@ var YourGames = React.createClass({
                       <td>Destoyer</td>
                       <td>Finished</td>
                       <td>sam, jim, sally</td>
-                      <td><input type="submit" className="btn btn-primary" value="Watch Fight" /></td>
+                      <td><input type="submit" onClick={this.watchGame.bind(this, "somegameid")} className="btn btn-primary" value="Watch Fight" /></td>
                     </tr>
                     <tr>
                       <td>Debbie</td>
                       <td>Waiting for players</td>
                       <td>sally</td>
-                      <td><input type="submit" className="btn btn-primary" value="Watch Fight" /></td>
+                      <td><input type="submit" onClick={this.watchGame.bind(this, "somegameid")} className="btn btn-primary" value="Watch Fight" /></td>
                     </tr>
                   </tbody>
               </table>
