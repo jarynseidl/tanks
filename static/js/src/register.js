@@ -9,7 +9,7 @@ var Register = React.createClass({
                           debugger;
                           if (success) {
                               debugger;
-                              this.props.history.pushState(null, '/user/');
+                              this.props.history.pushState(null, '/arena_home');
                           } else {
                               alert('oops there was kind of a little problem with you registering. Maybe try again?');
                           }
