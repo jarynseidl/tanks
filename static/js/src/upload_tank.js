@@ -7,20 +7,6 @@ var UploadTank = React.createClass({
                       var self = this;
                       self.tankName = this.refs.tankName1.value.trim();
                       self.tank_code = this.refs.tankText.value.trim();
-                      /*$.ajax({
-                          url: '/api/users/' + Auth.getUsername() + '/tanks',
-                          type: 'POST',
-                          contentType: 'application/json',
-                          data: JSON.stringify({
-                              name: tankName,
-                              code: code
-                          }),
-                          success: function(data) {
-                              this.props.history.pushState(null, '/user/' + Auth.getUsername());
-                          }.bind(this),
-                          error: function(xhr, status, err) {
-                                 }.bind(this)
-                      });*/
                       this.uploadTank();
                   },
     uploadFile: function (e) {
@@ -28,39 +14,25 @@ var UploadTank = React.createClass({
                       var reader = new FileReader();
                       self.file = e.target.files[0];
                       self.tankName = this.refs.tankName2.value.trim();
+
                       reader.onload = function(e) { 
                           var contents = e.target.result;             
                           self.tank_code = reader.result;
-                          var words = code.split(' ');            
-                         /* $.ajax({
-                              url: '/api/users/' + Auth.getUsername() + '/tanks',
-                              type: 'POST',
-                              contentType: 'application/json',
-                              data: JSON.stringify({
-                                  name: tankName,
-                                  code: code
-                              }),
-                              success: function(data) {
-                                  self.props.history.pushState(null, '/user/' + Auth.getUsername());
-                              }.bind(this),
-                              error: function(xhr, status, err) {
-                                     }.bind(self)
-                          });*/
+                          var words = code.split(' ');
+                          self.fileLoaded = true;            
                       }
-
                       reader.readAsText(self.file);
-
-                      //TODO: Add code to send the textarea's input to the server. Then display a success or failure.
-
                   },
     uploadTank: function() {
         var self = this;
-        //var reader = new FileReader();
-        //var tankName = this.refs.tankName.value.trim();
-        //reader.onload = function(e) { 
-            //var contents = e.target.result;             
-            //var code = reader.result;
-            //var words = code.split(' ');            
+  
+        if(self.tankName == "" || self.tankName == undefined){
+            alert("Whoops. Looks like you forgot fill out everything.");
+        } 
+        else if(self.tank_code == undefined){
+          alert("Looks like there was a problem uploading your file. Try uploading it again.");
+        }
+        else{          
             $.ajax({
                 url: '/api/users/' + Auth.getUsername() + '/tanks',
                 type: 'POST',
@@ -75,10 +47,7 @@ var UploadTank = React.createClass({
                 error: function(xhr, status, err) {
                        }.bind(self)
             });
-        //}
-
-        //reader.readAsText(self.file);
-
+        }
     },
     render: function() {
         return (
