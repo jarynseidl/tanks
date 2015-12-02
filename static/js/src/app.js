@@ -12,9 +12,12 @@ var YourGames = require('./your_games.js');
 var Logout = require('./logout.js');
 var OpenGames = require('./open_games.js');
 var WatchGame = require('./watch_game.js');
+var Auth = require('./authentication.js')
+var TankList = require('./tanks.js');
 
 var App = React.createClass({
   render: function() {
+
     return (
       <div>
         <div className="master">
@@ -34,12 +37,15 @@ var App = React.createClass({
 
                     <div className="collapse navbar-collapse" id="bs-navbar">
                       <ul className="nav navbar-nav">
-                        <li><Link to="home">Home</Link></li>
-                        <li><Link to="register">Register</Link></li>
-                        <li><Link to="arena_home">Arena Home</Link></li>
+                        {Auth.loggedIn() ? null : <li><Link to="home">Home</Link></li> }
+                        {Auth.loggedIn() ? null : <li><Link to="register">Register</Link></li> }
+                        {Auth.loggedIn() ? <li><Link to="upload_tank">Upload a Tank</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="your_games">See Your Games</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="tanks">Your Tanks</Link></li> : null }
                       </ul>
                       <ul className="nav navbar-nav navbar-right">
-                        <li><Logout history={this.props.history} /></li>
+                        {Auth.loggedIn() ? <li><Logout history={this.props.history} /></li> : null }
                       </ul>
                     </div>
                   </div>
@@ -61,6 +67,7 @@ var routes = (
                 <Route name ="arena_home" path="/arena_home" component={ArenaHome} />
                 <Route name ="upload_tank" path="/upload_tank" component={UploadTank} />
                 <Route name ="get_started" path="/get_started" component={GetStarted} />
+                <Route name ="tanks" path="/tanks" component={TankList} />
                 <Route name ="your_games" path="/your_games" component={YourGames} />
                 <Route name ="open_games" path="/games" component={OpenGames} />
                 <Route name ="watch_game" path="/games/:gameId/watch" component={WatchGame} />

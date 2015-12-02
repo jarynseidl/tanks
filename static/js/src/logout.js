@@ -4,7 +4,7 @@ var Login = React.createClass({
     handleLogout: function (e) {
                       e.preventDefault();
                       Auth.logout(function() {
-                          this.props.history.pushState(null, "/");
+                          this.props.history.pushState(null, "/app");
                       }.bind(this));
                   },
     render: function() {

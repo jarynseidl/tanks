@@ -28,8 +28,6 @@ var Home = React.createClass({
                     </div>
                 </form>
                 <Login history={this.props.history} />
-                <Register history={this.props.history} />
-
             </div>
             );
     }

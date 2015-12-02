@@ -7,7 +7,7 @@ var Login = React.createClass({
                       var password = this.refs.password.value.trim();
                       Auth.login(username, password, function(success) {
                           if (success) {
-                              this.props.history.pushState(null, '/arena_home');
+                              this.props.history.pushState(null, '/user/' + Auth.getUsername());
                           } else {
                               alert('I don\'t think you be gottin gud cradenshals. Why don\'t u try dat one mor time.');
                           }
@@ -33,5 +33,5 @@ var Login = React.createClass({
                     </div>
                     );
             }
-});
+        });
 module.exports = Login;
