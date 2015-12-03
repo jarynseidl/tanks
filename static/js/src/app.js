@@ -42,7 +42,7 @@ var App = React.createClass({
                         {Auth.loggedIn() ? <li><Link to="upload_tank">Upload a Tank</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="your_games">See Your Games</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="tanks">Your Tanks</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="user">Your Tanks</Link></li> : null }
                       </ul>
                       <ul className="nav navbar-nav navbar-right">
                         {Auth.loggedIn() ? <li><Logout history={this.props.history} /></li> : null }
@@ -67,7 +67,7 @@ var routes = (
                 <Route name ="arena_home" path="/arena_home" component={ArenaHome} />
                 <Route name ="upload_tank" path="/upload_tank" component={UploadTank} />
                 <Route name ="get_started" path="/get_started" component={GetStarted} />
-                <Route name ="tanks" path="/tanks" component={TankList} />
+                <Route name ="user" path="/user" component={User} />
                 <Route name ="your_games" path="/your_games" component={YourGames} />
                 <Route name ="open_games" path="/games" component={OpenGames} />
                 <Route name ="watch_game" path="/games/:gameId/watch" component={WatchGame} />
