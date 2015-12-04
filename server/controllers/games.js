@@ -2,6 +2,7 @@ var exports = module.exports = {}
 
 var mongoose = require('mongoose');
 var Games = mongoose.model('Games');
+var Users = mongoose.model('Users');
 
 exports.findAll = function (req, res) {
     Games.find({}, function(err, results) {
@@ -24,6 +25,24 @@ exports.findById = function (req, res) {
     var gameid = req.params.gameid;
     Games.findById(gameid, function(err, result) {
         return res.send(result);
+    });
+};
+
+exports.findGamesByUsername = function (req, res) {
+    var username = req.params.username;
+    Users.findOne({'username': username}, function(err, result) {
+        if (result === null || !result.tanks) {
+            return res.send([]);
+        }
+        var userTankIds = [];
+        for (var i = 0; i < result.tanks.length; i++) {
+            userTankIds.push(result.tanks[i]._id);
+        }
+        Games.find({
+            tankIds: { $in : userTankIds }
+        }, function (error, results) {
+            return res.send(results);
+        });
     });
 };
 

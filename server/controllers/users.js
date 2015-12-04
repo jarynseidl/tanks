@@ -18,8 +18,7 @@ exports.findById = function(req, res) {
 };
 */
 exports.findByUsername = function(req, res) {
-    var username = req.params.username;
-    Users.findOne({'username': username}, function(err, result) {
+    Users.findOne({username: req.params.username}, function(err, result) {
         return res.send(result);
     });
 };
