@@ -54,6 +54,8 @@ var TankListModal = React.createClass({
             contentType: 'application/json',
             type: 'POST',
             data: JSON.stringify({
+                userName: Auth.getUsername(),
+                tankName: tank.name,
                 tankId: tank._id
             }),
             error: function(xhr, status, err) {
