@@ -38,6 +38,9 @@ exports.addTank = function (req, res) {
     var gameid = req.params.gameid;
     Games.findById(gameid, function(err, game) {
         game.tankIds.push(req.body.tankId);
+        if (game.tankIds.length >= 4) {
+            game.ready = true;
+        }
         game.save(function (err) {
             if (err) return console.log(err);
             return res.sendStatus(202);

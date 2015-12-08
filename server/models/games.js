@@ -32,6 +32,7 @@ var GameSchema = new Schema({
     tanks: [GameTank],
     tankIds: [ObjectId],
     board: [[String]],
+    ready: Boolean
 })
 
 mongoose.model('Games', GameSchema);
