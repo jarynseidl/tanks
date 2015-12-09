@@ -15,6 +15,7 @@ module.exports = function(app) {
     var games = require('./games.js');
     app.get('/api/games/', games.findAll);
     app.get('/api/games/open', games.listOpen);
+    app.get('/api/games/username/:username', games.findGamesByUsername);
     app.get('/api/games/:gameid', games.findById);
     app.post('/api/games', jsonParser, games.add);
     app.post('/api/games/:gameid/tanks', jsonParser, games.addTank);
