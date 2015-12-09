@@ -5,27 +5,25 @@ var UploadTank = React.createClass({
 	uploadText: function (e) {
                       e.preventDefault();
                       var self = this;
-                      self.tankName = this.refs.tankName1.value.trim();
                       self.tank_code = this.refs.tankText.value.trim();
                       this.uploadTank();
                   },
-    uploadFile: function (e) {
-                      var self = this;
-                      var reader = new FileReader();
-                      self.file = e.target.files[0];
-                      self.tankName = this.refs.tankName2.value.trim();
+  uploadFile: function (e) {
+                    var self = this;
+                    var reader = new FileReader();
+                    self.file = e.target.files[0];
 
-                      reader.onload = function(e) { 
-                          var contents = e.target.result;             
-                          self.tank_code = reader.result;
-                          var words = code.split(' ');
-                          self.fileLoaded = true;            
-                      }
-                      reader.readAsText(self.file);
-                  },
+                    reader.onload = function(e) { 
+                        var contents = e.target.result;             
+                        self.tank_code = reader.result;
+                        var words = code.split(' ');
+                        self.fileLoaded = true;            
+                    }
+                    reader.readAsText(self.file);
+                },
     uploadTank: function() {
         var self = this;
-  
+        self.tankName = this.refs.tankName.value.trim();
         if(self.tankName == "" || self.tankName == undefined){
             alert("Whoops. Looks like you forgot fill out everything.");
         } 
@@ -57,7 +55,7 @@ var UploadTank = React.createClass({
                 <form onSubmit={this.uploadText}>
                     <div className="input-group">
                         <span className="input-group-addon">Name:</span>
-                        <input ref="tankName1" type="text" className="form-control" />
+                        <input ref="tankName" type="text" className="form-control" />
                     </div>
                     <textarea ref="tankText" cols="50" rows="10" defaultValue="Place your code here"></textarea>
                     <div className="input-group blue">
@@ -66,10 +64,6 @@ var UploadTank = React.createClass({
                 </form>
                 <form onSubmit={this.uploadTank}>
                     <h3>Upload a java file (optional)</h3>
-                    <div className="input-group">
-                        <span className="input-group-addon">Name:</span>
-                        <input ref="tankName2" type="text" className="form-control" />
-                    </div>
                     <input ref="tankFile" onChange={this.uploadFile} type="file" name="tank" accept="java/*" />
                     <div className="input-group blue">
                         <input type="submit" className="btn btn-primary" value="Add tank!" />

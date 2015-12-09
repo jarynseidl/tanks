@@ -37,6 +37,7 @@ var YourGames = React.createClass({
                         {this.state.games.map(function(game) {
                             var key = game._id;
                             var modalName = "modal_" + key;
+                            alert(game.name);
                             return (<tr key={key}>
                                     <td>{game.name}</td>
                                     { 4 - game.tankIds.length == 0 ? <td>Game Full</td> : <td>Need {4 - game.tankIds.length} more tanks</td> }
