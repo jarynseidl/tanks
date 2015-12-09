@@ -3,11 +3,50 @@ var WatchGame = React.createClass({
         return {
             tanks: [
                 {"coord" : { "x" : 0, "y" : 0 }, "dir" : "S" },
-                {"coord" : { "x" : 1, "y" : 0 }, "dir" : "E" },
-                {"coord" : { "x" : 5, "y" : 5 }, "dir" : "N" },
-                {"coord" : { "x" : 3, "y" : 0 }, "dir" : "S" }
-            ]
+                {"coord" : { "x" : 9, "y" : 9 }, "dir" : "S" },
+                {"coord" : { "x" : 1, "y" : 1 }, "dir" : "N" },
+                {"coord" : { "x" : 8, "y" : 8 }, "dir" : "N" }
+            ],
+            game: {}
         };
+    },
+     StartGame: function()
+     {     
+            for(var i = 0; i < this.state.game.moves.listOfMoves.length; i++)
+            {
+                    for (var j = 0; j < 4; j++)
+                    {
+                        switch(j){
+                            case(0):
+                                console.log(this.state.game.moves.listOfMoves[i]['0']);
+                            break;
+                            case(1):
+                                console.log(this.state.game.moves.listOfMoves[i]['1']);
+                            break;
+                            case(2):
+                                console.log(this.state.game.moves.listOfMoves[i]['2']); 
+                            break;
+                            case(3):
+                                console.log(this.state.game.moves.listOfMoves[i]['3']);
+                            break;
+                        }
+                        
+                    }
+            }
+     },
+     componentDidMount: function() {
+       var pathname = this.props.location.pathname;
+       var pieces = pathname.split("/");
+       var gameID = pieces[2];
+       console.log(gameID);
+       
+       $.get('/api/games/'+gameID, function (results) {
+            this.setState({
+                game: results
+            }, function() {
+              this.StartGame();  
+            });
+        }.bind(this));
     },
     render: function() {
         var board = new Array(
