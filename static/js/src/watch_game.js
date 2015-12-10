@@ -2,14 +2,20 @@ var WatchGame = React.createClass({
     getInitialState: function() {
         return {
             tanks: [
-                {"coord" : { "x" : 0, "y" : 0 }, "dir" : "S", "visible" : true},
-                {"coord" : { "x" : 9, "y" : 9 }, "dir" : "N", "visible" : true},
-                {"coord" : { "x" : 8, "y" : 1 }, "dir" : "N", "visible" : true},
-                {"coord" : { "x" : 1, "y" : 8 }, "dir" : "S", "visible" : true}
+                {"coord" : { "x" : 0, "y" : 0 }, "dir" : "S", "visible" : true, "index": 0},
+                {"coord" : { "x" : 9, "y" : 9 }, "dir" : "N", "visible" : true, "index": 1},
+                {"coord" : { "x" : 8, "y" : 1 }, "dir" : "N", "visible" : true, "index": 2},
+                {"coord" : { "x" : 1, "y" : 8 }, "dir" : "S", "visible" : true, "index": 3}
             ],
-            game: {}
+            game: {},
+            tanksLeft: 4
         };
     },
+    DisplayWinner: function()
+    {
+        
+    },
+    
     StartGame: function()
      {     
             this.makeMove(0,0)
@@ -397,6 +403,9 @@ var WatchGame = React.createClass({
                             exists = true;}
                         else{
                             console.log("Tank 0 died.");
+                            if(this.state.tanks[0].visible == true){
+                                this.state.tanksLeft--;
+                            }
                             this.state.tanks[0].visible = false;
                             this.forceUpdate();
                             index2++;
@@ -408,6 +417,9 @@ var WatchGame = React.createClass({
                         else{
                             console.log("Tank 1 died.");
                             this.state.tanks[1].visible = false;
+                            if(this.state.tanks[1].visible == true){
+                                this.state.tanksLeft--;
+                            }
                             this.forceUpdate();
                             index2++;
                             }     
@@ -417,6 +429,9 @@ var WatchGame = React.createClass({
                             exists = true;}
                         else{
                             console.log("Tank 2 died.");
+                            if(this.state.tanks[2].visible == true){
+                                this.state.tanksLeft--;
+                            }
                             this.state.tanks[2].visible = false;
                             this.forceUpdate();
                             index2++;
@@ -427,6 +442,9 @@ var WatchGame = React.createClass({
                             exists = true;}
                         else{
                             console.log("Tank 3 died.");
+                            if(this.state.tanks[3].visible == true){
+                                this.state.tanksLeft--;
+                            }
                             this.state.tanks[3].visible = false;
                             this.forceUpdate();
                             index2 =0;
@@ -437,6 +455,11 @@ var WatchGame = React.createClass({
             }              
             
             if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
+                return;
+            }
+            
+            if (this.state.tanksLeft <= 1)
+            {
                 return;
             }
                  
@@ -471,19 +494,19 @@ var WatchGame = React.createClass({
         });
         this.state.tanks.forEach(function(tank) {
             
-            var image_url = "TankUp.png";
+            var image_url = "NorthS.png";
             if (!tank.visible){
                 image_url = "Blank.png";
             } else if (tank.dir === "S") {
-                image_url = "TankDown.png";
+                image_url = "SouthS.png";
             } else if (tank.dir === "N") {
-                image_url = "TankUp.png";
+                image_url = "NorthS.png";
             } else if (tank.dir === "E") {
-                image_url = "TankRight.png";
+                image_url = "EastS.png";
             } else if (tank.dir === "W") {
-                image_url = "TankLeft.png";
+                image_url = "WestS.png";
             }
-            image_url = '/images/' + image_url;
+            image_url = '/images/'+tank.index +'/' + image_url;
             board[tank.coord.y][tank.coord.x] = image_url;
         });
         return (
