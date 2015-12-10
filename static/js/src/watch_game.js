@@ -2,10 +2,10 @@ var WatchGame = React.createClass({
     getInitialState: function() {
         return {
             tanks: [
-                {"coord" : { "x" : 0, "y" : 0 }, "dir" : "S", "visible" : true, "index": 0},
-                {"coord" : { "x" : 9, "y" : 9 }, "dir" : "N", "visible" : true, "index": 1},
-                {"coord" : { "x" : 8, "y" : 1 }, "dir" : "N", "visible" : true, "index": 2},
-                {"coord" : { "x" : 1, "y" : 8 }, "dir" : "S", "visible" : true, "index": 3}
+                {"coord" : { "x" : 0, "y" : 0 }, "dir" : "S", "visible" : true, "index": 0, "name": ""},
+                {"coord" : { "x" : 9, "y" : 9 }, "dir" : "N", "visible" : true, "index": 1, "name": ""},
+                {"coord" : { "x" : 8, "y" : 1 }, "dir" : "N", "visible" : true, "index": 2, "name": ""},
+                {"coord" : { "x" : 1, "y" : 8 }, "dir" : "S", "visible" : true, "index": 3, "name": ""}
             ],
             game: {},
             tanksLeft: 4,
@@ -573,6 +573,11 @@ var WatchGame = React.createClass({
        console.log(gameID);
        
        $.get('/api/games/'+gameID, function (results) {
+           for(var i =0 ; i < 4; i++)
+           {
+            this.state.tanks[i].name = results.users[i].tankName;    
+           }
+           
             this.setState({
                 game: results
             }, function() {
@@ -621,22 +626,35 @@ var WatchGame = React.createClass({
                 board[tank.coord.y][tank.coord.x] = image_url;}
         });
         return (
-            <div>
-                <h1>Watch Game</h1>
-                <table className="gameBoard"><tbody>
-                        {board.map(function (row) {
-                            return (
-                                <tr>
-                                    {row.map(function (cell) {
-                                        var image_url = "/images/Blank.png";
-                                        if (cell) {
-                                            image_url = cell;
-                                        }
-                                        return (<td><img height="65" width="65" src={image_url} /></td>);
-                                    })}
-                                </tr>);
+            <div className = "wrapper">
+                <div className ="container">
+                    <center>
+                    <h1>Watch Game</h1>
+                    <table className="gameBoard Test"><tbody>
+                            {board.map(function (row) {
+                                return (
+                                    <tr>
+                                        {row.map(function (cell) {
+                                            var image_url = "/images/Blank.png";
+                                            if (cell) {
+                                                image_url = cell;
+                                            }
+                                            return (<td><img height="65" width="65" src={image_url} /></td>);
+                                        })}
+                                    </tr>);
+                            })}
+                    </tbody></table>
+                    <table className ="tankKey"><tbody>
+                        <tr>
+                        {this.state.tanks.map(function (tank){
+                           var tankName = tank.name;
+                           var image_url = '/images/' +tank.index +'/EastS.png';
+                           return(<td className="Legend"><img height ="50" width="50" src={image_url} /><br/><center><b> {tankName} </b></center></td>);
                         })}
-                </tbody></table>
+                       </tr>   
+                    </tbody></table>
+                    </center>
+                </div>
             </div>
     )}
 });

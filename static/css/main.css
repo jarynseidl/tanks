@@ -18,3 +18,17 @@ table.gameBoard {
 table.gameBoard td {
     padding: 0px;
 }
+
+div.container {
+    display: inline-block;
+    text-align: center;
+}
+
+div.wrapper {
+    text-align: center;
+}
+
+td.Legend
+{
+    padding: 10px;
+}
