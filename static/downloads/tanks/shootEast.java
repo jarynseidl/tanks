@@ -21,7 +21,7 @@ public class TankImpl extends Tank {
 
     @Override
     public TANK_MOVES calculateTurn(List<Tank> tanks, int size) {
-        if (this.getDir() != TANK_DIR.N) {
+        if (this.getDir() != TANK_DIR.E) {
             return TANK_MOVES.TURN_RIGHT;
         }
         return TANK_MOVES.SHOOT;
