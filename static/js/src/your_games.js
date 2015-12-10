@@ -20,7 +20,6 @@ var YourGames = React.createClass({
                   },
     componentDidMount: function() {
         this.loadGamesFromServer(true);
-        this.pollInterval = 3000;
         setInterval(this.loadGamesFromServer, 3000);
     },
     showModal: function(modalName, e) {
@@ -39,7 +38,7 @@ var YourGames = React.createClass({
                             <th>Watch</th>
                         </tr>
                     </thead>
-                    <tbody pollInterval={5000}>
+                    <tbody>
                         {this.state.games.map(function(game) {
                             var key = game._id;
                             var modalName = "modal_" + key;

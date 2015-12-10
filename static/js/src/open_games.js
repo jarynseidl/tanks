@@ -144,7 +144,7 @@ var OpenGames = React.createClass({
     },
     componentDidMount: function() {
         this.loadOpenGamesFromServer();
-        //setInterval(this.loadOpenGamesFromServer,this.props.pollInterval);
+        setInterval(this.loadOpenGamesFromServer,3000);
     },
     showModal: function(modalName, e) {
         if (e) {e.preventDefault();}
@@ -163,7 +163,7 @@ var OpenGames = React.createClass({
                             <th>Join</th>
                         </tr>
                     </thead>
-                    <tbody pollInterval={4000}>
+                    <tbody>
                         {this.state.games.map(function(game) {
                             var key = game._id;
                             var modalName = "modal_" + key;
