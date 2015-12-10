@@ -12,7 +12,6 @@ var YourGames = React.createClass({
                     games: results
                 });
         }.bind(this));
-        console.log("in here");
     },
     watchGame: function (gameId, e) {
                       e.preventDefault();
@@ -42,11 +41,13 @@ var YourGames = React.createClass({
                         {this.state.games.map(function(game) {
                             var key = game._id;
                             var modalName = "modal_" + key;
-                           // console.log(game);
                             return (<tr key={key}>
                                     <td>{game.name}</td>
                                     { 4 - game.tankIds.length == 0 ? <td>Game Full</td> : <td>Need {4 - game.tankIds.length} more tanks</td> }
-                                    {"moves" in game == false ? <td>Not finished</td> : <td><input type="submit" onClick={this.watchGame.bind(this, game._id)} className="btn btn-primary" value="Watch Fight" /></td> }
+                                    { game.status == 1 ? <td><input type="submit" onClick={this.watchGame.bind(this, game._id)} className="btn btn-primary" value="Watch Fight" /></td> : null}
+                                    { game.status == -1 ? <td>Compilation Error</td> : null}
+                                    { game.status == 0 ? <td>Not Finished</td> : null }
+                                    
                                 </tr>);
                         }.bind(this))}
                     </tbody>
