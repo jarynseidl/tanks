@@ -15,19 +15,24 @@ var Home = React.createClass({
                   },
     render: function() {
         return (
-            <div>
-            	<h1>Home</h1>
-           		<p>Welcome to our online tank arena! On this website you will be able to upload and battle 
-            		tanks that you have programmed against other users. Using our interface, you will be 
-            		able to code up a tank of your very own in no time. For more information on how to get started,
-            		click the link below.
-            	</p>
-            	<form onClick={this.getStarted}>
-                    <div className="input-group">
-                        <input type="submit" className="btn btn-primary" value="Get Started" />
-                    </div>
-                </form>
-                <Login history={this.props.history} />
+            <div className="row">
+                <div className="col-md-6">
+                    <h1>Home</h1>
+                    <p>Welcome to our online tank arena! On this website you will be able to upload and battle 
+                        tanks that you have programmed against other users. Using our interface, you will be 
+                        able to code up a tank of your very own in no time. For more information on how to get started,
+                        click the link below.
+                    </p>
+                    <form onClick={this.getStarted}>
+                        <div className="input-group">
+                            <input type="submit" className="btn btn-primary" value="Get Started" />
+                        </div>
+                    </form>
+                    <Login history={this.props.history} />
+                </div>
+                <div className="col-md-6">
+                    <img className="home-screen-shot" src="/images/screenshot1.png" />
+                </div>
             </div>
             );
     }

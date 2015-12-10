@@ -5,3 +5,5 @@ node_modules
 mongodb/db/*
 mongodb/log/*
 static/js/app.js
+.idea
+java/tanks.iml
