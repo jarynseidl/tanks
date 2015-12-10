@@ -8,7 +8,9 @@ var WatchGame = React.createClass({
                 {"coord" : { "x" : 1, "y" : 8 }, "dir" : "S", "visible" : true, "index": 3}
             ],
             game: {},
-            tanksLeft: 4
+            tanksLeft: 4,
+            lasers: [],
+            TURN_LENGTH: 350
         };
     },
     DisplayWinner: function()
@@ -16,6 +18,89 @@ var WatchGame = React.createClass({
         
     },
     
+    hasTank: function(x,y){
+      console.log("testing x:" + x + " y:" + y);
+      for(var i = 0; i < 4; i++)
+      {
+          if (this.state.tanks[i].coord.x == x && this.state.tanks[i].coord.y == y && this.state.tanks[i].visible == true)
+          {
+               console.log("There is a tank here: x:" + this.state.tanks[i].coord.x + " y: " + this.state.tanks[i].coord.y)
+              return true;
+          }
+      }  
+      return false;
+    },
+    
+    fire: function(tankNo)
+    {
+        var tempLasers = [];
+        switch(this.state.tanks[tankNo].dir){
+            case("S"):
+                for(var y = this.state.tanks[tankNo].coord.y+1; y < 10; y++){
+                    if(!this.hasTank(this.state.tanks[tankNo].coord.x,y)){
+                        tempLasers.push({"y" : true, "coord": {"x": this.state.tanks[tankNo].coord.x,"y": y}});
+                    }
+                    else{
+                        //we could add something about getting hit here.
+                        break;
+                    }
+                    this.setState({lasers: tempLasers});
+                    setTimeout(function(){
+                        this.setState({lasers: []})
+                        }.bind(this),this.state.TURN_LENGTH-50);
+                }
+            break;
+            case("W"):
+                for(var x = this.state.tanks[tankNo].coord.x-1; x >= 0; x--){
+                    if(!this.hasTank(x,this.state.tanks[tankNo].coord.y)){
+                        tempLasers.push({"x" : true, "coord": {"x": x,"y": this.state.tanks[tankNo].coord.y}});
+                    }
+                    else{
+                        //we could add something about getting hit here.
+                        break;
+                    }
+                    this.setState({lasers: tempLasers});
+                    setTimeout(function(){
+                            this.setState({lasers: []})
+                         }.bind(this),this.state.TURN_LENGTH-50);
+                }
+            break;
+            case("N"):
+                for(var y = this.state.tanks[tankNo].coord.y-1; y >= 0; y--){
+                    if(!this.hasTank(this.state.tanks[tankNo].coord.x,y)){
+                        tempLasers.push({"y" : true, "coord": {"x": this.state.tanks[tankNo].coord.x,"y": y}});
+                    }
+                    else{
+                        //we could add something about getting hit here.
+                        
+                        break;
+                    }
+                    this.setState({lasers: tempLasers});
+                    setTimeout(function(){
+                            this.setState({lasers: []})
+                         }.bind(this),this.state.TURN_LENGTH-50);
+                }
+            break;
+            case("E"):
+                for(var x = this.state.tanks[tankNo].coord.x+1; x < 10; x++){
+                    console.log("We're in the loop!");
+                    if(!this.hasTank(x,this.state.tanks[tankNo].coord.y)){
+                        console.log("Adding Lasers");
+                        tempLasers.push({"x" : true, "coord": {"x": x,"y": this.state.tanks[tankNo].coord.y}});
+                    }
+                    else{
+                        //we could add something about getting hit here.
+                        
+                        break;
+                    }
+                }
+                this.setState({lasers: tempLasers});
+                setTimeout(function(){
+                            this.setState({lasers: []})
+                         }.bind(this),this.state.TURN_LENGTH-50);
+            break;
+        }
+    },
     StartGame: function()
      {     
             this.makeMove(0,0)
@@ -26,11 +111,13 @@ var WatchGame = React.createClass({
             if(index1 >= this.state.game.moves.listOfMoves.length){
                 return;}
                 
-                       console.log("Moving!");
-                       console.log("index1: " + index1 + ". Index2: " +index2);
                        switch(index2){
                             case(0):
                                 switch(this.state.game.moves.listOfMoves[index1]['0']){
+                                    case("SHOOT"):
+                                      console.log("Shooting");
+                                      this.fire(0)
+                                    break;
                                     case("TURN_RIGHT"):
                                     console.log("Turning right!");
                                       switch(this.state.tanks[0].dir){
@@ -119,6 +206,10 @@ var WatchGame = React.createClass({
                             break;
                             case(1):
                             switch(this.state.game.moves.listOfMoves[index1]['1']){
+                                    case("SHOOT"):
+                                        console.log("Shooting");
+                                          this.fire(1)
+                                    break;
                                     case("TURN_RIGHT"):
                                     console.log("Turning right!");
                                       switch(this.state.tanks[1].dir){
@@ -206,6 +297,10 @@ var WatchGame = React.createClass({
                             break;
                             case(2):
                                 switch(this.state.game.moves.listOfMoves[index1]['2']){
+                                    case("SHOOT"):
+                                        console.log("Shooting");
+                                        this.fire(2)
+                                    break;
                                     case("TURN_RIGHT"):
                                     console.log("Turning right!");
                                       switch(this.state.tanks[2].dir){
@@ -294,6 +389,10 @@ var WatchGame = React.createClass({
                             break;
                             case(3):
                                 switch(this.state.game.moves.listOfMoves[index1]['3']){
+                                    case("SHOOT"):
+                                        console.log("Shooting");
+                                        this.fire(3)
+                                    break;
                                     case("TURN_RIGHT"):
                                     console.log("Turning right!");
                                       switch(this.state.tanks[3].dir){
@@ -465,7 +564,7 @@ var WatchGame = React.createClass({
                  
             setTimeout(function(){
                 this.makeMove(index1,index2);
-            }.bind(this),500);
+            }.bind(this),this.state.TURN_LENGTH);
      },
      componentDidMount: function() {
        var pathname = this.props.location.pathname;
@@ -492,12 +591,23 @@ var WatchGame = React.createClass({
                 ar[i] = undefined;
             }
         });
+        
+        this.state.lasers.forEach(function(laser)
+        {
+           console.log("Setting laser...");
+           var image_url = "Blank.png";
+           if(laser.y){
+               image_url = "LaserUpDown.gif";
+           } else if (laser.x){
+               image_url = "LaserEastWest.gif";
+           }
+           image_url = '/images/'+image_url;
+           board[laser.coord.y][laser.coord.x] = image_url
+        });
+        
         this.state.tanks.forEach(function(tank) {
-            
             var image_url = "NorthS.png";
-            if (!tank.visible){
-                image_url = "Blank.png";
-            } else if (tank.dir === "S") {
+            if (tank.dir === "S") {
                 image_url = "SouthS.png";
             } else if (tank.dir === "N") {
                 image_url = "NorthS.png";
@@ -507,7 +617,8 @@ var WatchGame = React.createClass({
                 image_url = "WestS.png";
             }
             image_url = '/images/'+tank.index +'/' + image_url;
-            board[tank.coord.y][tank.coord.x] = image_url;
+            if (tank.visible){
+                board[tank.coord.y][tank.coord.x] = image_url;}
         });
         return (
             <div>
@@ -521,7 +632,7 @@ var WatchGame = React.createClass({
                                         if (cell) {
                                             image_url = cell;
                                         }
-                                        return (<td><img height="50" width="50" src={image_url} /></td>);
+                                        return (<td><img height="65" width="65" src={image_url} /></td>);
                                     })}
                                 </tr>);
                         })}
