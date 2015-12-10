@@ -396,7 +396,9 @@ var WatchGame = React.createClass({
                         if(this.state.game.moves.listOfMoves[index1]['0']){
                             exists = true;}
                         else{
+                            console.log("Tank 0 died.");
                             this.state.tanks[0].visible = false;
+                            this.forceUpdate();
                             index2++;
                             }     
                     break;
@@ -404,7 +406,9 @@ var WatchGame = React.createClass({
                         if(this.state.game.moves.listOfMoves[index1]['1']){
                             exists = true;}
                         else{
+                            console.log("Tank 1 died.");
                             this.state.tanks[1].visible = false;
+                            this.forceUpdate();
                             index2++;
                             }     
                     break;
@@ -412,7 +416,9 @@ var WatchGame = React.createClass({
                         if(this.state.game.moves.listOfMoves[index1]['2']){
                             exists = true;}
                         else{
+                            console.log("Tank 2 died.");
                             this.state.tanks[2].visible = false;
+                            this.forceUpdate();
                             index2++;
                             }   
                     break;
@@ -420,7 +426,9 @@ var WatchGame = React.createClass({
                          if(this.state.game.moves.listOfMoves[index1]['3']){
                             exists = true;}
                         else{
+                            console.log("Tank 3 died.");
                             this.state.tanks[3].visible = false;
+                            this.forceUpdate();
                             index2 =0;
                             index1++;
                             }   
@@ -431,7 +439,7 @@ var WatchGame = React.createClass({
             if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
                 return;
             }
-                
+                 
             setTimeout(function(){
                 this.makeMove(index1,index2);
             }.bind(this),500);
