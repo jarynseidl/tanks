@@ -6,20 +6,22 @@ var YourGames = React.createClass({
             games: []
         };
     },
-    loadGamesFromServer: function(){
+    loadGamesFromServer: function(init){
         $.get('/api/games/username/' + Auth.getUsername(), function (results) {
-            this.setState({
-                games: results
-            });
+                this.setState({
+                    games: results
+                });
         }.bind(this));
+        console.log("in here");
     },
     watchGame: function (gameId, e) {
                       e.preventDefault();
                       this.props.history.pushState(null, '/games/' + gameId + '/watch');
                   },
     componentDidMount: function() {
-        this.loadGamesFromServer();
-        //setInterval(this.loadGamesFromServer, this.props.pollInterval);
+        this.loadGamesFromServer(true);
+        this.pollInterval = 3000;
+        setInterval(this.loadGamesFromServer, 3000);
     },
     showModal: function(modalName, e) {
         if (e) {e.preventDefault();}
