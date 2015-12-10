@@ -463,7 +463,7 @@ var WatchGame = React.createClass({
         });
         this.state.tanks.forEach(function(tank) {
             
-            image_url = "TankUp.png";
+            var image_url = "TankUp.png";
             if (!tank.visible){
                 image_url = "Blank.png";
             } else if (tank.dir === "S") {
