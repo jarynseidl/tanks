@@ -135,12 +135,16 @@ var OpenGames = React.createClass({
             games: []
         };
     },
-    componentDidMount: function() {
+    loadOpenGamesFromServer: function() {
         $.get('/api/games/open', function (results) {
             this.setState({
                 games: results
             });
         }.bind(this));
+    },
+    componentDidMount: function() {
+        this.loadOpenGamesFromServer();
+        //setInterval(this.loadOpenGamesFromServer,this.props.pollInterval);
     },
     showModal: function(modalName, e) {
         if (e) {e.preventDefault();}
@@ -159,13 +163,13 @@ var OpenGames = React.createClass({
                             <th>Join</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody pollInterval={4000}>
                         {this.state.games.map(function(game) {
                             var key = game._id;
                             var modalName = "modal_" + key;
                             return (<tr key={key}>
                                     <td>{game.name}</td>
-                                    <td>{4 - game.tankIds.length}</td>
+                                    <td >{4 - game.tankIds.length}</td>
                                     <td>
                                         <a href="#" onClick={this.showModal.bind(this, modalName)} >Join</a>
                                         <TankListModal callback={this.componentDidMount.bind(this)} modalName={modalName} game={game} />
