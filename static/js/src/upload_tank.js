@@ -1,5 +1,21 @@
 var Auth = require('./authentication.js');
 
+var ExampleTanks = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <h1>Example Tanks</h1>
+                <a href="/downloads/tanks/wait.java" download>Sitting Duck</a><br />
+                <p>The basic tank template</p>
+                <a href="/downloads/tanks/goNorth.java" download>Go North</a><br />
+                <p>Turns until it faces north and then goes forward</p>
+                <a href="/downloads/tanks/shootEast.java" download>Shoot East</a><br />
+                <p>Turns until it faces east and then shoots</p>
+            </div>
+            );
+    }
+});
+
 var UploadTank = React.createClass({
 
 	uploadText: function (e) {
@@ -49,27 +65,34 @@ var UploadTank = React.createClass({
     },
     render: function() {
         return (
-            <div className="registerUser">
-                <h1>Add tank</h1>
-                
-                <form onSubmit={this.uploadText}>
-                    <div className="input-group">
-                        <span className="input-group-addon">Name:</span>
-                        <input ref="tankName" type="text" className="form-control" />
-                    </div>
-                    <textarea ref="tankText" cols="50" rows="10" defaultValue="Place your code here"></textarea>
-                    <div className="input-group blue">
-                        <input type="submit" className="btn btn-primary" value="Add tank!" />
-                    </div>
-                </form>
-                <form onSubmit={this.uploadTank}>
-                    <h3>Upload a java file (optional)</h3>
-                    <input ref="tankFile" onChange={this.uploadFile} type="file" name="tank" accept="java/*" />
-                    <div className="input-group blue">
-                        <input type="submit" className="btn btn-primary" value="Add tank!" />
-                    </div>
-                </form>
+            <div className="row">
+                <div className="col-md-6">
+                    <div className="registerUser">
+                        <h1>Add tank</h1>
+                        
+                        <form onSubmit={this.uploadText}>
+                            <div className="input-group">
+                                <span className="input-group-addon">Name:</span>
+                                <input ref="tankName" type="text" className="form-control" />
+                            </div>
+                            <textarea ref="tankText" cols="50" rows="10" defaultValue="Place your code here"></textarea>
+                            <div className="input-group blue">
+                                <input type="submit" className="btn btn-primary" value="Add tank!" />
+                            </div>
+                        </form>
+                        <form onSubmit={this.uploadTank}>
+                            <h3>Upload a java file (optional)</h3>
+                            <input ref="tankFile" onChange={this.uploadFile} type="file" name="tank" accept="java/*" />
+                            <div className="input-group blue">
+                                <input type="submit" className="btn btn-primary" value="Add tank!" />
+                            </div>
+                        </form>
 
+                    </div>
+                </div>
+                <div className="col-md-6">
+                    <ExampleTanks></ExampleTanks>
+                </div>
             </div>
                     );
     }
