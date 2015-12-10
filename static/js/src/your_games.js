@@ -41,13 +41,12 @@ var YourGames = React.createClass({
                         {this.state.games.map(function(game) {
                             var key = game._id;
                             var modalName = "modal_" + key;
-                            console.log("Games status: " + game.status);
                             return (<tr key={key}>
                                     <td>{game.name}</td>
                                     { 4 - game.tankIds.length == 0 ? <td>Game Full</td> : <td>Need {4 - game.tankIds.length} more tanks</td> }
                                     { game.status == 1 ? <td><input type="submit" onClick={this.watchGame.bind(this, game._id)} className="btn btn-primary" value="Watch Fight" /></td> : null}
                                     { game.status == -1 ? <td>Compilation Error</td> : null}
-                                    { "status" in game ? null : <td>Not Finished</td> }
+                                    { game.status == 0 ? <td>Not Finished</td> : null }
                                     
                                 </tr>);
                         }.bind(this))}
