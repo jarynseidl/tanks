@@ -1,3 +1,5 @@
+var Auth = require('./authentication.js')
+
 var WatchGame = React.createClass({
     getInitialState: function() {
         return {
@@ -13,19 +15,58 @@ var WatchGame = React.createClass({
             TURN_LENGTH: 350
         };
     },
+    getWinner: function()
+    {
+        for(var i = 0; i < 4; i++)
+        {
+            if(this.state.game.users[i].userID == this.state.game.winnerID){
+                return this.state.game.users[i].userName;
+            }
+        }
+    },
+    backToViewGames: function()
+    {
+        this.props.history.pushState(null, '/your_games');
+    },
     DisplayWinner: function()
     {
+        console.log("There's a winner!");
+        var winningUser= this.getWinner();
+        if(winningUser == Auth.getUsername()){
+            swal({
+                title: "Congratulations!",
+                text: "You suck the least!",
+                type: "success",
+                closeOnConfirm: true
+            },
+            function()
+            {
+                this.backToViewGames();
+            }.bind(this));    
+        }
+        else
+        {
+            swal({
+                title: "Bummer dude.",
+                text: "Well.... you tried. ",
+                type: "errror",
+                imageUrL: "\images\failure.png",
+                closeOnConfirm: true
+            },
+            function()
+            {
+                this.backToViewGames();
+            }.bind(this));
+        }
         
     },
     
     hasTank: function(x,y){
-      console.log("testing x:" + x + " y:" + y);
       for(var i = 0; i < 4; i++)
       {
           if (this.state.tanks[i].coord.x == x && this.state.tanks[i].coord.y == y && this.state.tanks[i].visible == true)
-          {
-               console.log("There is a tank here: x:" + this.state.tanks[i].coord.x + " y: " + this.state.tanks[i].coord.y)
-              return true;
+          {    
+             return true;
           }
       }  
       return false;
@@ -83,9 +124,7 @@ var WatchGame = React.createClass({
             break;
             case("E"):
                 for(var x = this.state.tanks[tankNo].coord.x+1; x < 10; x++){
-                    console.log("We're in the loop!");
                     if(!this.hasTank(x,this.state.tanks[tankNo].coord.y)){
-                        console.log("Adding Lasers");
                         tempLasers.push({"x" : true, "coord": {"x": x,"y": this.state.tanks[tankNo].coord.y}});
                     }
                     else{
@@ -495,8 +534,10 @@ var WatchGame = React.createClass({
             var exists = false;
             while(!exists)
             {
+                console.log("Before" + this.state.tanksLeft);
                 switch(index2)
                 {
+                    
                     case(0):
                         if(this.state.game.moves.listOfMoves[index1]['0']){
                             exists = true;}
@@ -515,10 +556,10 @@ var WatchGame = React.createClass({
                             exists = true;}
                         else{
                             console.log("Tank 1 died.");
-                            this.state.tanks[1].visible = false;
                             if(this.state.tanks[1].visible == true){
                                 this.state.tanksLeft--;
                             }
+                             this.state.tanks[1].visible = false;
                             this.forceUpdate();
                             index2++;
                             }     
@@ -548,17 +589,24 @@ var WatchGame = React.createClass({
                             this.forceUpdate();
                             index2 =0;
                             index1++;
-                            }   
+                           
+                            }
                     break;
                 }
+                if(this.state.tanksLeft <= 1)
+                    exists = true;
+                console.log("after");
             }              
             
             if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
                 return;
             }
             
+            console.log(this.state.tanksLeft);
+            
             if (this.state.tanksLeft <= 1)
             {
+                this.DisplayWinner();
                 return;
             }
                  
@@ -599,7 +647,6 @@ var WatchGame = React.createClass({
         
         this.state.lasers.forEach(function(laser)
         {
-           console.log("Setting laser...");
            var image_url = "Blank.png";
            if(laser.y){
                image_url = "LaserUpDown.gif";
