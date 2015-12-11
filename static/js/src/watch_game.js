@@ -49,7 +49,7 @@ var WatchGame = React.createClass({
             swal({
                 title: "Bummer dude.",
                 text: "Well.... you tried. ",
-                type: "errror",
+                type: "error",
                 imageUrL: "\images\failure.png",
                 closeOnConfirm: true
             },
