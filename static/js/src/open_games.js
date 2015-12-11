@@ -136,11 +136,13 @@ var OpenGames = React.createClass({
         };
     },
     loadOpenGamesFromServer: function() {
-        $.get('/api/games/open', function (results) {
-            this.setState({
-                games: results
-            });
-        }.bind(this));
+        if(this.isMounted()){
+            $.get('/api/games/open', function (results) {
+                this.setState({
+                    games: results
+                });
+            }.bind(this));
+        }
     },
     componentDidMount: function() {
         this.loadOpenGamesFromServer();

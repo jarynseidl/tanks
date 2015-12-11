@@ -7,11 +7,13 @@ var YourGames = React.createClass({
         };
     },
     loadGamesFromServer: function(init){
-        $.get('/api/games/username/' + Auth.getUsername(), function (results) {
-                this.setState({
-                    games: results
-                });
-        }.bind(this));
+        if(this.isMounted()){    
+            $.get('/api/games/username/' + Auth.getUsername(), function (results) {
+                    this.setState({
+                        games: results
+                    });
+            }.bind(this));
+        }
     },
     watchGame: function (gameId, e) {
                       e.preventDefault();
