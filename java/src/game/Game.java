@@ -91,7 +91,7 @@ public class Game {
                     case MOVE_FORWARD:
                         move = move(t, true, move);
                         break;
-                    case MOVE_BACKWORD:
+                    case MOVE_BACKWARD:
                         move = move(t, false, move);
                         break;
                 }

@@ -20,7 +20,7 @@ public class MoveTracker {
 
     public void addMove(int tank, TANK_MOVES move) {
         if (curTurn >= listOfMoves.size()) {
-            listOfMoves.add(new HashMap<>());
+            listOfMoves.add(new HashMap<Integer, TANK_MOVES>());
         }
         listOfMoves.get(curTurn).put(tank, move);
     }

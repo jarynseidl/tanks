@@ -25,7 +25,7 @@ public class SquareBoardImpl implements Board {
         // Initialize the board with nulls
         board = new ArrayList<>();
         for (int x = 0; x < size; x++) {
-            board.add(new ArrayList<>());
+            board.add(new ArrayList<BoardElement>());
             for (int y = 0; y < size; y++) {
                 board.get(x).add(null);
             }
