@@ -7,3 +7,6 @@ mongodb/log/*
 static/js/app.js
 .idea
 java/tanks.iml
+/bin/
+.classpath
+.project
