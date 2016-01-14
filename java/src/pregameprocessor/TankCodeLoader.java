@@ -48,8 +48,11 @@ public class TankCodeLoader {
             //StandardJavaFileManager fileManager = comp.getStandardFileManager(diagnostics, null, null);
 
             Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
-            final Iterable<String> options = Arrays.asList( new String[] { "-d", "src/"} );
-            JavaCompiler.CompilationTask task = comp.getTask(null, null,null,null, null, compilationUnits);
+
+            StandardJavaFileManager fileManager = comp.getStandardFileManager( null, null, null);
+            fileManager.setLocation(StandardLocation.CLASS_OUTPUT,
+                    Arrays.asList(new File("/src")));
+            JavaCompiler.CompilationTask task = comp.getTask(null, fileManager,null,null, null, compilationUnits);
 
             //for (Diagnostic diagnostic : diagnostics.getDiagnostics())
             //    System.out.format("Error on line %d in %s%n",
