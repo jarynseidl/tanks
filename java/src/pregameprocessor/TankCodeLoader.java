@@ -59,15 +59,15 @@ public class TankCodeLoader {
             //            diagnostic.getSource().toString());
 
             //fileManager.close();
-            System.err.println(name);
+            //System.err.println(name);
             boolean success = task.call();
 
             if (success) {
                 try {
                     File f = new File("src");
-                    System.err.println(f.toURI().toURL());
+                    //System.err.println(f.toURI().toURL());
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
-                    Class<?> cs = Class.forName("game.board.elements."+name, true, classLoader);
+                    Class<?> cs = Class.forName(name, true, classLoader);
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class, int.class);
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank", 3);
                     return t;
