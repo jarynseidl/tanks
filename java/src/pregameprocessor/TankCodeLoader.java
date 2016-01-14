@@ -57,7 +57,7 @@ public class TankCodeLoader {
             //            diagnostic.getSource().toString());
 
             //fileManager.close();
-            System.out.println("here");
+            System.err.println("here");
             boolean success = task.call();
 
             if (success) {
