@@ -75,27 +75,32 @@ public class Game {
             for (Tank t : tanks) {
                 if (ttanks.contains(t))
                     continue;
-                move = t.calculateTurn(tanks, boardSize);
-                switch (move) {
-                    case SHOOT:
-                        shoot(t);
-                        break;
-                    case TURN_RIGHT:
-                        t.setDir(t.getDir().rotateRight(t.getDir()));
-                        break;
-                    case TURN_LEFT:
-                        t.setDir(t.getDir().rotateLeft(t.getDir()));
-                        break;
-                    case WAIT:
-                        break;
-                    case MOVE_FORWARD:
-                        move = move(t, true, move);
-                        break;
-                    case MOVE_BACKWORD:
-                        move = move(t, false, move);
-                        break;
+                try {
+                    move = t.calculateTurn(tanks, boardSize);
+                    switch (move) {
+                        case SHOOT:
+                            shoot(t);
+                            break;
+                        case TURN_RIGHT:
+                            t.setDir(t.getDir().rotateRight(t.getDir()));
+                            break;
+                        case TURN_LEFT:
+                            t.setDir(t.getDir().rotateLeft(t.getDir()));
+                            break;
+                        case WAIT:
+                            break;
+                        case MOVE_FORWARD:
+                            move = move(t, true, move);
+                            break;
+                        case MOVE_BACKWORD:
+                            move = move(t, false, move);
+                            break;
+                    }
+                    moves.addMove(t.getAlias(), move);
+                } catch (Exception e) {
+                    // Send the output of e to the user for debugging
+                    moves.addMove(t.getAlias(), TANK_MOVES.WAIT);
                 }
-                moves.addMove(t.getAlias(), move);
             }
             moves.newTurn();
             currentTurn += 1;

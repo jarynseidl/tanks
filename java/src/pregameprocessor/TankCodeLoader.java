@@ -7,9 +7,7 @@ import game.board.elements.Tank;
 import game.util.JavaSourceFromString;
 import org.bson.types.ObjectId;
 
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.ToolProvider;
+import javax.tools.*;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.URL;
@@ -41,10 +39,23 @@ public class TankCodeLoader {
             // Save it to a file
             JavaFileObject file = new JavaSourceFromString(name, code);
 
+
+
             // Set up variables (classpath) necessary
             JavaCompiler comp = ToolProvider.getSystemJavaCompiler();
+
+            DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+            StandardJavaFileManager fileManager = comp.getStandardFileManager(diagnostics, null, null);
+
             Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
-            JavaCompiler.CompilationTask task = comp.getTask(null, null, null, null, null, compilationUnits);
+            JavaCompiler.CompilationTask task = comp.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
+
+            for (Diagnostic diagnostic : diagnostics.getDiagnostics())
+                System.out.format("Error on line %d in %s%n",
+                        diagnostic.getLineNumber(),
+                        diagnostic.getSource().toString());
+
+            fileManager.close();
 
             boolean success = task.call();
 
