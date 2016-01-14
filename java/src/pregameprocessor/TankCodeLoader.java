@@ -48,7 +48,8 @@ public class TankCodeLoader {
             StandardJavaFileManager fileManager = comp.getStandardFileManager(diagnostics, null, null);
 
             Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
-            JavaCompiler.CompilationTask task = comp.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
+            final Iterable<String> options = Arrays.asList( new String[] { "-d", "game/board/elements/"} );
+            JavaCompiler.CompilationTask task = comp.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
 
             for (Diagnostic diagnostic : diagnostics.getDiagnostics())
                 System.out.format("Error on line %d in %s%n",
@@ -61,8 +62,8 @@ public class TankCodeLoader {
 
             if (success) {
                 try {
-                    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{new File(name).toURI().toURL()});
-                    System.err.println(new File(name).toURI().toURL());
+                    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{new File("").toURI().toURL()});
+
                     Class<?> cs = Class.forName(name, true, classLoader);
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class, int.class);
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank", 3);
