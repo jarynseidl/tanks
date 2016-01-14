@@ -50,7 +50,7 @@ public class TankCodeLoader {
             Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
 
             StandardJavaFileManager fileManager = comp.getStandardFileManager( null, null, null);
-            fileManager.setLocation(StandardLocation.CLASS_OUTPUT,Arrays.asList(new File("src/")));
+            fileManager.setLocation(StandardLocation.CLASS_OUTPUT,Arrays.asList(new File("/src/")));
             JavaCompiler.CompilationTask task = comp.getTask(null, fileManager,null,null, null, compilationUnits);
 
             //for (Diagnostic diagnostic : diagnostics.getDiagnostics())
