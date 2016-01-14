@@ -57,29 +57,27 @@ public class TankCodeLoader {
             //            diagnostic.getSource().toString());
 
             //fileManager.close();
-            System.err.println("here");
             System.err.println(name);
             boolean success = task.call();
 
             if (success) {
                 try {
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{new File(name+".class").toURI().toURL()});
-                    System.out.println(name);
-                    System.err.println(name);
                     Class<?> cs = Class.forName(name, true, classLoader);
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class, int.class);
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank", 3);
                     return t;
                 } catch (Exception e) {
-                    System.out.format("Reflection failed");
+                    System.err.format("Reflection failed");
                     e.printStackTrace();
                     return null;
                 }
             } else {
-                System.out.format("Failed to compile class. Loc: %s%n", name);
+                System.err.format("Failed to compile class. Loc: %s%n", name);
                 return null;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
