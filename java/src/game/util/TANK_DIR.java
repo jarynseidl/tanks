@@ -11,6 +11,9 @@ public enum TANK_DIR {
     }
 
     public TANK_DIR rotateLeft(TANK_DIR dir) {
+        if( ordinal() - 1 < 0){
+            return values()[3];
+        }
         return values()[(ordinal() - 1) % 4];
     }
 }
