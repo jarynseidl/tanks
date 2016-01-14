@@ -23,7 +23,7 @@ public class SquareBoardImpl implements Board {
         this.size = size;
 
         // Initialize the board with nulls
-        board = new ArrayList<>();
+        board = new ArrayList<List<BoardElement>>();
         for (int x = 0; x < size; x++) {
             board.add(new ArrayList<BoardElement>());
             for (int y = 0; y < size; y++) {

@@ -15,7 +15,7 @@ public class MoveTracker {
 
     public MoveTracker() {
         curTurn = 0;
-        listOfMoves = new ArrayList<>();
+        listOfMoves = new ArrayList<Map<Integer, TANK_MOVES>>();
     }
 
     public void addMove(int tank, TANK_MOVES move) {
