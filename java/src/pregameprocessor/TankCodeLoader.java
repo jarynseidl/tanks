@@ -58,6 +58,7 @@ public class TankCodeLoader {
 
             //fileManager.close();
             System.err.println("here");
+            System.err.println(name);
             boolean success = task.call();
 
             if (success) {
