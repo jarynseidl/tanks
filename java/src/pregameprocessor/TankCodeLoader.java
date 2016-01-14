@@ -62,7 +62,7 @@ public class TankCodeLoader {
 
             if (success) {
                 try {
-                    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{new File(name).toURI().toURL()});
+                    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{new File(name+".class").toURI().toURL()});
                     Class<?> cs = Class.forName(name, true, classLoader);
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class, int.class);
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank", 3);
