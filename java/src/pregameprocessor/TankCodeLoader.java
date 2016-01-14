@@ -48,7 +48,7 @@ public class TankCodeLoader {
             //StandardJavaFileManager fileManager = comp.getStandardFileManager(diagnostics, null, null);
 
             Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
-            //final Iterable<String> options = Arrays.asList( new String[] { "-d", "game/board/elements/"} );
+            final Iterable<String> options = Arrays.asList( new String[] { "-d", "src/"} );
             JavaCompiler.CompilationTask task = comp.getTask(null, null,null,null, null, compilationUnits);
 
             //for (Diagnostic diagnostic : diagnostics.getDiagnostics())
@@ -62,7 +62,7 @@ public class TankCodeLoader {
 
             if (success) {
                 try {
-                    File f = new File("");
+                    File f = new File("src/");
                     System.err.println(f.toURI().toURL());
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
                     Class<?> cs = Class.forName(name);//, true, classLoader);
