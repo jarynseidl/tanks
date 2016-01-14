@@ -15,6 +15,7 @@ import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Transient;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -76,7 +77,7 @@ public class Game {
                 if (ttanks.contains(t))
                     continue;
                 try {
-                    move = t.calculateTurn(tanks, boardSize);
+                    move = t.calculateTurn(Collections.unmodifiableList(tanks), boardSize);
                     switch (move) {
                         case SHOOT:
                             shoot(t);

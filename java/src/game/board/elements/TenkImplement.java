@@ -17,7 +17,7 @@ public class TenkImplement extends Tank {
 
 
     @Override
-    public TANK_MOVES calculateTurn(List<Tank> tanks, int size) {
+    public TANK_MOVES calculateTurn(final List<Tank> tanks, int size) {
         if (this.getDir() != TANK_DIR.E) {
             return TANK_MOVES.TURN_RIGHT;
         }
