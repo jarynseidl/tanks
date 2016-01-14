@@ -62,7 +62,7 @@ public class TankCodeLoader {
 
             if (success) {
                 try {
-                    File f = new File(name+".class");
+                    File f = new File(".");
                     System.err.println(f.toURI().toURL());
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
                     Class<?> cs = Class.forName(name, true, classLoader);
