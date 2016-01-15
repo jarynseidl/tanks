@@ -48,9 +48,10 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
     var username = req.params.username;
     var tankid = req.params.tankid;
-    Users.findById(username, function(err, user) {
+    console.log(tankid + "  " + username);
+    Users.findOne({'username':username}, function(err, user) {
         if (err) return console.log(err);
-        user.tanks.pull(tankid);
+        console.log(user.tanks.pull(tankid));
         user.save( function(err) {
             if (!err) return res.sendStatus(202);
             return console.log(err);
