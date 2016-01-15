@@ -58,3 +58,5 @@ exports.delete = function(req, res) {
         });
     });
 };
+
+// Utility functions
