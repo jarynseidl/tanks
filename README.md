@@ -1,6 +1,3 @@
-tanks
-=======
-
 Install:
 --------
 
@@ -28,6 +25,13 @@ To run it, you'll need MongoDB, which you can install from [here](https://docs.m
 ```bash
 mongod --config mongod.conf # starts mongo on default port 27017
 node server.js # starts node on default port 3000
+```
+
+To run the java engine, run ```java/src/Main.java``` with everything from ```java/lib``` in the classpath. On the aws server we run the following nasty long commands from the ```java``` directory. However, it can be simplified in an IDE.
+
+```
+javac -classpath lib/morphia-1.0.1.jar:lib/bson-3.0.4.jar:lib/mongodb-driver-3.0.4.jar:lib/mongodb-driver-core-3.1.1.jar:lib/gson-2.4.jar:src src/Main.java
+java -classpath lib/morphia-1.0.1.jar:lib/bson-3.0.4.jar:lib/mongodb-driver-3.0.4.jar:lib/mongodb-driver-core-3.1.1.jar:lib/gson-2.4.jar:src Main
 ```
 
 Errors:
