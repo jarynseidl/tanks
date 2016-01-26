@@ -42,7 +42,7 @@ var WatchGame = React.createClass({
             function()
             {
                 this.backToViewGames();
-            }.bind(this));    
+            }.bind(this));
         }
         else
         {
@@ -58,20 +58,20 @@ var WatchGame = React.createClass({
                 this.backToViewGames();
             }.bind(this));
         }
-        
+
     },
-    
+
     hasTank: function(x,y){
       for(var i = 0; i < 4; i++)
       {
           if (this.state.tanks[i].coord.x == x && this.state.tanks[i].coord.y == y && this.state.tanks[i].visible == true)
-          {    
+          {
              return true;
           }
-      }  
+      }
       return false;
     },
-    
+
     fire: function(tankNo)
     {
         var tempLasers = [];
@@ -113,7 +113,7 @@ var WatchGame = React.createClass({
                     }
                     else{
                         //we could add something about getting hit here.
-                        
+
                         break;
                     }
                     this.setState({lasers: tempLasers});
@@ -129,7 +129,7 @@ var WatchGame = React.createClass({
                     }
                     else{
                         //we could add something about getting hit here.
-                        
+
                         break;
                     }
                 }
@@ -141,15 +141,15 @@ var WatchGame = React.createClass({
         }
     },
     StartGame: function()
-     {     
+     {
             this.makeMove(0,0)
      },
-     
+
      makeMove: function(index1, index2)
      {
             if(index1 >= this.state.game.moves.listOfMoves.length){
                 return;}
-                
+
                        switch(index2){
                             case(0):
                                 switch(this.state.game.moves.listOfMoves[index1]['0']){
@@ -424,7 +424,7 @@ var WatchGame = React.createClass({
                                             break;
                                         }
                                     break;
-                                } 
+                                }
                             break;
                             case(3):
                                 switch(this.state.game.moves.listOfMoves[index1]['3']){
@@ -519,25 +519,25 @@ var WatchGame = React.createClass({
                                 }
                             break;
                         }
-            
-            
-            //check to see if the next tank in line exists, if not push it to the next tank and run again - this way we're not waiting. 
+
+
+            //check to see if the next tank in line exists, if not push it to the next tank and run again - this way we're not waiting.
             if(index2 != 3){
                 index2 ++;
             }
-            
+
             else{
                 index2 = 0;
                 index1++;
             }
-            
+
             var exists = false;
             while(!exists)
             {
                 console.log("Before" + this.state.tanksLeft);
                 switch(index2)
                 {
-                    
+
                     case(0):
                         if(this.state.game.moves.listOfMoves[index1]['0']){
                             exists = true;}
@@ -549,7 +549,7 @@ var WatchGame = React.createClass({
                             this.state.tanks[0].visible = false;
                             this.forceUpdate();
                             index2++;
-                            }     
+                            }
                     break;
                     case(1):
                         if(this.state.game.moves.listOfMoves[index1]['1']){
@@ -562,7 +562,7 @@ var WatchGame = React.createClass({
                              this.state.tanks[1].visible = false;
                             this.forceUpdate();
                             index2++;
-                            }     
+                            }
                     break;
                     case(2):
                         if(this.state.game.moves.listOfMoves[index1]['2']){
@@ -575,7 +575,7 @@ var WatchGame = React.createClass({
                             this.state.tanks[2].visible = false;
                             this.forceUpdate();
                             index2++;
-                            }   
+                            }
                     break;
                     case(3):
                          if(this.state.game.moves.listOfMoves[index1]['3']){
@@ -589,27 +589,27 @@ var WatchGame = React.createClass({
                             this.forceUpdate();
                             index2 =0;
                             index1++;
-                           
+
                             }
                     break;
                 }
                 if(this.state.tanksLeft <= 1)
                     exists = true;
                 console.log("after");
-            }              
-            
+            }
+
             if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
                 return;
             }
-            
+
             console.log(this.state.tanksLeft);
-            
+
             if (this.state.tanksLeft <= 1)
             {
                 this.DisplayWinner();
                 return;
             }
-                 
+
             setTimeout(function(){
                 this.makeMove(index1,index2);
             }.bind(this),this.state.TURN_LENGTH);
@@ -619,17 +619,17 @@ var WatchGame = React.createClass({
        var pieces = pathname.split("/");
        var gameID = pieces[2];
        console.log(gameID);
-       
+
        $.get('/api/games/'+gameID, function (results) {
            for(var i =0 ; i < 4; i++)
            {
-            this.state.tanks[i].name = results.users[i].tankName;    
+            this.state.tanks[i].name = results.users[i].tankName;
            }
-           
+
             this.setState({
                 game: results
             }, function() {
-              this.StartGame();  
+              this.StartGame();
             });
         }.bind(this));
     },
@@ -644,7 +644,7 @@ var WatchGame = React.createClass({
                 ar[i] = undefined;
             }
         });
-        
+
         this.state.lasers.forEach(function(laser)
         {
            var image_url = "Blank.png";
@@ -656,7 +656,7 @@ var WatchGame = React.createClass({
            image_url = '/images/'+image_url;
            board[laser.coord.y][laser.coord.x] = image_url
         });
-        
+
         this.state.tanks.forEach(function(tank) {
             var image_url = "NorthS.png";
             if (tank.dir === "S") {
@@ -698,7 +698,7 @@ var WatchGame = React.createClass({
                            var image_url = '/images/' +tank.index +'/EastS.png';
                            return(<td className="Legend"><img height ="50" width="50" src={image_url} /><br/><center><b> {tankName} </b></center></td>);
                         })}
-                       </tr>   
+                       </tr>
                     </tbody></table>
                     </center>
                 </div>

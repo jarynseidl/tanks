@@ -1,20 +1,6 @@
 var Auth = require('./authentication.js');
 
 var DisplayTank = React.createClass({
-	deleteTank: function (tankId,e) {
-		console.log("Delete tank with id: " + tankId);
-    	$.ajax({
-            url: '/api/users/' + Auth.getUsername() + '/tanks/'+ tankId,
-            type: 'DELETE',
-            contentType: 'application/json',
-            success: function(data) {
-                this.forceUpdate();
-                //self.props.history.pushState(null, '/user/' + Auth.getUsername());
-            }.bind(this),
-            error: function(xhr, status, err) {
-                   }.bind(self)
-        });                  
-    },
     render: function() {
         var collapseId = "collapse_" + this.props.tank._id;
         return (
@@ -26,7 +12,7 @@ var DisplayTank = React.createClass({
                 </div>
                 <div id={collapseId} className="accordion-body panel-body collapse">
                   <div>
-                  	<a className="accordion-toggle" onClick={this.deleteTank.bind(this, this.props.tank._id)} data-toggle="collapse" data-parent={"#" + this.props.accordionId} href={"#" + collapseId}>
+                  	<a className="accordion-toggle" onClick={this.props.onDeleteTank.bind(null, this.props.tank._id)} data-toggle="collapse" data-parent={"#" + this.props.accordionId} href={"#" + collapseId}>
                       Delete Tank
                   	</a>
                   </div>
@@ -41,12 +27,13 @@ var DisplayTank = React.createClass({
 var TankList = React.createClass({
     render: function() {
         var accordionId = Auth.getUsername() + "_tankList";
+		var self = this;
         return (
             <div>
                 <h3>Tanks: </h3>
                 <div className="accordion" id={accordionId}>
                     {this.props.tanks.map(function(tank) {
-                       return <DisplayTank tank={tank} key={tank._id} accordionId={accordionId} />;
+                       return <DisplayTank tank={tank} key={tank._id} accordionId={accordionId} onDeleteTank={self.props.onDeleteTank}/>;
                     })}
                 </div>
             </div>

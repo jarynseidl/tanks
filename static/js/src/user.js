@@ -7,7 +7,7 @@ var User = React.createClass({
             user: {tanks: []},
             username: "",
             tankCount: 0
-        }; 
+        };
     },
     componentDidMount: function() {
         $.get('/api/users/' + Auth.getUsername(), function(result) {
@@ -18,11 +18,31 @@ var User = React.createClass({
             });
         }.bind(this));
     },
+    deleteTank: function (tankId,e) {
+		var self = this;
+		console.log("Delete tank with id: " + tankId);
+    	$.ajax({
+            url: '/api/users/' + Auth.getUsername() + '/tanks/'+ tankId,
+            type: 'DELETE',
+            contentType: 'application/json',
+            success: function(data) {
+				var newArray = $.grep(self.state.user.tanks, function(a) {
+					return a._id !== tankId;
+				});
+                var modified = self.state.user;
+                modified.tanks = newArray;
+                self.setState({user: modified, tankCount: modified.tanks.length});
+                //self.props.history.pushState(null, '/user/' + Auth.getUsername());
+            },
+            error: function(xhr, status, err) {
+            }
+        });
+    },
     render: function() {
         return (
             <div className="displayUser">
                 <h1>{this.state.username} - ({this.state.tankCount} tanks)</h1>
-                <TankList tanks={this.state.user.tanks} />
+                <TankList tanks={this.state.user.tanks} onDeleteTank={this.deleteTank}/>
             </div>
             )}
 });
