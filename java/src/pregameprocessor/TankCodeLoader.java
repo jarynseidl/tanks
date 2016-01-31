@@ -13,33 +13,47 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by nathand on 12/1/15.
  */
 public class TankCodeLoader {
 
+	// public members
+	//public static File tankCodeDirectory = new File("./tankCode/");
     public static GameDatabase db = GameDatabaseImpl.getSingleton();
-    //public static File tankCodeDirectory = new File("./tankCode/");
     public static String compiledTankCodeDirectory = "./compiledTanks/";
+    
+    // private members
     private static String tankClassLoc = "game.board.elements.Tank";
+    private static final String CLASS_STR = "public class ";
+    private static final String IMPORT_STR = "import ";
+    private static final String SEMICOLON = ";";
+    
+    // approved Java package name patterns
+    private static final String[] APPROVED_PACKAGES = {
+    	"\\s*game.*",
+    	"\\s*org\\.bson.*",
+    	"\\s*org\\.mongodb.*",
+    	"\\s*java\\.util.*"
+    };
 
     public static Tank loadTank(ObjectId tankId, String name) {
         try {
+        	
+        	// get info and tank code text
             DBTank tank = db.loadDBTank(tankId);
             String code = tank.getCode();
-            //int start = code.indexOf("class ") + 6;
-            //if (start < 10) {
-            int start = code.indexOf("public class ") + 13;
-            //}
-            int end = code.indexOf(" ", start);
-            String nName = code.substring(start, end);
-            code = code.replaceAll(nName, name + " ");
+            
+            // parse the code and sanitize it
+            code = this.replaceTankClassName(code, name);
+            code = this.removeUnapprovedImports(code);
+
             // Take the code out
             // Save it to a file
             JavaFileObject file = new JavaSourceFromString(name, code);
-
-
 
             // Set up variables (classpath) necessary
             JavaCompiler comp = ToolProvider.getSystemJavaCompiler();
@@ -84,5 +98,71 @@ public class TankCodeLoader {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    //
+    // Private methods
+    //
+    
+    private String replaceTankClassName(String code, String tankName) {
+    	
+    	// find the class declaration
+        int start = code.indexOf(CLASS_STR) + CLASS_STR.length();
+        int end = code.indexOf(" ", start);
+        String nName = code.substring(start, end);
+        
+        // replace provided classname with unique identifying one from us
+        code = code.replaceAll(nName, name + " ");
+        return code;
+    }
+    
+    private String removeUnapprovedImports(String code) {
+    	
+    	// pre-compile regex patterns for acceptable package names
+    	Pattern[] packagePatterns = new Pattern[APPROVED_PACKAGES.length];
+    	for(int i=0; i<APPROVED_PACKAGES.length; i++) {
+    		packagePatterns[i] = Pattern.compile(APPROVED_PACKAGES[i]);
+    	}
+    	
+    	// find each import statement
+        int start = 0;
+        int packageIdx = 0;
+        int end = 0;
+        int lastImport = 0;
+        while (start != -1) {
+        	
+        	// identify substring location
+        	start = code.indexOf(IMPORT_STR, lastImport);
+        	packageIdx = start + IMPORT_STR.length();
+        	end = code.indexOf(SEMICOLON, packageIdx);
+        	
+        	// stop searching if we're out of imports
+        	if (start == -1) {
+        		break;
+        	}
+        	
+        	// extract package name, and check it for approval
+        	String packageInQuestion = code.substring(packageIdx, end);
+        	boolean packageApproved = false;
+        	for(int i=0; i<packagePatterns.length; i++) {
+        		Matcher match = packagePatterns[i].matcher(packageInQuestion);
+        		if (match.find()) {
+        			packageApproved = true;
+        			break;
+        		}
+        	}
+        	
+        	// remove the package declaration if it is NOT approved
+        	// set the "checked up to" index to either the end of this import
+        	// or to where we removed it from appropriately
+        	if (!packageApproved) {
+        		code = code.replace(code.substring(start, end+1), "");
+        		lastImport = start;
+        	} else {
+        		lastImport = end;
+        	}
+        }
+        
+        return code;
     }
 }
