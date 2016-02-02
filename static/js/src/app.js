@@ -17,7 +17,6 @@ var TankList = require('./tanks.js');
 
 var App = React.createClass({
   render: function() {
-
     return (
       <div>
         <div className="master">
@@ -52,7 +51,9 @@ var App = React.createClass({
                 </nav>
         </div>
         <div className="mainContent">
-          {this.props.children}
+          {this.props.children==null && Auth.loggedIn() ? <User/> : null}
+          {this.props.children==null && !Auth.loggedIn() ? <Home/> : null}
+          {this.props.children!=null ? this.props.children : null}
         </div>
       </div>
     );
