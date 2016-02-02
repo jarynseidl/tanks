@@ -51,9 +51,7 @@ var App = React.createClass({
                 </nav>
         </div>
         <div className="mainContent">
-          {this.props.children==null && Auth.loggedIn() ? <User/> : null}
-          {this.props.children==null && !Auth.loggedIn() ? <Home/> : null}
-          {this.props.children!=null ? this.props.children : null}
+          {this.props.children}
         </div>
       </div>
     );

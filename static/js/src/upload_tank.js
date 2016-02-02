@@ -109,8 +109,6 @@ var UploadTank = React.createClass({
         reader.onload = function(e) {
             var contents = e.target.result;
             self.tank_code = reader.result;
-            console.log("Code: " + self.tank_code);
-            //var words = code.split(' ');
             editor.setValue(self.tank_code);
             self.fileLoaded = true;
             
