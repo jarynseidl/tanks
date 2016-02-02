@@ -1,6 +1,6 @@
 var Router = require('react-router').Router
 var Route = require('react-router').Route
-var DefaultRoute = require('react-router').DefaultRoute
+var IndexRoute = require('react-router').IndexRoute
 var Link = require('react-router').Link
 var Register = require('./register.js');
 var User = require('./user.js');
@@ -14,6 +14,12 @@ var OpenGames = require('./open_games.js');
 var WatchGame = require('./watch_game.js');
 var Auth = require('./authentication.js')
 var TankList = require('./tanks.js');
+var defaultPageComponent;
+
+if(Auth.loggedIn())
+  defaultPageComponent = User;
+else
+  defaultPageComponent = Home;
 
 var App = React.createClass({
   render: function() {
@@ -58,7 +64,9 @@ var App = React.createClass({
   }
 }) ;
 
-var routes = (
+
+
+const routes = (
         <Router>
             <Route name="app" path="/" component={App}>
                 <Route name="register" path="/register" component={Register} />
@@ -71,6 +79,7 @@ var routes = (
                 <Route name ="open_games" path="/games" component={OpenGames} />
                 <Route name ="watch_game" path="/games/:gameId/watch" component={WatchGame} />
                 <Route path="*" component={Home} />
+                <IndexRoute component={defaultPageComponent} />
             </Route>
         </Router>
         );
