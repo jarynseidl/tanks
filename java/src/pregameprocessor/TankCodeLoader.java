@@ -48,8 +48,9 @@ public class TankCodeLoader {
             String code = tank.getCode();
             
             // parse the code and sanitize it
-            code = this.replaceTankClassName(code, name);
-            code = this.removeUnapprovedImports(code);
+            code = replaceTankClassName(code, name);
+            code = removeUnapprovedImports(code);
+            System.out.println(code);
 
             // Take the code out
             // Save it to a file
@@ -104,7 +105,7 @@ public class TankCodeLoader {
     // Private methods
     //
     
-    private String replaceTankClassName(String code, String tankName) {
+    private static String replaceTankClassName(String code, String tankName) {
     	
     	// find the class declaration
         int start = code.indexOf(CLASS_STR) + CLASS_STR.length();
@@ -112,11 +113,11 @@ public class TankCodeLoader {
         String nName = code.substring(start, end);
         
         // replace provided classname with unique identifying one from us
-        code = code.replaceAll(nName, name + " ");
+        code = code.replaceAll(nName, tankName + " ");
         return code;
     }
     
-    private String removeUnapprovedImports(String code) {
+    private static String removeUnapprovedImports(String code) {
     	
     	// pre-compile regex patterns for acceptable package names
     	Pattern[] packagePatterns = new Pattern[APPROVED_PACKAGES.length];
