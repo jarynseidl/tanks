@@ -65,8 +65,6 @@ public class TankCodeLoader {
             if (success) {
                 try {
                     File f = new File("src");
-                    System.out.println(name);
-                    System.out.println();
                     //System.err.println(f.toURI().toURL());
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
                     Class<?> cs = Class.forName(name, true, classLoader);
@@ -74,7 +72,7 @@ public class TankCodeLoader {
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank");
                     return t;
                 } catch (Exception e) {
-                    System.err.format("Reflection failed" + " on " + name);
+                    System.err.format("Reflection failed");
                     e.printStackTrace();
                     return null;
                 }
