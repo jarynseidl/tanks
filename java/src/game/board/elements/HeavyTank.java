@@ -31,6 +31,10 @@ public abstract class HeavyTank extends Tank{
 	private int reloadCost = 8;
 	private int damage = 10;
 	
+	public HeavyTank(){
+		
+	}
+	
 	public HeavyTank(ObjectId tankID, String tankName){
 		super(tankID, tankName, "Heavy");
 	}

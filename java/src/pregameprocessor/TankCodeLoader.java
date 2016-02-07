@@ -69,7 +69,7 @@ public class TankCodeLoader {
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
                     Class<?> cs = Class.forName(name, true, classLoader);
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class, int.class);
-                    Tank t = (Tank) ctor.newInstance(tankId, "My Tank", 3);
+                    Tank t = (Tank) ctor.newInstance(tankId, "My Tank");
                     return t;
                 } catch (Exception e) {
                     System.err.format("Reflection failed");
