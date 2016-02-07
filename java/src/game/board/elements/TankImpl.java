@@ -16,7 +16,7 @@ public class TankImpl extends BasicTank {
     public TankImpl() {
     }
 
-    public TankImpl(ObjectId tankID, String tankName, int health) {
+    public TankImpl(ObjectId tankID, String tankName) {
         super(tankID, tankName);
     }
 
