@@ -39,6 +39,8 @@ public abstract class BasicTank extends Tank{
 	public BasicTank(ObjectId tankID, String tankName){
 		super(tankID, tankName, "Basic");
 	}
+	
+    public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);
 
 	public int getMoveCost() {
 		return moveCost;
