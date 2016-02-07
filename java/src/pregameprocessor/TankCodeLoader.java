@@ -68,6 +68,7 @@ public class TankCodeLoader {
                     //System.err.println(f.toURI().toURL());
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
                     Class<?> cs = Class.forName(name, true, classLoader);
+                    System.out.println("Morphin time");
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class);
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank");
                     return t;
