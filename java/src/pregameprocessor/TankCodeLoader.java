@@ -74,7 +74,7 @@ public class TankCodeLoader {
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank");
                     return t;
                 } catch (Exception e) {
-                    System.err.format("Reflection failed");
+                    System.err.format("Reflection failed" + " on " + name);
                     e.printStackTrace();
                     return null;
                 }
