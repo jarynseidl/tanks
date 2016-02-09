@@ -177,7 +177,7 @@ public class Game {
                 for (int i = t.getCoord().getY(); i >= 0; i--) {
                     BoardElement elem = board.getElementAt(t.getCoord().getX(), i);
                     if (elem != null && (Tank) elem != t) {
-                        ((Tank) elem).takeDamage(1);
+                        ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                             ttanks.add((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
@@ -191,7 +191,7 @@ public class Game {
                 for (int i = t.getCoord().getX(); i < board.getSize(); i++) {
                     BoardElement elem = board.getElementAt(i, t.getCoord().getY());
                     if (elem != null && (Tank) elem != t) {
-                        ((Tank) elem).takeDamage(1);
+                        ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                             ttanks.add((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
@@ -204,7 +204,7 @@ public class Game {
                 for (int i = t.getCoord().getY(); i < board.getSize(); i++) {
                     BoardElement elem = board.getElementAt(t.getCoord().getX(), i);
                     if (elem != null && (Tank) elem != t) {
-                        ((Tank) elem).takeDamage(1);
+                        ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                             ttanks.add((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
@@ -217,7 +217,7 @@ public class Game {
                 for (int i = t.getCoord().getX(); i >= 0; i--) {
                     BoardElement elem = board.getElementAt(i, t.getCoord().getY());
                     if (elem != null && (Tank) elem != t) {
-                        ((Tank) elem).takeDamage(1);
+                        ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                             ttanks.add((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);

@@ -21,14 +21,33 @@ public abstract class Tank implements BoardElement {
     private TANK_DIR dir;
     @Transient
     private int alias;
+    private int actionPoints;
+    
+    //in case they decide to implement the superclass for some reason
+    // it's just the same stats as the BasicTank
+    //each tank class has their own ap costs
+    // I'm thinking it can then be called in the game class in that big switch?
+	private int moveCost = 2;
+	private int shootCost = 2;
+	private int turnCost = 1;
+	private int diagCost = 4;
+	private int reloadCost = 4;
+	private int damage = 7;
 
     public Tank() {
     }
 
-    public Tank(ObjectId tankID, String tankName, int health) {
+    public Tank(ObjectId tankID, String tankName, String tankType) {
         this.tankID = tankID;
         this.tankName = tankName;
-        this.health = health;
+        if(tankType.equals("Heavy"))
+        	health = 50;
+        else if(tankType.equals("Basic"))
+        	health = 35;
+        else if(tankType.equals("Light"))
+        	health = 20;
+        else
+        	health = 35;
     }
 
     public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);
@@ -75,5 +94,37 @@ public abstract class Tank implements BoardElement {
     public void setAlias(int alias) {
         this.alias = alias;
     }
+    
+    public int getActionPoints() {
+    	return actionPoints;
+    }
+
+    /*
+     * These are the AP cost get statements
+     */
+    
+	public int getMoveCost() {
+		return moveCost;
+	}
+
+	public int getShootCost() {
+		return shootCost;
+	}
+
+	public int getTurnCost() {
+		return turnCost;
+	}
+
+	public int getDiagCost() {
+		return diagCost;
+	}
+
+	public int getReloadCost() {
+		return reloadCost;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
 }
 
