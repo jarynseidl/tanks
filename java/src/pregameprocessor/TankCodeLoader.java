@@ -30,7 +30,13 @@ public class TankCodeLoader {
     private static String tankClassLoc = "game.board.elements.Tank";
     private static final String CLASS_STR = "public class ";
     private static final String IMPORT_STR = "import ";
+    private static final String PACKAGE_STR = "package ";
     private static final String SEMICOLON = ";";
+    private static final String SL_COMMENT_OPEN = "//";
+    private static final String SL_COMMENT_CLOSE = "\n";
+    private static final String ML_COMMENT_OPEN = "/*";
+    private static final String ML_COMMENT_CLOSE = "*/";
+    
     
     // approved Java package name patterns
     private static final String[] APPROVED_PACKAGES = {
@@ -115,6 +121,74 @@ public class TankCodeLoader {
         // replace provided classname with unique identifying one from us
         code = code.replaceAll(nName, tankName + " ");
         return code;
+    }
+    
+    private static String removePackageDeclaration(String code) {
+    	
+    	// Package statements are required to appear before any import statements
+    	// This combined with the edge cases involving Java keywords appearing in
+    	// comments has led to the extreme step of simply removing all text from
+    	// the source code that precedes the first valid import statement.
+    	int slCommentOpen = code.indexOf(SL_COMMENT_OPEN);
+    	int slCommentClose = code.indexOf(SL_COMMENT_CLOSE);
+    	int mlCommentOpen = code.indexOf(ML_COMMENT_OPEN);
+    	int mlCommentClose = code.indexOf(ML_COMMENT_CLOSE);
+    	int importIdx = code.indexOf(IMPORT_STR);
+    	
+    	// Let's go through all of the "import " matches
+    	// The first valid one will serve as the new beginning of the code
+    	// (everything before it is comments or a package statement)
+    	while (importIdx != -1) {
+    		
+	    	// If there are multiple comments, and the "import " is beyond the end 
+	    	// boundaries of these comments, let's find the next comments
+	    	// that aren't already over by the "import "
+    		//
+    		// Second clause is to ensure we don't get stuck here indefinitely
+    		// when we run out of comments (location at -1) and importIdx is always
+    		// greater than that. Must be an OR or else we'll leave prematurely
+    		// by running out of one kind of comment when there are still the 
+    		// other kind of comment (single and multi-line)
+	    	while ((importIdx > slCommentClose && importIdx > mlCommentClose) &&
+	    			(slCommentClose != -1 || mlCommentClose != -1)) {
+	    		
+	        	slCommentOpen = code.indexOf(SL_COMMENT_OPEN, slCommentOpen+1);
+	        	slCommentClose = code.indexOf(SL_COMMENT_CLOSE, slCommentClose+1);
+	        	mlCommentOpen = code.indexOf(ML_COMMENT_OPEN, mlCommentOpen+1);
+	        	mlCommentClose = code.indexOf(ML_COMMENT_CLOSE, mlCommentClose+1);
+	    	}
+	    	
+	    	// Check to see if this import lies within these comments
+	    	if ((importIdx > slCommentOpen && importIdx < slCommentClose) || 
+	    			(importIdx > mlCommentOpen && importIdx < mlCommentClose)) {
+	    		
+	    		// hmmm, this instance of "import " is within a comment, and therefore
+	    		// not a valid import statement; let's find the next candidate
+	    		importIdx = code.indexOf(IMPORT_STR, importIdx+1);
+	    		continue;
+	    		
+	    	} else {
+	    		
+	    		// this "import " is not within a comment!
+	    		// being the first valid import within the file, we can
+	    		// safely remove all text before it 
+	    		// (comments and possibly a package statement)
+	    		code = code.substring(importIdx);
+	    		return code;
+	    	}
+    	}
+    	
+    	// Well, if we're still here, it means there were 0 matches for "import "
+    	// or they were all within comments. This means this code is destined not
+    	// to work anyway because at a minimum, java.util. and game. need to be imported
+    	// for a tank to work.
+    	//
+    	// Anyway, this means there could still be a package statement, but now the
+    	// next valid code statement following it is the class declaration, so let's 
+    	// remove everything prior to the class declaration.
+    	//
+    	code = code.substring(code.indexOf(CLASS_STR));
+    	return code;
     }
     
     private static String removeUnapprovedImports(String code) {
