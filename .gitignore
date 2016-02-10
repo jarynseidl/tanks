@@ -12,3 +12,4 @@ java/tanks.iml
 .project
 java/src/*
 java/out/
+*.class
