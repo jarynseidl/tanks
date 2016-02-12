@@ -1,9 +1,12 @@
 package game.board.elements;
 
 import game.util.Coordinate;
+import game.util.LogItem;
 import game.util.TANK_DIR;
 import game.util.TANK_MOVES;
 import org.bson.types.ObjectId;
+import game.util.TANK_TYPE;
+import game.util.TANK_SKIN;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Transient;
 
@@ -22,6 +25,13 @@ public abstract class Tank implements BoardElement {
     @Transient
     private int alias;
     private int actionPoints;
+    private int kills;
+    private int deaths;
+    private boolean ready;
+    @Embedded
+    private List<LogItem> errors;
+    private TANK_TYPE type;
+    private TANK_SKIN skin;
     
     //in case they decide to implement the superclass for some reason
     // it's just the same stats as the BasicTank
