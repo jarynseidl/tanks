@@ -4,6 +4,7 @@ import game.board.Board;
 import game.board.SquareBoardImpl;
 import game.board.elements.BoardElement;
 import game.board.elements.Tank;
+import game.board.elements.Wall;
 import game.user.User;
 import game.util.Coordinate;
 import game.util.MoveTracker;
@@ -179,7 +180,7 @@ public class Game {
             case N:
                 for (int i = t.getCoord().getY(); i >= 0; i--) {
                     BoardElement elem = board.getElementAt(t.getCoord().getX(), i);
-                    if (elem != null && (Tank) elem != t) {
+                    if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                             ttanks.add((Tank) elem);
@@ -193,7 +194,7 @@ public class Game {
             case E:
                 for (int i = t.getCoord().getX(); i < board.getSize(); i++) {
                     BoardElement elem = board.getElementAt(i, t.getCoord().getY());
-                    if (elem != null && (Tank) elem != t) {
+                    if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                             ttanks.add((Tank) elem);
@@ -206,7 +207,7 @@ public class Game {
             case S:
                 for (int i = t.getCoord().getY(); i < board.getSize(); i++) {
                     BoardElement elem = board.getElementAt(t.getCoord().getX(), i);
-                    if (elem != null && (Tank) elem != t) {
+                    if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                             ttanks.add((Tank) elem);
@@ -219,7 +220,7 @@ public class Game {
             case W:
                 for (int i = t.getCoord().getX(); i >= 0; i--) {
                     BoardElement elem = board.getElementAt(i, t.getCoord().getY());
-                    if (elem != null && (Tank) elem != t) {
+                    if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                             ttanks.add((Tank) elem);
