@@ -29,11 +29,11 @@ public class TankCodeLoader {
     // private members
     private static String tankClassLoc = "game.board.elements.Tank";
     private static final String CLASS_STR = "public class ";
-    private static final String IMPORT_STR = "import ";
+    private static final String IMPORT_STR = "import";
     private static final String PACKAGE_STR = "package ";
     private static final String SEMICOLON = ";";
     private static final String SL_COMMENT_OPEN = "//";
-    private static final String SL_COMMENT_CLOSE = "\n";
+    private static final char SL_COMMENT_CLOSE = '\n';
     private static final String ML_COMMENT_OPEN = "/*";
     private static final String ML_COMMENT_CLOSE = "*/";
     
@@ -49,20 +49,27 @@ public class TankCodeLoader {
     public static Tank loadTank(ObjectId tankId, String name) {
         try {
         	
-        	// get info and tank code text
+        	// 0) get info and tank code text
             DBTank tank = db.loadDBTank(tankId);
             String code = tank.getCode();
             
-            // parse the code and sanitize it
+            // 1) Rename the tank to guarantee unique tank class names
+        	// 		within the game
             code = replaceTankClassName(code, name);
+            
+            // 2) Remove all code before imports
+            //	WARNING: must be called before removing unapproved imports
+            //	or else code will become jumbled!!!!!
+            code = removePackageDeclaration(code);
+            
+            // 3) Remove all imports that aren't whitelisted
             code = removeUnapprovedImports(code);
-            System.out.println(code);
 
-            // Take the code out
-            // Save it to a file
+            // 4) Take the code out
+            //		Save it to a file
             JavaFileObject file = new JavaSourceFromString(name, code);
 
-            // Set up variables (classpath) necessary
+            // 5) Set up variables (classpath) necessary
             JavaCompiler comp = ToolProvider.getSystemJavaCompiler();
 
             //DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -73,7 +80,6 @@ public class TankCodeLoader {
             StandardJavaFileManager fileManager = comp.getStandardFileManager( null, null, null);
             fileManager.setLocation(StandardLocation.CLASS_OUTPUT,Arrays.asList(new File("src")));
             JavaCompiler.CompilationTask task = comp.getTask(null, fileManager,null,null, null, compilationUnits);
-
             //for (Diagnostic diagnostic : diagnostics.getDiagnostics())
             //    System.out.format("Error on line %d in %s%n",
             //            diagnostic.getLineNumber(),
@@ -125,69 +131,109 @@ public class TankCodeLoader {
     
     private static String removePackageDeclaration(String code) {
     	
-    	// Package statements are required to appear before any import statements
-    	// This combined with the edge cases involving Java keywords appearing in
-    	// comments has led to the extreme step of simply removing all text from
-    	// the source code that precedes the first valid import statement.
-    	int slCommentOpen = code.indexOf(SL_COMMENT_OPEN);
-    	int slCommentClose = code.indexOf(SL_COMMENT_CLOSE);
-    	int mlCommentOpen = code.indexOf(ML_COMMENT_OPEN);
-    	int mlCommentClose = code.indexOf(ML_COMMENT_CLOSE);
-    	int importIdx = code.indexOf(IMPORT_STR);
+    	// Q: WHY ARE WE DOING THIS BY HAND? IT'S SO UGLY!
+    	// I originalyl did the hand parsing because I was calling the code
+    	// sanitations methods out of order and it was causing string 
+    	// foolishness I couldn't track down.
+    	//
+    	// However, now that bug is solved, this is still cleaner, easier
+    	// to read code than the "more abstract" use of indexOf() to track
+    	// comments and import statements, and it works. So... don't fix
+    	// what isn't broken.
     	
-    	// Let's go through all of the "import " matches
-    	// The first valid one will serve as the new beginning of the code
-    	// (everything before it is comments or a package statement)
-    	while (importIdx != -1) {
+    	// Q: WHY NOT JUST REMOVE PACKAGE STATEMENTS? WHY THE MASSIVE FILE CHOP?
+    	// For overkill safety, with a guarantee that a valid, compilable Java file
+    	// will suffer no damage from it anyway
+    	
+    	// Looking for the first valid import statement and removing everything before it
+    	// Why not just find the package statement? because that would require we find *all*
+    	// package statements; otherwise, someone could have 2 package statements, we'd
+    	// remove the first one, then their 2nd package statement would be left to happily
+    	// compile even though their original code would not have.
+    	
+    	int i = -1;
+    	boolean isLineComment = false;
+    	boolean isBlockComment = false;
+    	
+    	while(++i < code.length()) {
     		
-	    	// If there are multiple comments, and the "import " is beyond the end 
-	    	// boundaries of these comments, let's find the next comments
-	    	// that aren't already over by the "import "
-    		//
-    		// Second clause is to ensure we don't get stuck here indefinitely
-    		// when we run out of comments (location at -1) and importIdx is always
-    		// greater than that. Must be an OR or else we'll leave prematurely
-    		// by running out of one kind of comment when there are still the 
-    		// other kind of comment (single and multi-line)
-	    	while ((importIdx > slCommentClose && importIdx > mlCommentClose) &&
-	    			(slCommentClose != -1 || mlCommentClose != -1)) {
-	    		
-	        	slCommentOpen = code.indexOf(SL_COMMENT_OPEN, slCommentOpen+1);
-	        	slCommentClose = code.indexOf(SL_COMMENT_CLOSE, slCommentClose+1);
-	        	mlCommentOpen = code.indexOf(ML_COMMENT_OPEN, mlCommentOpen+1);
-	        	mlCommentClose = code.indexOf(ML_COMMENT_CLOSE, mlCommentClose+1);
-	    	}
-	    	
-	    	// Check to see if this import lies within these comments
-	    	if ((importIdx > slCommentOpen && importIdx < slCommentClose) || 
-	    			(importIdx > mlCommentOpen && importIdx < mlCommentClose)) {
-	    		
-	    		// hmmm, this instance of "import " is within a comment, and therefore
-	    		// not a valid import statement; let's find the next candidate
-	    		importIdx = code.indexOf(IMPORT_STR, importIdx+1);
-	    		continue;
-	    		
-	    	} else {
-	    		
-	    		// this "import " is not within a comment!
-	    		// being the first valid import within the file, we can
-	    		// safely remove all text before it 
-	    		// (comments and possibly a package statement)
-	    		code = code.substring(importIdx);
-	    		return code;
-	    	}
+    		//System.out.println(String.format("...char: \"%c\" at i:%d", code.charAt(i), i));
+    		switch (code.charAt(i)) {
+    		
+    		case '/':
+    			if (i+1 < code.length()) {
+	    			if (code.charAt(i+1) == '/' && !isBlockComment) {
+	    				// we've found a line comment!
+	    				isLineComment = true;
+	    				i++;
+	    			}
+	    			else if (code.charAt(i+1) == '*' && !isLineComment) {
+	    				// we've found a multi-line comment!
+	    				isBlockComment = true;
+	    				i++;
+	    			}
+    			}
+    			break;
+    			
+    		case '*':
+    			if (i+1 < code.length()) {
+	    			if (code.charAt(i+1) == '/' && !isLineComment) {
+	    				// we're ending a multiline!
+	    				isBlockComment = false;
+	    				i++;
+	    			}
+    			}
+    			break;
+    			
+    		case '\n':
+    			isLineComment = false;
+    			break;
+    			
+    		case 'i':
+    			if (i+IMPORT_STR.length() < code.length()) {
+	    			if (code.substring(i, i+IMPORT_STR.length()).equals(IMPORT_STR)
+	    					&& !isLineComment && !isBlockComment) {
+	    				
+	    				// found an un-commented import statement!
+	    				// remove all text before it, as it's all possibly-valid
+	    				// package statement(s) and comments!
+	    				code = code.substring(i);
+	    				return code;
+	    			}
+    			}
+    			break;
+    			
+    		case 'p':
+    			if (i+CLASS_STR.length() < code.length()) {
+    				if (code.substring(i, i+CLASS_STR.length()).equals(CLASS_STR)
+    						&& !isLineComment && !isBlockComment) {
+    					
+    					// found an un-commented class declaration!
+    					// if we made it here, then there were no valid import
+    					// statements, so this definitely won't work as a tank
+    					// Nevertheless, having been born of thorough parents, I'll
+    					// remove everything before it anyway to guarantee no
+    					// package statement exists!
+    					//
+    					// (Note: this will remove the @Embedded annotation, but again:
+    					// doesn't matter, it won't work as a tank anyway)
+    					code = code.substring(i);
+    					return code;
+    				}
+    			}
+    			break;
+    			
+    		default:
+    			break;
+    			
+    		}
     	}
     	
-    	// Well, if we're still here, it means there were 0 matches for "import "
-    	// or they were all within comments. This means this code is destined not
-    	// to work anyway because at a minimum, java.util. and game. need to be imported
-    	// for a tank to work.
+    	// If we're still here, it means there were no valid import statements
+    	// AND no valid class declaration! Yikes.
     	//
-    	// Anyway, this means there could still be a package statement, but now the
-    	// next valid code statement following it is the class declaration, so let's 
-    	// remove everything prior to the class declaration.
-    	//
-    	code = code.substring(code.indexOf(CLASS_STR));
+    	// I guess we'll leave it untouched, as there's no valid Java file that
+    	// meets those parameters, so we're at no risk anyway.
     	return code;
     }
     
