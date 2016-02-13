@@ -31,6 +31,10 @@ public class TankCodeLoader {
     private static final String CLASS_STR = "public class ";
     private static final String IMPORT_STR = "import";
     private static final String PACKAGE_STR = "package ";
+    private static final String THREAD_STR = "new Thread(";
+    private static final String RUNNABLE_STR = "new Runnable(";
+    private static final String EXT_THREAD_STR = "extends Thread";
+    private static final String THREAD_CALL_STR = "Thread.";
     private static final String SEMICOLON = ";";
     private static final String SL_COMMENT_OPEN = "//";
     private static final char SL_COMMENT_CLOSE = '\n';
@@ -64,12 +68,15 @@ public class TankCodeLoader {
             
             // 3) Remove all imports that aren't whitelisted
             code = removeUnapprovedImports(code);
+            
+            // 4) Remove calls that can create threads
+            code = removeThreadAndRunnableCalls(code);
 
-            // 4) Take the code out
+            // 5) Take the code out
             //		Save it to a file
             JavaFileObject file = new JavaSourceFromString(name, code);
 
-            // 5) Set up variables (classpath) necessary
+            // 6) Set up variables (classpath) necessary
             JavaCompiler comp = ToolProvider.getSystemJavaCompiler();
 
             //DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -127,6 +134,24 @@ public class TankCodeLoader {
         // replace provided classname with unique identifying one from us
         code = code.replaceAll(nName, tankName + " ");
         return code;
+    }
+    
+    private static String removeThreadAndRunnableCalls(String code) {
+    	
+    	// Right now, there's no guaranteed security setup
+    	// So, we want to prevent user code from creating Threads or Runnable
+    	// objects. This might leave their code butchered, as it does not attempt 
+    	// clean removal, but they surrendered that right when they injected
+    	// this kind of crap, IMHO.
+    	//
+    	// WARNING: currently not comment-safe (will remove instances of 
+    	// these strings from comments as well as live code)
+    	
+    	code = code.replace(THREAD_STR, "/*Thou shalt cling unto thine own thread!*/");
+    	code = code.replace(RUNNABLE_STR, "/*Thou shalt cling unto thine own thread!*/");
+    	code = code.replace(EXT_THREAD_STR, "/*Thou shalt cling unto thine own thread!*/");
+    	code = code.replace(THREAD_CALL_STR, "/*Thou shalt cling unto thine own thread!*/");
+    	return code;
     }
     
     private static String removePackageDeclaration(String code) {
