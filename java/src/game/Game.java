@@ -156,7 +156,9 @@ public class Game {
                     x += 1;
                 break;
         }
-        if (y < 0 || y > boardSize || x < 0 || x > boardSize) {
+        
+        //if tank center < 1 or > boardSize - 2, tank edge is out of bounds
+        if (y < 1 || y > boardSize - 2 || x < 1 || x > boardSize - 2) {
 
             return TANK_MOVES.WAIT;
         } else {
