@@ -35,11 +35,18 @@ public class TankCodeLoader {
     private static final String RUNNABLE_STR = "new Runnable(";
     private static final String EXT_THREAD_STR = "extends Thread";
     private static final String THREAD_CALL_STR = "Thread.";
+    private static final String RUNTIME_STR = "Runtime";
+    private static final String SYSTEM_STR = "System.";
+    private static final String SEC_MAN_STR = "SecurityManager";
     private static final String SEMICOLON = ";";
     private static final String SL_COMMENT_OPEN = "//";
     private static final char SL_COMMENT_CLOSE = '\n';
     private static final String ML_COMMENT_OPEN = "/*";
     private static final String ML_COMMENT_CLOSE = "*/";
+    private static final String COMMENT_THREADS = "/*Thou shalt cling unto thine own thread!*/";
+    private static final String COMMENT_RUNTIME = "/*Thou shalt not execute system commands!*/";
+    private static final String COMMENT_SYSTEM = "/*Thou shalt not use java.lang.System!*/";
+    private static final String COMMENT_SECURITY = "/*Thou shalt not set app security!*/";
     
     
     // approved Java package name patterns
@@ -71,12 +78,17 @@ public class TankCodeLoader {
             
             // 4) Remove calls that can create threads
             code = removeThreadAndRunnableCalls(code);
+            
+            // 5) Remove java.lang included functionality
+            //    This includes Runtime (allows system calls), System (allows file streams),
+            //    and SecurityManager (could potentially brick our running program)
+            code = removeOtherJavaLangProblems(code);
 
-            // 5) Take the code out
+            // 6) Take the code out
             //		Save it to a file
             JavaFileObject file = new JavaSourceFromString(name, code);
 
-            // 6) Set up variables (classpath) necessary
+            // 7) Set up variables (classpath) necessary
             JavaCompiler comp = ToolProvider.getSystemJavaCompiler();
 
             //DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -147,17 +159,31 @@ public class TankCodeLoader {
     	// WARNING: currently not comment-safe (will remove instances of 
     	// these strings from comments as well as live code)
     	
-    	code = code.replace(THREAD_STR, "/*Thou shalt cling unto thine own thread!*/");
-    	code = code.replace(RUNNABLE_STR, "/*Thou shalt cling unto thine own thread!*/");
-    	code = code.replace(EXT_THREAD_STR, "/*Thou shalt cling unto thine own thread!*/");
-    	code = code.replace(THREAD_CALL_STR, "/*Thou shalt cling unto thine own thread!*/");
+    	code = code.replace(THREAD_STR, COMMENT_THREADS);
+    	code = code.replace(RUNNABLE_STR, COMMENT_THREADS);
+    	code = code.replace(EXT_THREAD_STR, COMMENT_THREADS);
+    	code = code.replace(THREAD_CALL_STR, COMMENT_THREADS);
+    	return code;
+    }
+    
+    private static String removeOtherJavaLangProblems(String code) {
+    	
+    	// The Runtime object comes with java.lang and therefore reqires no import
+    	// statements. It can give the programmer access to the command line by
+    	// taking in Strings that can be evaluated as shell commands!
+    	//
+    	// This cannot be permitted. Go forth and slay them!
+    	
+    	code = code.replace(RUNNABLE_STR, COMMENT_RUNTIME);
+    	code = code.replace(SEC_MAN_STR, COMMENT_SECURITY);
+    	code = code.replace(SYSTEM_STR, COMMENT_SYSTEM);
     	return code;
     }
     
     private static String removePackageDeclaration(String code) {
     	
     	// Q: WHY ARE WE DOING THIS BY HAND? IT'S SO UGLY!
-    	// I originalyl did the hand parsing because I was calling the code
+    	// I originally did the hand parsing because I was calling the code
     	// sanitations methods out of order and it was causing string 
     	// foolishness I couldn't track down.
     	//
