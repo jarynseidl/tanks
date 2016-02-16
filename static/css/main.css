@@ -36,3 +36,23 @@ td.Legend
 img.home-screen-shot {
     width: 90%;
 }
+
+.red {
+    color:#ff0000;
+}
+
+.black {
+    color:#000000;
+}
+
+.gray {
+    color:#999999;
+}
+
+.clickable {
+    cursor:pointer;
+}
+
+.marginSmallRight {
+    margin-right:5px;
+}

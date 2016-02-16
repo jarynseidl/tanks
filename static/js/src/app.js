@@ -14,6 +14,7 @@ var OpenGames = require('./open_games.js');
 var WatchGame = require('./watch_game.js');
 var Auth = require('./authentication.js')
 var TankList = require('./tanks.js');
+var Sandbox = require('./sandbox.js');
 var defaultPageComponent;
 
 if(Auth.loggedIn())
@@ -48,6 +49,8 @@ var App = React.createClass({
                         {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="your_games">See Your Games</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="user">Your Tanks</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="user">Your Tanks</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="sandbox">Sandbox</Link></li> : null }
                       </ul>
                       <ul className="nav navbar-nav navbar-right">
                         {Auth.loggedIn() ? <li><Logout history={this.props.history} /></li> : null }
@@ -78,6 +81,7 @@ const routes = (
                 <Route name ="your_games" path="/your_games" component={YourGames} />
                 <Route name ="open_games" path="/games" component={OpenGames} />
                 <Route name ="watch_game" path="/games/:gameId/watch" component={WatchGame} />
+                <Route name ="sandbox" path="/sandbox" component={Sandbox} />
                 <Route path="*" component={Home} />
                 <IndexRoute component={defaultPageComponent} />
             </Route>
