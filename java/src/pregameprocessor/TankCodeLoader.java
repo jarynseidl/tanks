@@ -38,6 +38,7 @@ public class TankCodeLoader {
     private static final String RUNTIME_STR = "Runtime";
     private static final String SYSTEM_STR = "System.";
     private static final String SEC_MAN_STR = "SecurityManager";
+    private static final String PROCESS_STR = " Process";
     private static final String SEMICOLON = ";";
     private static final String SL_COMMENT_OPEN = "//";
     private static final char SL_COMMENT_CLOSE = '\n';
@@ -47,6 +48,7 @@ public class TankCodeLoader {
     private static final String COMMENT_RUNTIME = "/*Thou shalt not execute system commands!*/";
     private static final String COMMENT_SYSTEM = "/*Thou shalt not use java.lang.System!*/";
     private static final String COMMENT_SECURITY = "/*Thou shalt not set app security!*/";
+    private static final String COMMENT_PROCESS = "/*Thou shalt not use java.lang.Process(Builder)!*/";
     
     
     // approved Java package name patterns
@@ -177,6 +179,7 @@ public class TankCodeLoader {
     	code = code.replace(RUNNABLE_STR, COMMENT_RUNTIME);
     	code = code.replace(SEC_MAN_STR, COMMENT_SECURITY);
     	code = code.replace(SYSTEM_STR, COMMENT_SYSTEM);
+    	code = code.replace(PROCESS_STR, COMMENT_PROCESS);
     	return code;
     }
     
