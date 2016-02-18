@@ -82,6 +82,8 @@ var UploadEditor = React.createClass({
             borderRadius: '5px'
         };
 
+        console.log(this.refs)
+
         return (
             <form onSubmit={this.uploadText}>
                 <div className="input-group">
@@ -139,4 +141,4 @@ var UploadTank = React.createClass({
     }
 });
 
-    module.exports = UploadTank;
+module.exports = UploadTank;
