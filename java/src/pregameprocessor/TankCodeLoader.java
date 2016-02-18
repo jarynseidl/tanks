@@ -38,7 +38,7 @@ public class TankCodeLoader {
     private static final String RUNTIME_STR = "Runtime";
     private static final String SYSTEM_STR = "System.";
     private static final String SEC_MAN_STR = "SecurityManager";
-    private static final String PROCESS_STR = " Process";
+    private static final String PROCESS_STR = "Process";
     private static final String SEMICOLON = ";";
     private static final String SL_COMMENT_OPEN = "//";
     private static final char SL_COMMENT_CLOSE = '\n';
