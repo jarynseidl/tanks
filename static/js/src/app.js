@@ -22,6 +22,9 @@ if(Auth.loggedIn())
 else
   defaultPageComponent = Home;
 
+var Manual = require('./manual.js');
+
+
 var App = React.createClass({
   render: function() {
     return (
@@ -49,8 +52,8 @@ var App = React.createClass({
                         {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="your_games">See Your Games</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="user">Your Tanks</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="user">Your Tanks</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="sandbox">Sandbox</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="manual">Manual</Link></li> : null }
                       </ul>
                       <ul className="nav navbar-nav navbar-right">
                         {Auth.loggedIn() ? <li><Logout history={this.props.history} /></li> : null }
@@ -82,6 +85,7 @@ const routes = (
                 <Route name ="open_games" path="/games" component={OpenGames} />
                 <Route name ="watch_game" path="/games/:gameId/watch" component={WatchGame} />
                 <Route name ="sandbox" path="/sandbox" component={Sandbox} />
+                <Route name ="manual" path="/manual" component={Manual} />
                 <Route path="*" component={Home} />
                 <IndexRoute component={defaultPageComponent} />
             </Route>
