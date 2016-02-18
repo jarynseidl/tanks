@@ -81,7 +81,15 @@ public class Game {
                     move = t.calculateTurn(Collections.unmodifiableList(tanks), boardSize);
                     switch (move) {
                         case SHOOT:
-                            shoot(t);
+                            //if tank has shot, fall to reload
+                            if(!t.getShot()){
+                                shoot(t);
+                                t.setShot(true);
+                                break;
+                            }
+                            move = TANK_MOVES.RELOAD;
+                        case RELOAD:
+                            t.setShot(false);
                             break;
                         case TURN_RIGHT:
                             t.setDir(t.getDir().rotateRight(t.getDir()));
