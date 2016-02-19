@@ -22,6 +22,8 @@ public abstract class Tank implements BoardElement {
     @Transient
     private int alias;
     private int actionPoints;
+    //if tank has shot without reloading
+    private boolean shot;
     
     //in case they decide to implement the superclass for some reason
     // it's just the same stats as the BasicTank
@@ -48,6 +50,7 @@ public abstract class Tank implements BoardElement {
         	health = 20;
         else
         	health = 35;
+        shot = false;
     }
 
     public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);
@@ -125,6 +128,14 @@ public abstract class Tank implements BoardElement {
 
 	public int getDamage() {
 		return damage;
+	}
+
+	public boolean getShot(){
+		return shot;
+	}
+
+	public void setShot(boolean shot){
+		this.shot = shot;
 	}
 }
 
