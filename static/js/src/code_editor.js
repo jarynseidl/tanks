@@ -3,9 +3,6 @@ var Editor = React.createClass({
         var editor = ace.edit(this.refs.editor);
         editor.setTheme("ace/theme/monokai");
         editor.getSession().setMode("ace/mode/java");
-        if (this.props.init) {
-            editor.setValue(this.props.init);
-        }
     },
     render: function() {
         var editorStyle =  {
@@ -14,6 +11,10 @@ var Editor = React.createClass({
             margin: '10px 0',
             borderRadius: '5px'
         };
+        if (this.props.selectedTank) {
+
+          ace.edit(this.refs.editor).setValue(this.props.selectedTank.code);
+        }
 
         return (
             <form>

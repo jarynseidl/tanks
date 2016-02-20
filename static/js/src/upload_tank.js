@@ -37,7 +37,7 @@ var uploadTank =  function() {
                 code: self.tank_code
             }),
             success: function(data) {
-                self.props.history.pushState(null, '/user/' + Auth.getUsername());
+                self.props.history.pushState(null, '/test');
             },
             error: function(xhr, status, err) {
             }
@@ -113,7 +113,7 @@ var UploadTank = React.createClass({
             self.tank_code = reader.result;
             editor.setValue(self.tank_code);
             self.fileLoaded = true;
-            
+
         }
         reader.readAsText(self.file);
     },

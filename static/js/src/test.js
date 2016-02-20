@@ -13,8 +13,6 @@ var Test = React.createClass({
     },
     handleSelectTank: function(tank) {
         this.setState({selectedTank: tank});
-        console.log("TANK: " + tank);
-        console.log(this.state.selectedTank);
     },
     componentDidMount: function() {
         $.get('/api/users/' + Auth.getUsername(), function(result) {
@@ -32,7 +30,7 @@ var Test = React.createClass({
                     <TankList tanks={this.state.user.tanks} onSelectTank={this.handleSelectTank}/>
                 </div>
                 <div className="col-md-4">
-                    <Editor />
+                    <Editor selectedTank={this.state.selectedTank} />
                 </div>
                 <div className="col-md-4"></div>
             </div>

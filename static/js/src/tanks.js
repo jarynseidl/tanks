@@ -104,7 +104,7 @@ var TankCard = React.createClass({
             <div id={this.props.tank._id} style={cardStyle} onClick={this.props.onSelectTank.bind(null, this.props.tank)}>
                 <div className="row">
                     <div className="col-md-3">
-                        <div ref="tankName">Megadeth</div>
+                        <div ref="tankName">{this.props.tank.name}</div>
                         <img src="/images/BlueSouth.gif"></img>
                     </div>
                     <div className="col-md-9">
@@ -129,8 +129,6 @@ var TankList = React.createClass({
                        return (
                            <div>
                                <TankCard tank={tank} key={tank._id} onSelectTank={self.props.onSelectTank}/>
-
-                               <DisplayTank tank={tank} key={tank._id} accordionId={accordionId} onDeleteTank={self.props.onDeleteTank}/>
                            </div>
                        )
                 })}

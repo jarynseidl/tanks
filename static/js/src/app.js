@@ -52,7 +52,6 @@ var App = React.createClass({
                         {Auth.loggedIn() ? <li><Link to="upload_tank">Upload a Tank</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="your_games">See Your Games</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="user">Your Tanks</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="sandbox">Sandbox</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="manual">Manual</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="test">Test</Link></li> : null }
