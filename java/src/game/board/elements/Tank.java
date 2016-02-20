@@ -1,12 +1,9 @@
 package game.board.elements;
 
 import game.util.Coordinate;
-import game.util.LogItem;
 import game.util.TANK_DIR;
 import game.util.TANK_MOVES;
 import org.bson.types.ObjectId;
-import game.util.TANK_TYPE;
-import game.util.TANK_SKIN;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Transient;
 
@@ -25,13 +22,8 @@ public abstract class Tank implements BoardElement {
     @Transient
     private int alias;
     private int actionPoints;
-    private int kills;
-    private int deaths;
-    private boolean ready;
-    @Embedded
-    private List<LogItem> errors;
-    private TANK_TYPE type;
-    private TANK_SKIN skin;
+    //if tank has shot without reloading
+    private boolean shot;
     
     //in case they decide to implement the superclass for some reason
     // it's just the same stats as the BasicTank
@@ -58,6 +50,7 @@ public abstract class Tank implements BoardElement {
         	health = 20;
         else
         	health = 35;
+        shot = false;
     }
 
     public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);
@@ -135,6 +128,14 @@ public abstract class Tank implements BoardElement {
 
 	public int getDamage() {
 		return damage;
+	}
+
+	public boolean getShot(){
+		return shot;
+	}
+
+	public void setShot(boolean shot){
+		this.shot = shot;
 	}
 }
 

@@ -84,7 +84,15 @@ public class Game {
                     move = t.calculateTurn(Collections.unmodifiableList(tanks), boardSize);
                     switch (move) {
                         case SHOOT:
-                            shoot(t);
+                            //if tank has shot, fall to reload
+                            if(!t.getShot()){
+                                shoot(t);
+                                t.setShot(true);
+                                break;
+                            }
+                            move = TANK_MOVES.RELOAD;
+                        case RELOAD:
+                            t.setShot(false);
                             break;
                         case TURN_RIGHT:
                             t.setDir(t.getDir().rotateRight(t.getDir()));
@@ -159,7 +167,9 @@ public class Game {
                     x += 1;
                 break;
         }
-        if (y < 0 || y > boardSize || x < 0 || x > boardSize) {
+        
+        //if tank center < 1 or > boardSize - 2, tank edge is out of bounds
+        if (y < 1 || y > boardSize - 2 || x < 1 || x > boardSize - 2) {
 
             return TANK_MOVES.WAIT;
         } else {
