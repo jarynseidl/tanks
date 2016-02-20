@@ -10,3 +10,4 @@ java/tanks.iml
 /bin/
 .classpath
 .project
+*.class
