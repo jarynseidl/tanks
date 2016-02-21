@@ -121,16 +121,16 @@ var TankList = React.createClass({
     render: function() {
         var accordionId = Auth.getUsername() + "_tankList";
 		var self = this;
+        var listStyle = {
+            height: '500px',
+            overflowY: 'auto',
+            overflowX: 'hidden'
+        };
         return (
             <div>
-                <h3>Tanks: </h3>
-                <div className="accordion" id={accordionId}>
+                <div style={listStyle}>
                     {this.props.tanks.map(function(tank) {
-                       return (
-                           <div>
-                               <TankCard tank={tank} key={tank._id} onSelectTank={self.props.onSelectTank}/>
-                           </div>
-                       )
+                       return <TankCard tank={tank} key={tank._id} onSelectTank={self.props.onSelectTank}/>
                 })}
                 </div>
             </div>

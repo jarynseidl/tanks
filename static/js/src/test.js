@@ -2,6 +2,27 @@ var Auth = require('./authentication.js');
 var Editor = require('./code_editor.js');
 var TankList = require('./tanks.js')
 
+var Placeholder = React.createClass({
+    render: function() {
+        var style = {
+            backgroundColor: '#D4D2D2',
+            color: '#F0EFEF',
+            fontSize: '5em',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+            textShadow: '1px 4px 6px #BDBCBC, 0 0 0 #000, 1px 4px 6px #BDBCBC',
+            borderRadius: '5px',
+            height: '8em',
+            lineHeight: '8em'
+        }
+        return (
+            <div style={style}>
+                Choose a tank
+            </div>
+        )
+    }
+})
+
 var Test = React.createClass({
     getInitialState: function() {
         return {
@@ -26,13 +47,13 @@ var Test = React.createClass({
     render: function() {
         return (
             <div>
-                <div className="col-md-4">
+                <div className="col-md-3 col-md-offset-1">
+                    <h3>Tanks: </h3>
                     <TankList tanks={this.state.user.tanks} onSelectTank={this.handleSelectTank}/>
                 </div>
-                <div className="col-md-4">
-                    <Editor selectedTank={this.state.selectedTank} />
+                <div className="col-md-5 col-md-offset-1">
+                    {this.state.selectedTank ? <Editor selectedTank={this.state.selectedTank} /> : <Placeholder /> }
                 </div>
-                <div className="col-md-4"></div>
             </div>
         )
     }
