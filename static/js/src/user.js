@@ -1,5 +1,6 @@
 var Auth = require('./authentication.js');
 var TankList = require('./tanks.js');
+var Armory = require('./armory.js');
 
 var User = React.createClass({
     getInitialState: function() {
@@ -41,8 +42,7 @@ var User = React.createClass({
     render: function() {
         return (
             <div className="displayUser">
-                <h1>{this.state.username} - ({this.state.tankCount} tanks)</h1>
-                <TankList tanks={this.state.user.tanks} onDeleteTank={this.deleteTank}/>
+                <Armory tanks={this.state.user.tanks}/>
             </div>
             )}
 });

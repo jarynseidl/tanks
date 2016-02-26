@@ -20,20 +20,14 @@ var TankCard = React.createClass({
                         <span>Kills:</span>
                     </div>
                     <div className="buttonSection">
-                            {inArmory ? 
-                                <button type="submit" className="btn btn-primary tankCardButton">Upload</button>
-                                : null
-                            }
                             {inArmory ?  
-                                <button type="submit" className="btn btn-danger tankCardButton">Download</button>
+                                <button type="submit" className="btn btn-danger button">Edit</button>
                                 : null
                             }
                             {!inArmory ?  
-                                <button onClick={this.props.joinGame.bind(null, tank)} ontype="submit" className="btn btn-success tankCardButton">Join!</button>
+                                <button onClick={this.props.joinGame.bind(null, tank)} ontype="submit" className="btn btn-success button">Join!</button>
                                 : null
                             } 
-                            
-                            
                     </div>
                 </div>
         );
