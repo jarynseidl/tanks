@@ -36,3 +36,96 @@ td.Legend
 img.home-screen-shot {
     width: 90%;
 }
+
+.red {
+    color:#ff0000;
+}
+
+.black {
+    color:#000000;
+}
+
+.gray {
+    color:#999999;
+}
+
+.clickable {
+    cursor:pointer;
+}
+
+.marginSmallRight {
+    margin-right:5px;
+}
+/**************************************************************************
+CSS For the TankCard Class
+**************************************************************************/
+.tankCard{
+    display:inline-flex;
+    width:100%;
+    height: 100px;
+    background-color: #a6a6a6;
+    margin-bottom: 10px;
+}
+
+.tankCard h4 {
+    margin: 5px 0px 5px 0px;
+}
+
+.tankCard h5 {
+    margin: 5px 0px 5px 0px;
+}
+
+.tankCardSection1 {
+    display: flex;
+    flex-direction:column;
+    width:30%;
+}
+
+.tankCardStats {
+    width:30%;
+    font-weight: 600;
+    display:flex;
+    flex-direction:column;
+}
+
+.buttonSection {
+    width:30%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.tankCardButton {
+    width:100%;
+    margin:5px;
+    box-shadow: 3px 3px 3px #888888;
+    background-color:#800000 !important;
+    border-color:#800000 !important;
+}
+/**************************************************************************
+CSS For the PlayerPanel Class
+**************************************************************************/
+.tankPanel {
+    display: flex;
+    flex-wrap:wrap;
+
+}
+
+.inGamePanel {
+    width:170px;
+    height:170px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #5bc0de;
+    border-radius: 20px;
+    text-align:center;
+    position: relative;
+    margin:10px;
+
+}
+
+.topRight {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
