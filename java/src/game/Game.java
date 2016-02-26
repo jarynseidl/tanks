@@ -170,8 +170,16 @@ public class Game {
 
             return TANK_MOVES.WAIT;
         } else {
-            if (board.getElementAt(x, y) != null) {
-                return TANK_MOVES.WAIT;
+        	//elem is the BoardElement in the spot we want to go
+        	BoardElement elem = board.getElementAt(x, y);
+        	//if elem is not an empty spot
+            if (elem != null) {
+            	//if elem is a wall
+            	if(elem instanceof Wall ||
+            			//or a tank other than ourselves
+            			(elem instanceof Tank && (Tank)elem != t))
+            		//we can't move there, so wait instead
+            		return TANK_MOVES.WAIT;
             }
 
             board.setElementAt(t.getCoord().getX(), t.getCoord().getY(), null);
