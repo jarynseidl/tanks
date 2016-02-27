@@ -55,7 +55,18 @@ var UploadEditor = React.createClass({
 });
 
 var Armory = React.createClass({
+    //the current tank in the editing area
     curr_tank: null,
+    //boolean indicating whether or not the current code is for a new tank or an existing one
+    is_new: true,
+    //reset the editor to have default values on it
+    resetEditor: function(){
+        var editor = this.refs.upload_editor;
+        var tankName = this.refs.tankName;
+        editor.componentDidMount();
+        tankName.value = "New Tank";
+    },
+    //uploads a java file from the client's computer and puts it in the text editor
     uploadFile: function (e) {
         var self = this;
         var reader = new FileReader();
@@ -66,46 +77,53 @@ var Armory = React.createClass({
             var contents = e.target.result;
             self.tank_code = reader.result;
             editor.setValue(self.tank_code);
-            self.fileLoaded = true;
-            
+            self.fileLoaded = true; 
         }
         reader.readAsText(self.file);
     },
+    //deletes a tank
     deleteTank: function () {
+        //grab the current tank in the editing area
         var tank = this.curr_tank;
         var update = this.props.update;
-        var editor = this.refs.upload_editor;
-        var tankName = this.refs.tankName;
+        var resetEditor = this.resetEditor;
+        //if there is no tank in the editing area, do nothing
         if(tank==null)
             return;
+        //set the current tank variable to null because it will be deleted
+        this.curr_tank = null;
         var self = this;
         var tankId = tank._id;
-        console.log("Delete tank with id: " + tankId);
+        this.is_new = true;
         $.ajax({
             url: '/api/users/' + Auth.getUsername() + '/tanks/'+ tankId,
             type: 'DELETE',
             contentType: 'application/json',
             success: function(data) {
+                //callback to update the state component in user.js
                 update();
-                editor.componentDidMount();
-                tankName.value = "";
+                resetEditor();
             },
             error: function(xhr, status, err) {
             }
         });
     },
+    //put the tank's code into editing area and update the curr_tank variable
     editTank: function(tank,e) {
-        console.log("in edit tank function");
+        this.is_new = false;
         var editor = this.refs.upload_editor.getEditor();
         editor.setValue(tank.code);
         this.refs.tankName.value = tank.name;
         this.curr_tank = tank;
-        console.log(this.curr_tank);
-
     },
-    uploadTank:  function(e) {
-        console.log(this.props);
+    //set the current tank in the editing area
+    setCurrTank: function(tank) {
+        this.curr_tank = tank;
+    },
+    //save tank to the database
+    saveTank:  function(e) {
         var update = this.props.update;
+        var curr_tank = this.curr_tank;
         var tankName = this.refs.tankName.value.trim();
         var editor = this.refs.upload_editor.getEditor();
         var tank_code = editor.getValue().trim();
@@ -117,21 +135,42 @@ var Armory = React.createClass({
             alert("Looks like there was a problem uploading your file. Try uploading it again.");
         }
         else{
+            var route;
+            var reqType;
+            var setCurrTank = this.setCurrTank;
+            //set the route and type to this if the tank is brand new
+            if(this.is_new){
+                route = '/api/users/' + Auth.getUsername() + '/tanks';
+                reqType = 'POST'; 
+            }
+            //set the route and type to this if the tank is being updated
+            else {
+                route = '/api/users/' + Auth.getUsername() + '/tanks/' + this.curr_tank._id;
+                reqType = 'PUT';
+            }
+            this.is_new = false;
             $.ajax({
-                url: '/api/users/' + Auth.getUsername() + '/tanks',
-                type: 'POST',
+                url: route,
+                type: reqType,
                 contentType: 'application/json',
                 data: JSON.stringify({
                     name: tankName,
                     code: tank_code
                 }),
                 success: function(data) {
+                    setCurrTank(data);
                     update();
                 },
                 error: function(xhr, status, err) {
                 }
             });
         }
+    },
+    //prepares a new tank to be saved and puts it in the editing area
+    newTank: function(){
+        this.is_new = true;
+        this.resetEditor();
+
     },
     render: function() {
         var user_tanks = this.props.tanks;
@@ -140,7 +179,7 @@ var Armory = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-md-3 armory-top flex">
-                        <button type="submit" className="btn btn-primary button">Create New Tank</button>
+                        <button type="submit" className="btn btn-primary button" onClick={this.newTank}>Create New Tank</button>
                         <div className="tankPanel dark-background ">
                             {user_tanks.map(function(tank,i) {
                                    return <TankCard tank={tank} key={i} inArmory={true} editTank={editTank}/>;
@@ -150,10 +189,10 @@ var Armory = React.createClass({
                     <div className="col-md-9 armory-top flex">
                         <div className="input-group">
                             <span className="input-group-addon">Name: </span>
-                            <input ref="tankName" type="text" className="form-control" />
+                            <input ref="tankName" type="text" className="form-control"/>
                         </div>
                         <div className="horizontal">
-                            <button type="submit" className="btn btn-primary button" onClick={this.uploadTank}>Save</button>
+                            <button type="submit" className="btn btn-primary button" onClick={this.saveTank}>Save</button>
                             <button type="submit" className="btn btn-primary button" onClick={this.props.update}>Run</button>
                             <input className="inputfile" ref="tankFile" onChange={this.uploadFile} type="file" name="tankFile" id="tankFile" accept="java/*" />
                             <label className="btn btn-primary button" htmlFor="tankFile">Upload</label>
