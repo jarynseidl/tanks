@@ -17,35 +17,6 @@ var ExampleTanks = React.createClass({
     }
 });
 
-var uploadTank =  function() {
-    var self = this;
-    console.log("In upload function");
-    self.tankName = this.refs.tankName.value.trim();
-    console.log("After tank name");
-    if(self.tankName == "" || self.tankName == undefined){
-        alert("Whoops. Looks like you forgot fill out everything.");
-    }
-    else if(self.tank_code == undefined){
-        alert("Looks like there was a problem uploading your file. Try uploading it again.");
-    }
-    else{
-        $.ajax({
-            url: '/api/users/' + Auth.getUsername() + '/tanks',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                name: self.tankName,
-                code: self.tank_code
-            }),
-            success: function(data) {
-                self.props.history.pushState(null, '/user/' + Auth.getUsername());
-            },
-            error: function(xhr, status, err) {
-            }
-        });
-    }
-};
-
 var UploadEditor = React.createClass({
     componentDidMount: function() {
         var editor = ace.edit(this.refs.editor);
@@ -64,18 +35,10 @@ var UploadEditor = React.createClass({
             "\n\t\t}\n\t}\n}"
         );
     },
-    uploadText: function (e) {
-        e.preventDefault();
-        var editor = ace.edit(this.refs.editor);
-        var self = this;
-        self.tank_code = editor.getValue().trim();
-        this.uploadTank();
-    },
     getEditor: function(e) {
         var editor = ace.edit(this.refs.editor);
         return editor;
     },
-    uploadTank: uploadTank,
     render: function() {
         var editorStyle =  {
             height: '500px',
@@ -84,7 +47,7 @@ var UploadEditor = React.createClass({
         };
 
         return (
-            <form onSubmit={this.uploadText}>
+            <form>
                 <div className="editorStyle" ref="editor"></div>
             </form>
         );
@@ -92,6 +55,7 @@ var UploadEditor = React.createClass({
 });
 
 var Armory = React.createClass({
+    curr_tank: null,
     uploadFile: function (e) {
         var self = this;
         var reader = new FileReader();
@@ -107,9 +71,71 @@ var Armory = React.createClass({
         }
         reader.readAsText(self.file);
     },
-    uploadTank: uploadTank,
+    deleteTank: function () {
+        var tank = this.curr_tank;
+        var update = this.props.update;
+        var editor = this.refs.upload_editor;
+        var tankName = this.refs.tankName;
+        if(tank==null)
+            return;
+        var self = this;
+        var tankId = tank._id;
+        console.log("Delete tank with id: " + tankId);
+        $.ajax({
+            url: '/api/users/' + Auth.getUsername() + '/tanks/'+ tankId,
+            type: 'DELETE',
+            contentType: 'application/json',
+            success: function(data) {
+                update();
+                editor.componentDidMount();
+                tankName.value = "";
+            },
+            error: function(xhr, status, err) {
+            }
+        });
+    },
+    editTank: function(tank,e) {
+        console.log("in edit tank function");
+        var editor = this.refs.upload_editor.getEditor();
+        editor.setValue(tank.code);
+        this.refs.tankName.value = tank.name;
+        this.curr_tank = tank;
+        console.log(this.curr_tank);
+
+    },
+    uploadTank:  function(e) {
+        console.log(this.props);
+        var update = this.props.update;
+        var tankName = this.refs.tankName.value.trim();
+        var editor = this.refs.upload_editor.getEditor();
+        var tank_code = editor.getValue().trim();
+        var update = this.props.update;
+        if(tankName == "" || tankName == undefined){
+            alert("Whoops. Looks like you forgot fill out everything.");
+        }
+        else if(tank_code == undefined){
+            alert("Looks like there was a problem uploading your file. Try uploading it again.");
+        }
+        else{
+            $.ajax({
+                url: '/api/users/' + Auth.getUsername() + '/tanks',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    name: tankName,
+                    code: tank_code
+                }),
+                success: function(data) {
+                    update();
+                },
+                error: function(xhr, status, err) {
+                }
+            });
+        }
+    },
     render: function() {
         var user_tanks = this.props.tanks;
+        var editTank = this.editTank;
         return (
             <div>
                 <div className="row">
@@ -117,7 +143,7 @@ var Armory = React.createClass({
                         <button type="submit" className="btn btn-primary button">Create New Tank</button>
                         <div className="tankPanel dark-background ">
                             {user_tanks.map(function(tank,i) {
-                                   return <TankCard tank={tank} key={i} inArmory={true}/>;
+                                   return <TankCard tank={tank} key={i} inArmory={true} editTank={editTank}/>;
                             })}
                         </div>
                     </div>
@@ -127,10 +153,12 @@ var Armory = React.createClass({
                             <input ref="tankName" type="text" className="form-control" />
                         </div>
                         <div className="horizontal">
-                            <button type="submit" className="btn btn-primary button">Save</button>
-                            <button type="submit" className="btn btn-primary button">Run</button>
-                            <button type="submit" className="btn btn-primary button">Upload</button>
+                            <button type="submit" className="btn btn-primary button" onClick={this.uploadTank}>Save</button>
+                            <button type="submit" className="btn btn-primary button" onClick={this.props.update}>Run</button>
+                            <input className="inputfile" ref="tankFile" onChange={this.uploadFile} type="file" name="tankFile" id="tankFile" accept="java/*" />
+                            <label className="btn btn-primary button" htmlFor="tankFile">Upload</label>
                             <button type="submit" className="btn btn-primary button">Download</button>
+                            <button type="submit" className="btn btn-primary button" onClick={this.deleteTank}>Delete</button>
                         </div>
                         <div className="registerUser">
                             <UploadEditor ref="upload_editor" history={this.props.history}/>

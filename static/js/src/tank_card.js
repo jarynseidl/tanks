@@ -21,7 +21,7 @@ var TankCard = React.createClass({
                     </div>
                     <div className="buttonSection">
                             {inArmory ?  
-                                <button type="submit" className="btn btn-danger button">Edit</button>
+                                <button onClick={this.props.editTank.bind(null, tank)} type="submit" className="btn btn-danger button">Edit</button>
                                 : null
                             }
                             {!inArmory ?  
