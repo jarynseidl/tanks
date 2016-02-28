@@ -48,16 +48,20 @@ var Sandbox = React.createClass({
             <div>
             	
             	<div className="row">
-				 	<div className="col-sm-3">
-				 		<h1>Your Tanks</h1>
-				        <TankList tanks={user_tanks} joinGame={this.joinGame}/>
+				 	<div className="col-md-3 tankPanel dark-background">
+				 		<h1 className="white">Your Tanks</h1>
+				 		<div>
+				        	<TankList tanks={user_tanks} joinGame={this.joinGame}/>
+				        </div>
 				 	</div>
-				 	<div className="col-sm-4">
+				 	<div className="col-md-6">
 				 		<CenterPiece tanks_in_game={this.state.tanks_in_game} startGame={this.startGame} removeTank={this.removeTank}/>
 				 	</div>
-				 	<div className="col-sm-3">
-				 		<h1>Other Tanks</h1>
-				 		<TankList tanks={user_tanks} joinGame={this.joinGame}/>
+				 	<div className="col-md-3 tankPanel dark-background">
+				 		<h1 className="white">Other Tanks</h1>
+				 		<div>
+				 			<TankList tanks={user_tanks} joinGame={this.joinGame}/>
+				 		</div>
 				 	</div>
 				</div>
           		
@@ -73,7 +77,7 @@ var CenterPiece = React.createClass({
         return (
         	<div>
             	<h1>Tanks in Game: {tanks.length}</h1>
-            	<div className="tankPanel">
+            	<div className="centerPanel">
 	            	{tanks.map(function(tank,i) {
 	                       return <PlayerPanel tank={tank} removeTank={removeTank} key={i}/>;
 	                })}
