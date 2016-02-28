@@ -10,6 +10,13 @@ public class User {
     private String userName;
     private String tankName;
     private ObjectId tankID;
+    
+    //Values needed for armory
+    private int gamesWon = 0;
+    private int gamesLost = 0;
+    private int draws = 0;
+    private int gamesPlayed = 0;
+    private int tanksKilled = 0;
 
     public User() {
     }
@@ -52,4 +59,43 @@ public class User {
     public void setTankID(ObjectId tankID) {
         this.tankID = tankID;
     }
+    
+	public int getGamesWon() {
+		return gamesWon;
+	}
+
+	public void incGamesWon() {
+		gamesWon++;
+		gamesPlayed++;
+	}
+
+	public int getGamesLost() {
+		return gamesLost;
+	}
+
+	public void incGamesLost() {
+		gamesLost++;
+		gamesPlayed++;
+	}
+
+	public int getTanksKilled() {
+		return tanksKilled;
+	}
+
+	public void incTanksKilled() {
+		this.tanksKilled ++;
+	}
+
+	public int getDraws() {
+		return draws;
+	}
+
+	public void incDraws() {
+		draws++;
+		gamesPlayed++;
+	}
+
+	public int getGamesPlayed() {
+		return gamesPlayed;
+	} 
 }
