@@ -74,6 +74,11 @@ var Armory = React.createClass({
             });
         }.bind(this));
     },
+    componentWillReceiveProps: function(nextProps) {
+        this.setValue({
+            value: nextProps.selectedTank.name
+        })
+    },
     //the current tank in the editing area
     curr_tank: null,
     //boolean indicating whether or not the current code is for a new tank or an existing one
@@ -194,6 +199,19 @@ var Armory = React.createClass({
     handleSelectTank: function(tank) {
         this.setState({selectedTank: tank});
     },
+    updateList: function(updatedTank) {
+        var updatedList = this.state.user.tanks;
+        for (var i = 0; i < updatedList.length; i++) {
+            if (updatedList[i]._id == updatedTank._id) {
+                updatedList[i] = updatedTank;
+                break;
+            }
+        }
+        this.setState({
+            user : {tanks: updatedList},
+            selectedTank: updatedTank
+        });
+    },
     render: function() {
         var user_tanks = this.props.tanks;
         var editTank = this.editTank;
@@ -217,7 +235,7 @@ var Armory = React.createClass({
                     </div>
                     <div className="col-md-9 armory-top flex">
                         <div style={editorWrapperStyle}>
-                            {this.state.selectedTank ? <Editor.View selectedTank={this.state.selectedTank} history={this.props.history}/> : <Editor.Placeholder /> }
+                            {this.state.selectedTank ? <Editor.View selectedTank={this.state.selectedTank} update={this.updateList} history={this.props.history}/> : <Editor.Placeholder /> }
                         </div>
                     </div>
                 </div>

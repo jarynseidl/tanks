@@ -24,12 +24,13 @@ var Placeholder = React.createClass({
 var Editor = React.createClass({
     getInitialState: function() {
         return {
-            value : this.props.selectedTank.name
+            name: this.props.selectedTank.name,
+            code: this.props.selectedTank.code
         }
     },
     handleChange: function(e) {
         this.setState({
-            value: e.target.value
+            name: e.target.value
         })
     },
     componentDidMount: function() {
@@ -37,15 +38,12 @@ var Editor = React.createClass({
         editor.setTheme("ace/theme/monokai");
         editor.getSession().setMode("ace/mode/java");
         editor.setValue(this.props.selectedTank.code);
-        this.setState({
-            value: this.props.selectedTank.name
-        })
-        // TODO: Fix tank name problem
     },
     componentWillReceiveProps: function(nextProps) {
         ace.edit(this.refs.editor).setValue(nextProps.selectedTank.code);
         this.setState({
-            value: this.props.selectedTank.name
+            name: nextProps.selectedTank.name,
+            code: nextProps.selectedTank.code
         })
 
     },
@@ -62,14 +60,21 @@ var Editor = React.createClass({
         else{
             $.ajax({
                 url: '/api/users/' + Auth.getUsername() + '/tanks/' + self.props.selectedTank._id,
-                type: 'POST',
+                type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     name: self.tankName,
                     code: self.tankCode
                 }),
                 success: function(data) {
-                    console.log(data)
+                    console.log(data);
+                    self.setState({
+                        name: self.tankName,
+                        code: self.tankCode
+                    });
+                    self.props.update(data);
+                    // ace.edit(this.refs.editor).setValue(nextProps.selectedTank.code);
+
                     // self.props.history.pushState(null, '/user/' + Auth.getUsername());
                 },
                 error: function(xhr, status, err) {
@@ -91,13 +96,12 @@ var Editor = React.createClass({
                     <div className="col-md-9">
                         <div className="input-group">
                             <span className="input-group-addon">Name</span>
-                            <input ref="tankName" type="text" className="form-control" onChange={this.handleChange} value={this.state.value}/>
-
+                            <input ref="tankName" type="text" className="form-control" onChange={this.handleChange} value={this.state.name}/>
                         </div>
                     </div>
                     <div className="col-md-3">
                         <div className="input-group blue btn-block">
-                            <input type="submit" className="btn btn-primary btn-block" value="Save tank" />
+                            <input type="button" className="btn btn-primary btn-block" onClick={this.editTank} value="Save tank" />
                         </div>
                     </div>
                 </div>
