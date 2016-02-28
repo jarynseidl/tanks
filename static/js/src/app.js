@@ -15,6 +15,7 @@ var WatchGame = require('./watch_game.js');
 var Auth = require('./authentication.js')
 var TankList = require('./tanks.js');
 var Sandbox = require('./sandbox.js');
+var Armory = require('./armory.js');
 var defaultPageComponent;
 
 if(Auth.loggedIn())
@@ -49,10 +50,9 @@ var App = React.createClass({
                       <ul className="nav navbar-nav">
                         {Auth.loggedIn() ? null : <li><Link to="home">Home</Link></li> }
                         {Auth.loggedIn() ? null : <li><Link to="register">Register</Link></li> }
-                        {Auth.loggedIn() ? <li><Link to="upload_tank">Upload a Tank</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="your_games">See Your Games</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="user">Your Tanks</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="user">Armory</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="sandbox">Sandbox</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="manual">Manual</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="test">Test</Link></li> : null }
@@ -81,7 +81,6 @@ const routes = (
                 <Route name="register" path="/register" component={Register} />
                 <Route name="user" path="/user/:userId" component={User} />
                 <Route name ="arena_home" path="/arena_home" component={ArenaHome} />
-                <Route name ="upload_tank" path="/upload_tank" component={UploadTank} />
                 <Route name ="get_started" path="/get_started" component={GetStarted} />
                 <Route name ="user" path="/user" component={User} />
                 <Route name ="your_games" path="/your_games" component={YourGames} />

@@ -13,26 +13,21 @@ var TankCard = React.createClass({
                             <img className="tankImage" src="../../images/BlueEast.gif"></img>
                         </div>
                     </div>
-                    <div className="tankCardSection2">
-                        <div className="tankCardStats">
-                            <span>Wins:</span>
-                            <span>Losses:</span>
-                            <span>Tanks killed:</span>
-                        </div>
-                        <div className="tankCardButton">
-                            {inArmory ? 
-                                <button type="submit" className="btn btn-primary" value="Download">Download</button>
-                                : null
-                            }
+                    <div className="tankCardStats">
+                        <h4>Stats:</h4>
+                        <span>Won:</span>
+                        <span>Lost:</span>
+                        <span>Kills:</span>
+                    </div>
+                    <div className="buttonSection">
                             {inArmory ?  
-                                <button type="submit" className="btn btn-danger" value="Delete">Delete</button>
+                                <button onClick={this.props.editTank.bind(null, tank)} type="submit" className="btn btn-danger button">Edit</button>
                                 : null
                             }
                             {!inArmory ?  
-                                <button onClick={this.props.joinGame.bind(null, tank)} ontype="submit" className="btn btn-success btn-block">Join Game</button>
+                                <button onClick={this.props.joinGame.bind(null, tank)} ontype="submit" className="btn btn-success button">Join!</button>
                                 : null
-                            }  
-                        </div>
+                            } 
                     </div>
                 </div>
         );
