@@ -91,24 +91,57 @@ var DisplayTank = React.createClass({
         )}
 });
 
+// var TankCard = React.createClass({
+//
+//     render: function() {
+//         var cardStyle = {
+//             backgroundColor: 'white',
+//             borderRadius: '3px',
+//             margin: '10px 0',
+//         }
+//         return (
+//             <div id={this.props.tank._id} style={cardStyle} onClick={this.props.onSelectTank.bind(null, this.props.tank)}>
+//                 <div className="row">
+//                     <div className="col-md-3">
+//                         <div ref="tankName">{this.props.tank.name}</div>
+//                         <img src="/images/BlueSouth.gif"></img>
+//                     </div>
+//                     <div className="col-md-9">
+//                         <div ref="tankDesc">This tank brings death.</div>
+//                     </div>
+//                 </div>
+//             </div>
+//         )
+//
+//     }
+// });
+
 var TankCard = React.createClass({
 
     render: function() {
         var cardStyle = {
-            border: '5px',
-            backgroundColor: 'green',
-            borderColor: 'blue',
-            borderStyle: 'solid'
+            backgroundColor: 'white',
+            borderRadius: '3px',
+            margin: '10px 0',
+            padding: '0 10px'
+        }
+        var statsStyle = {
+            verticalAlign: 'bottom'
         }
         return (
-            <div id={this.props.tank._id} style={cardStyle} onClick={this.props.onSelectTank.bind(null, this.props.tank)}>
+            <div className="tankCard" id={this.props.tank._id} onClick={this.props.onSelectTank.bind(null, this.props.tank)}>
                 <div className="row">
                     <div className="col-md-3">
                         <div ref="tankName">{this.props.tank.name}</div>
-                        <img src="/images/BlueSouth.gif"></img>
+                        <img className="tank-image" src="/images/BlueEast.gif"></img>
                     </div>
                     <div className="col-md-9">
                         <div ref="tankDesc">This tank brings death.</div>
+                        <div ref="tankStats" style={statsStyle}>
+                            <span>Won:</span>
+                            <span>Lost:</span>
+                            <span>Kills:</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -127,12 +160,10 @@ var TankList = React.createClass({
             overflowX: 'hidden'
         };
         return (
-            <div>
-                <div style={listStyle}>
-                    {this.props.tanks.map(function(tank) {
-                       return <TankCard tank={tank} key={tank._id} onSelectTank={self.props.onSelectTank}/>
+            <div ref="tankList">
+                {this.props.tanks.map(function(tank) {
+                   return <TankCard tank={tank} key={tank._id} onSelectTank={self.props.onSelectTank}/>
                 })}
-                </div>
             </div>
             )}
 });

@@ -1,5 +1,7 @@
 var Auth = require('./authentication.js');
-var TankCard = require('./tank_card.js');
+// var TankCard = require('./tank_card.js');
+var TankList = require('./tanks.js');
+var Editor = require('./code_editor.js');
 
 var ExampleTanks = React.createClass({
     render: function() {
@@ -55,6 +57,23 @@ var UploadEditor = React.createClass({
 });
 
 var Armory = React.createClass({
+    getInitialState: function() {
+        return {
+            user: {tanks: []},
+            username: "",
+            tankCount: 0,
+            selectedTank: null
+        };
+    },
+    componentDidMount: function() {
+        $.get('/api/users/' + Auth.getUsername(), function(result) {
+            this.setState({
+                user: result,
+                username: result["username"],
+                tankCount: result["tanks"].length
+            });
+        }.bind(this));
+    },
     //the current tank in the editing area
     curr_tank: null,
     //boolean indicating whether or not the current code is for a new tank or an existing one
@@ -77,7 +96,7 @@ var Armory = React.createClass({
             var contents = e.target.result;
             self.tank_code = reader.result;
             editor.setValue(self.tank_code);
-            self.fileLoaded = true; 
+            self.fileLoaded = true;
         }
         reader.readAsText(self.file);
     },
@@ -141,7 +160,7 @@ var Armory = React.createClass({
             //set the route and type to this if the tank is brand new
             if(this.is_new){
                 route = '/api/users/' + Auth.getUsername() + '/tanks';
-                reqType = 'POST'; 
+                reqType = 'POST';
             }
             //set the route and type to this if the tank is being updated
             else {
@@ -172,35 +191,33 @@ var Armory = React.createClass({
         this.resetEditor();
 
     },
+    handleSelectTank: function(tank) {
+        this.setState({selectedTank: tank});
+    },
     render: function() {
         var user_tanks = this.props.tanks;
         var editTank = this.editTank;
+        var listStyle = {
+            height: '40em',
+            overflowY: 'auto',
+            overflowX: 'hidden'
+        };
+        var editorWrapperStyle = {
+            height: '45em',
+            padding: '10px'
+        };
         return (
             <div>
                 <div className="row">
-                    <div className="col-md-3 armory-top flex">
+                    <div className="col-md-3 armory-top flex" style={listStyle}>
                         <button type="submit" className="btn btn-primary button" onClick={this.newTank}>Create New Tank</button>
                         <div className="tankPanel dark-background ">
-                            {user_tanks.map(function(tank,i) {
-                                   return <TankCard tank={tank} key={i} inArmory={true} editTank={editTank}/>;
-                            })}
+                            <TankList tanks={this.state.user.tanks} onSelectTank={this.handleSelectTank}/>
                         </div>
                     </div>
                     <div className="col-md-9 armory-top flex">
-                        <div className="input-group">
-                            <span className="input-group-addon">Name: </span>
-                            <input ref="tankName" type="text" className="form-control"/>
-                        </div>
-                        <div className="horizontal">
-                            <button type="submit" className="btn btn-primary button" onClick={this.saveTank}>Save</button>
-                            <button type="submit" className="btn btn-primary button" onClick={this.props.update}>Run</button>
-                            <input className="inputfile" ref="tankFile" onChange={this.uploadFile} type="file" name="tankFile" id="tankFile" accept="java/*" />
-                            <label className="btn btn-primary button" htmlFor="tankFile">Upload</label>
-                            <button type="submit" className="btn btn-primary button">Download</button>
-                            <button type="submit" className="btn btn-primary button" onClick={this.deleteTank}>Delete</button>
-                        </div>
-                        <div className="registerUser">
-                            <UploadEditor ref="upload_editor" history={this.props.history}/>
+                        <div style={editorWrapperStyle}>
+                            {this.state.selectedTank ? <Editor.View selectedTank={this.state.selectedTank} history={this.props.history}/> : <Editor.Placeholder /> }
                         </div>
                     </div>
                 </div>

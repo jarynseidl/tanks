@@ -1,5 +1,26 @@
 var Auth = require('./authentication.js');
 
+var Placeholder = React.createClass({
+    render: function() {
+        var style = {
+            backgroundColor: '#D4D2D2',
+            color: '#F0EFEF',
+            fontSize: '5em',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+            textShadow: '1px 4px 6px #BDBCBC, 0 0 0 #000, 1px 4px 6px #BDBCBC',
+            borderRadius: '5px',
+            height: '8em',
+            lineHeight: '8em'
+        }
+        return (
+            <div style={style}>
+                Choose a tank
+            </div>
+        )
+    }
+});
+
 var Editor = React.createClass({
     getInitialState: function() {
         return {
@@ -59,7 +80,7 @@ var Editor = React.createClass({
     },
     render: function() {
         var editorStyle =  {
-            height: '50em',
+            height: '43em',
             width: '100%',
             margin: '10px 0',
             borderRadius: '5px'
@@ -90,4 +111,7 @@ var Editor = React.createClass({
     }
 });
 
-module.exports = Editor;
+module.exports = {
+    View: Editor,
+    Placeholder: Placeholder
+};

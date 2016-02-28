@@ -21,7 +21,7 @@ var Placeholder = React.createClass({
             </div>
         )
     }
-})
+});
 
 var Test = React.createClass({
     getInitialState: function() {
