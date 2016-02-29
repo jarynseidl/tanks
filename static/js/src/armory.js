@@ -74,11 +74,6 @@ var Armory = React.createClass({
             });
         }.bind(this));
     },
-    componentWillReceiveProps: function(nextProps) {
-        this.setValue({
-            value: nextProps.selectedTank.name
-        })
-    },
     //the current tank in the editing area
     curr_tank: null,
     //boolean indicating whether or not the current code is for a new tank or an existing one
@@ -107,28 +102,27 @@ var Armory = React.createClass({
     },
     //deletes a tank
     deleteTank: function () {
-        //grab the current tank in the editing area
-        var tank = this.curr_tank;
-        var update = this.props.update;
-        var resetEditor = this.resetEditor;
-        //if there is no tank in the editing area, do nothing
-        if(tank==null)
-            return;
-        //set the current tank variable to null because it will be deleted
-        this.curr_tank = null;
+        if (this.state.selectedTank === null) return;
         var self = this;
-        var tankId = tank._id;
-        this.is_new = true;
+        var deletedTank = this.state.selectedTank;
+
         $.ajax({
-            url: '/api/users/' + Auth.getUsername() + '/tanks/'+ tankId,
+            url: '/api/users/' + Auth.getUsername() + '/tanks/' + deletedTank._id,
             type: 'DELETE',
             contentType: 'application/json',
             success: function(data) {
-                //callback to update the state component in user.js
-                update();
-                resetEditor();
+                var updatedList = self.state.user.tanks;
+
+                updatedList = updatedList.filter(function(tank) {
+                    return tank._id !== deletedTank._id;
+                })
+                self.setState({
+                    selectedTank: null,
+                    user: {tanks: updatedList}
+                })
             },
             error: function(xhr, status, err) {
+                console.log(err);
             }
         });
     },
@@ -230,12 +224,23 @@ var Armory = React.createClass({
                     <div className="col-md-3 armory-top flex" style={listStyle}>
                         <button type="submit" className="btn btn-primary button" onClick={this.newTank}>Create New Tank</button>
                         <div className="tankPanel dark-background ">
-                            <TankList tanks={this.state.user.tanks} onSelectTank={this.handleSelectTank}/>
+                            <TankList
+                                tanks={this.state.user.tanks}
+                                selectedTank={this.state.selectedTank}
+                                onSelectTank={this.handleSelectTank}
+                                deleteTank={this.deleteTank}
+                            />
                         </div>
                     </div>
                     <div className="col-md-9 armory-top flex">
                         <div style={editorWrapperStyle}>
-                            {this.state.selectedTank ? <Editor.View selectedTank={this.state.selectedTank} update={this.updateList} history={this.props.history}/> : <Editor.Placeholder /> }
+                            {this.state.selectedTank ?
+                                <Editor.View
+                                    selectedTank={this.state.selectedTank}
+                                    update={this.updateList}
+                                    history={this.props.history}
+                                />
+                            : <Editor.Placeholder /> }
                         </div>
                     </div>
                 </div>

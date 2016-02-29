@@ -1,4 +1,5 @@
 var Auth = require('./authentication.js');
+var classNames = require('classnames');
 
 var uploadTank =  function() {
     var self = this;
@@ -118,7 +119,25 @@ var DisplayTank = React.createClass({
 
 var TankCard = React.createClass({
 
+    getInitialState: function() {
+        return {
+            isSelected: false
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({
+            isSelected: nextProps.selected
+        });
+    },
+    handleSelect: function() {
+        this.props.onSelectTank(this.props.tank);
+        this.setState({
+            isSelected: true
+        });
+
+    },
     render: function() {
+
         var cardStyle = {
             backgroundColor: 'white',
             borderRadius: '3px',
@@ -128,20 +147,28 @@ var TankCard = React.createClass({
         var statsStyle = {
             verticalAlign: 'bottom'
         }
+
+        var cardClass = classNames({
+            'tankCard': true,
+            'card-selected': this.state.isSelected
+        });
         return (
-            <div className="tankCard" id={this.props.tank._id} onClick={this.props.onSelectTank.bind(null, this.props.tank)}>
+            <div className={cardClass} id={this.props.tank._id} onClick={this.handleSelect}>
                 <div className="row">
                     <div className="col-md-3">
                         <div ref="tankName">{this.props.tank.name}</div>
                         <img className="tank-image" src="/images/BlueEast.gif"></img>
                     </div>
-                    <div className="col-md-9">
+                    <div className="col-md-6">
                         <div ref="tankDesc">This tank brings death.</div>
                         <div ref="tankStats" style={statsStyle}>
                             <span>Won:</span>
                             <span>Lost:</span>
                             <span>Kills:</span>
                         </div>
+                    </div>
+                    <div className="col-md-3 delete-btn">
+                        <button type="button" className="btn btn-danger" onClick={this.props.deleteTank}>Delete</button>
                     </div>
                 </div>
             </div>
@@ -151,6 +178,17 @@ var TankCard = React.createClass({
 });
 
 var TankList = React.createClass({
+    getInitialState: function() {
+        return {
+            selectedTank: null
+        }
+    },
+    handleSelectTank: function(tank) {
+        this.props.onSelectTank(tank);
+        this.setState({
+            selectedTank: tank
+        });
+    },
     render: function() {
         var accordionId = Auth.getUsername() + "_tankList";
 		var self = this;
@@ -162,7 +200,13 @@ var TankList = React.createClass({
         return (
             <div ref="tankList">
                 {this.props.tanks.map(function(tank) {
-                   return <TankCard tank={tank} key={tank._id} onSelectTank={self.props.onSelectTank}/>
+                   return <TankCard
+                            tank={tank}
+                            key={tank._id}
+                            selected={self.props.selectedTank ? self.props.selectedTank._id === tank._id : false}
+                            onSelectTank={self.handleSelectTank}
+                            deleteTank={self.props.deleteTank}
+                          />
                 })}
             </div>
             )}

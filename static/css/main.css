@@ -76,6 +76,22 @@ CSS For the TankCard Class
     padding: 0 10px;
 }
 
+.tankCard .delete-btn {
+    line-height: 6em;
+}
+
+.tankCard.card-selected {
+    background-color: rgb(122, 165, 208);
+}
+
+.tankCard .delete-btn {
+    visibility: hidden;
+}
+
+.tankCard.card-selected .delete-btn {
+    visibility: visible;
+}
+
 .tankCard:hover {
     background-color: rgb(184, 243, 243);
 }
