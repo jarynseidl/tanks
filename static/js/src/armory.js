@@ -74,11 +74,6 @@ var Armory = React.createClass({
             });
         }.bind(this));
     },
-    //the current tank in the editing area
-    curr_tank: null,
-    //boolean indicating whether or not the current code is for a new tank or an existing one
-    is_new: true,
-    //reset the editor to have default values on it
     resetEditor: function(){
         var editor = this.refs.upload_editor;
         var tankName = this.refs.tankName;
@@ -133,6 +128,26 @@ var Armory = React.createClass({
         editor.setValue(tank.code);
         this.refs.tankName.value = tank.name;
         this.curr_tank = tank;
+    },
+    createTank: function() {
+        var initCode = "\nimport game.board.elements.Tank;" +
+                        "\nimport game.util.TANK_DIR;" +
+                        "\nimport game.util.TANK_MOVES;" +
+                        "\nimport org.bson.types.ObjectId;" +
+                        "\nimport org.mongodb.morphia.annotations.Embedded;" +
+                        "\nimport java.util.List;" +
+                        "\n\n@Embedded\npublic class YourTank extends Tank {\n\tpublic YourTank() {\n\t}\n\n\tpublic YourTank(ObjectId tankID, String tankName, int health) {\n\t\tsuper(tankID, tankName, health);" +
+                        "\n\t}\n\n\t@Override\n\tpublic TANK_MOVES calculateTurn(List<Tank> tanks, int size) {\n\t\tif (this.getDir() != TANK_DIR.E) {\n\t\t\treturn TANK_MOVES.TURN_RIGHT;" +
+                        "\n\t\t}\n\t\telse {\n\t\t\treturn TANK_MOVES.SHOOT;" +
+                        "\n\t\t}\n\t}\n}";
+        var newTank = {
+            name: "New Tank",
+            code: initCode,
+        };
+
+        this.setState({
+            selectedTank: newTank
+        });
     },
     //set the current tank in the editing area
     setCurrTank: function(tank) {
@@ -195,12 +210,20 @@ var Armory = React.createClass({
     },
     updateList: function(updatedTank) {
         var updatedList = this.state.user.tanks;
+        var updated = false
         for (var i = 0; i < updatedList.length; i++) {
             if (updatedList[i]._id == updatedTank._id) {
                 updatedList[i] = updatedTank;
+                updated = true;
                 break;
             }
         }
+
+        // Add updatedTank to the list if it does not exist in the list
+        if (!updated) {
+            updatedList.push(updatedTank);
+        }
+
         this.setState({
             user : {tanks: updatedList},
             selectedTank: updatedTank
@@ -222,7 +245,7 @@ var Armory = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-md-3 armory-top flex" style={listStyle}>
-                        <button type="submit" className="btn btn-primary button" onClick={this.newTank}>Create New Tank</button>
+                        <button type="submit" className="btn btn-primary button" onClick={this.createTank}>Create New Tank</button>
                         <div className="tankPanel dark-background ">
                             <TankList
                                 tanks={this.state.user.tanks}

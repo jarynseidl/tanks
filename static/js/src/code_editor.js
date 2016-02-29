@@ -47,27 +47,37 @@ var Editor = React.createClass({
         })
 
     },
-    editTank: function() {
+    saveTank: function() {
         var self = this;
         self.tankName = this.refs.tankName.value.trim();
         self.tankCode = ace.edit(this.refs.editor).getValue();
         if(self.tankName == "" || self.tankName == undefined){
-            alert("Whoops. Looks like you forgot fill out everything.");
+            alert("Whoops. Looks like you forgot to fill out everything.");
         }
         else if(self.tankCode == undefined){
             alert("Looks like there was a problem uploading your file. Try uploading it again.");
         }
         else{
+            var route, reqType;
+            if(!self.props.selectedTank._id){
+                route = '/api/users/' + Auth.getUsername() + '/tanks';
+                reqType = 'POST';
+            }
+            //set the route and type to this if the tank is being updated
+            else {
+                route = '/api/users/' + Auth.getUsername() + '/tanks/' + self.props.selectedTank._id;
+                reqType = 'PUT';
+            }
+
             $.ajax({
-                url: '/api/users/' + Auth.getUsername() + '/tanks/' + self.props.selectedTank._id,
-                type: 'PUT',
+                url: route,
+                type: reqType,
                 contentType: 'application/json',
                 data: JSON.stringify({
                     name: self.tankName,
                     code: self.tankCode
                 }),
                 success: function(data) {
-                    console.log(data);
                     self.setState({
                         name: self.tankName,
                         code: self.tankCode
@@ -91,7 +101,7 @@ var Editor = React.createClass({
             borderRadius: '5px'
         };
         return (
-            <form onSubmit={this.editTank}>
+            <form onSubmit={this.saveTank}>
                 <div className="row">
                     <div className="col-md-9">
                         <div className="input-group">
@@ -101,7 +111,7 @@ var Editor = React.createClass({
                     </div>
                     <div className="col-md-3">
                         <div className="input-group blue btn-block">
-                            <input type="button" className="btn btn-primary btn-block" onClick={this.editTank} value="Save tank" />
+                            <input type="button" className="btn btn-primary btn-block" onClick={this.saveTank} value="Save tank" />
                         </div>
                     </div>
                 </div>
