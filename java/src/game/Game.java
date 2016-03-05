@@ -50,6 +50,9 @@ public class Game {
     
     //this is where to get the error codes from
     private String compFailureResponse = "";
+    
+    //this is the passphrase used to prevent the user from updating their own wins
+    private String statsPassword = "poekillsKylo33#d@rn";
 
     public Game() {
         this.moves = new MoveTracker();
@@ -116,7 +119,7 @@ public class Game {
 
             if (currentTurn > maxTurns) {
             	for (Tank t: tanks){
-            		t.incDraws("poekillsKylo33#d@rn");
+            		t.incDraws("statsPassword");
             	}
                 return;
             }
@@ -127,7 +130,7 @@ public class Game {
             if (users.get(i).getTankID() == t.getTankID()) {
                 id = users.get(i).getUserID();
                 users.get(i).incGamesWon();
-                t.incGamesWon("poekillsKylo33#d@rn");
+                t.incGamesWon("statsPassword");
             }
             
             else
@@ -190,13 +193,13 @@ public class Game {
                     if (elem != null && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost("poekillsKylo33#d@rn");
+                        	((Tank) elem).incGamesLost("statsPassword");
                             ttanks.add((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
-                                    t.incTanksKilled("poekillsKylo33#d@rn");
+                                    t.incTanksKilled("statsPassword");
                                 }
                             }
                         }
@@ -211,13 +214,13 @@ public class Game {
                     if (elem != null && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost("poekillsKylo33#d@rn");
+                        	((Tank) elem).incGamesLost("statsPassword");
                             ttanks.add((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
-                                    t.incTanksKilled("poekillsKylo33#d@rn");
+                                    t.incTanksKilled("statsPassword");
                                 }
                             }
                         }
@@ -231,13 +234,13 @@ public class Game {
                     if (elem != null && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost("poekillsKylo33#d@rn");
+                        	((Tank) elem).incGamesLost("statsPassword");
                             ttanks.add((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
-                                    t.incTanksKilled("poekillsKylo33#d@rn");
+                                    t.incTanksKilled("statsPassword");
                                 }
                             }
                         }
@@ -251,13 +254,13 @@ public class Game {
                     if (elem != null && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost("poekillsKylo33#d@rn");
+                        	((Tank) elem).incGamesLost("statsPassword");
                             ttanks.add((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
-                                    t.incTanksKilled("poekillsKylo33#d@rn");
+                                    t.incTanksKilled("statsPassword");
                                 }
                             }
                         }
