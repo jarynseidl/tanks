@@ -51,7 +51,7 @@ public class Game {
     //this is where to get the error codes from
     private String compFailureResponse = "";
     
-    //this is the passphrase used to prevent the user from updating their own wins
+    //this is the passphrase used to prevent the user from updating their own wins, coordinates, or dir
     private String statsPassword = "poekillsKylo33#d@rn";
 
     public Game() {
@@ -89,10 +89,10 @@ public class Game {
                             shoot(t);
                             break;
                         case TURN_RIGHT:
-                            t.setDir(t.getDir().rotateRight(t.getDir()));
+                            t.setDir(t.getDir().rotateRight(t.getDir()), statsPassword);
                             break;
                         case TURN_LEFT:
-                            t.setDir(t.getDir().rotateLeft(t.getDir()));
+                            t.setDir(t.getDir().rotateLeft(t.getDir()), statsPassword);
                             break;
                         case WAIT:
                             break;
@@ -178,7 +178,7 @@ public class Game {
             }
 
             board.setElementAt(t.getCoord().getX(), t.getCoord().getY(), null);
-            t.setCoord(new Coordinate(x, y));
+            t.setCoord(new Coordinate(x, y), statsPassword);
             board.setElementAt(x, y, t);
             return move;
 

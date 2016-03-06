@@ -72,8 +72,9 @@ public abstract class Tank implements BoardElement {
     }
 
     @Override
-    public final void setCoord(Coordinate coord) {
-        this.coord = coord;
+    public final void setCoord(Coordinate coord, String passphrase) {
+    	if(passphrase.equals(password))
+    		this.coord = coord;
     }
 
     public final ObjectId getTankID() {
@@ -97,8 +98,9 @@ public abstract class Tank implements BoardElement {
         return dir;
     }
 
-    public final void setDir(TANK_DIR dir) {
-        this.dir = dir;
+    public final void setDir(TANK_DIR dir, String passphrase) {
+    	if(passphrase.equals(password))
+    		this.dir = dir;
     }
 
     public int getAlias() {
