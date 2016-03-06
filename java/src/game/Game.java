@@ -36,7 +36,7 @@ public class Game {
     private Board board;
     private ObjectId winnerID;
     @Transient
-    private int boardSize = 30;
+    private int boardSize = 10;
     @Transient
     private List<Tank> ttanks;
     @Embedded
