@@ -6,14 +6,10 @@ import game.util.TANK_MOVES;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Transient;
-
 import java.util.List;
 
-/**
- * Created by gladi on 11/12/2015.
- */
 @Embedded
-public abstract class Tank extends CoreTank {
+public abstract class CoreTank implements BoardElement {
     private Coordinate coord;
     private ObjectId tankID;
     private String tankName;
@@ -22,90 +18,50 @@ public abstract class Tank extends CoreTank {
     @Transient
     private int alias;
     private int actionPoints;
-    //if tank has shot without reloading
     private boolean shot;
-    
-    //in case they decide to implement the superclass for some reason
-    // it's just the same stats as the BasicTank
-    //each tank class has their own ap costs
-    // I'm thinking it can then be called in the game class in that big switch?
-	private int moveCost = 2;
-	private int shootCost = 2;
-	private int turnCost = 1;
-	private int diagCost = 4;
-	private int reloadCost = 4;
-	private int damage = 7;
+	private int moveCost;
+	private int shootCost;
+	private int turnCost;
+	private int diagCost;
+	private int reloadCost;
+	private int damage;
 
-    public Tank() {
+    public CoreTank() {
     }
 
-    public Tank(ObjectId tankID, String tankName, String tankType) {
-        this.tankID = tankID;
-        this.tankName = tankName;
-        if(tankType.equals("Heavy"))
-        	health = 50;
-        else if(tankType.equals("Basic"))
-        	health = 35;
-        else if(tankType.equals("Light"))
-        	health = 20;
-        else
-        	health = 35;
-        shot = false;
+    public CoreTank(ObjectId tankID, String tankName, String tankType) {
     }
 
     public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);
 
-    @Override
-    public final Coordinate getCoord() {
+    public Coordinate getCoord() {
         return this.coord;
     }
 
-    @Override
-    public final void setCoord(Coordinate coord) {
-        this.coord = coord;
-    }
-
-    public final ObjectId getTankID() {
+    public ObjectId getTankID() {
         return tankID;
     }
 
-
-    public final String getTankName() {
+    public String getTankName() {
         return tankName;
     }
 
-    public final int getHealth() {
+    public int getHealth() {
         return health;
     }
 
-    public final void takeDamage(int damage) {
-        this.health -= damage;
-    }
-
-    public final TANK_DIR getDir() {
+    public TANK_DIR getDir() {
         return dir;
-    }
-
-    public final void setDir(TANK_DIR dir) {
-        this.dir = dir;
     }
 
     public int getAlias() {
         return alias;
     }
 
-    public void setAlias(int alias) {
-        this.alias = alias;
-    }
-    
     public int getActionPoints() {
     	return actionPoints;
     }
 
-    /*
-     * These are the AP cost get statements
-     */
-    
 	public int getMoveCost() {
 		return moveCost;
 	}
@@ -132,10 +88,6 @@ public abstract class Tank extends CoreTank {
 
 	public boolean getShot(){
 		return shot;
-	}
-
-	public void setShot(boolean shot){
-		this.shot = shot;
 	}
 
 	protected boolean tankNorth(List<Tank> tanks){
@@ -265,4 +217,3 @@ public abstract class Tank extends CoreTank {
 		}
 	}
 }
-
