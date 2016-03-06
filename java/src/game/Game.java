@@ -36,7 +36,7 @@ public class Game {
     private Board board;
     private ObjectId winnerID;
     @Transient
-    private int boardSize = 10;
+    private int boardSize = 30;
     @Transient
     private List<Tank> ttanks;
     @Embedded
@@ -119,7 +119,7 @@ public class Game {
 
             if (currentTurn > maxTurns) {
             	for (Tank t: tanks){
-            		t.incDraws("statsPassword");
+            		t.incDraws(statsPassword);
             	}
                 return;
             }
@@ -130,7 +130,7 @@ public class Game {
             if (users.get(i).getTankID() == t.getTankID()) {
                 id = users.get(i).getUserID();
                 users.get(i).incGamesWon();
-                t.incGamesWon("statsPassword");
+                t.incGamesWon(statsPassword);
             }
             
             else
@@ -193,13 +193,13 @@ public class Game {
                     if (elem != null && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost("statsPassword");
+                        	((Tank) elem).incGamesLost(statsPassword);
                             ttanks.add((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
-                                    t.incTanksKilled("statsPassword");
+                                    t.incTanksKilled(statsPassword);
                                 }
                             }
                         }
@@ -214,13 +214,13 @@ public class Game {
                     if (elem != null && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost("statsPassword");
+                        	((Tank) elem).incGamesLost(statsPassword);
                             ttanks.add((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
-                                    t.incTanksKilled("statsPassword");
+                                    t.incTanksKilled(statsPassword);
                                 }
                             }
                         }
@@ -234,13 +234,13 @@ public class Game {
                     if (elem != null && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost("statsPassword");
+                        	((Tank) elem).incGamesLost(statsPassword);
                             ttanks.add((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
-                                    t.incTanksKilled("statsPassword");
+                                    t.incTanksKilled(statsPassword);
                                 }
                             }
                         }
@@ -254,13 +254,13 @@ public class Game {
                     if (elem != null && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost("statsPassword");
+                        	((Tank) elem).incGamesLost(statsPassword);
                             ttanks.add((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
-                                    t.incTanksKilled("statsPassword");
+                                    t.incTanksKilled(statsPassword);
                                 }
                             }
                         }
