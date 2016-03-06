@@ -137,5 +137,132 @@ public abstract class Tank implements BoardElement {
 	public void setShot(boolean shot){
 		this.shot = shot;
 	}
+
+	protected boolean tankNorth(List<Tank> tanks){
+		for(int i = 0; i < tanks.size(); ++i)
+			if(Math.abs(tanks.get(i).getCoord().getX() - this.getCoord().getX()) <= 1 &&
+			  tanks.get(i).getCoord().getY() < this.getCoord().getY())
+				return true;
+		return false;
+	}
+
+	protected boolean tankEast(List<Tank> tanks){
+		for(int i = 0; i < tanks.size(); ++i)
+			if(Math.abs(tanks.get(i).getCoord().getY() - this.getCoord().getY()) <= 1 &&
+			  tanks.get(i).getCoord().getX() > this.getCoord().getX())
+				return true;
+		return false;
+	}
+
+	protected boolean tankSouth(List<Tank> tanks){
+		for(int i = 0; i < tanks.size(); ++i)
+			if(Math.abs(tanks.get(i).getCoord().getX() - this.getCoord().getX()) <= 1 &&
+			  tanks.get(i).getCoord().getY() > this.getCoord().getY())
+				return true;
+		return false;
+	}
+
+	protected boolean tankWest(List<Tank> tanks){
+		for(int i = 0; i < tanks.size(); ++i)
+			if(Math.abs(tanks.get(i).getCoord().getY() - this.getCoord().getY()) <= 1 &&
+			  tanks.get(i).getCoord().getX() < this.getCoord().getX())
+				return true;
+		return false;
+	}
+
+	protected boolean tankFront(List<Tank> tanks){
+		return(((this.getDir() == TANK_DIR.N) && tankNorth(tanks)) ||
+		  ((this.getDir() == TANK_DIR.E) && tankEast(tanks)) ||
+		  ((this.getDir() == TANK_DIR.S) && tankSouth(tanks)) ||
+		  ((this.getDir() == TANK_DIR.W) && tankWest(tanks)));
+	}
+
+	protected boolean tankRight(List<Tank> tanks){
+		return(((this.getDir() == TANK_DIR.N) && tankEast(tanks)) ||
+		  ((this.getDir() == TANK_DIR.E) && tankSouth(tanks)) ||
+		  ((this.getDir() == TANK_DIR.S) && tankWest(tanks)) ||
+		  ((this.getDir() == TANK_DIR.W) && tankNorth(tanks)));
+	}
+
+	protected boolean tankBehind(List<Tank> tanks){
+		return(((this.getDir() == TANK_DIR.N) && tankSouth(tanks)) ||
+		  ((this.getDir() == TANK_DIR.E) && tankWest(tanks)) ||
+		  ((this.getDir() == TANK_DIR.S) && tankNorth(tanks)) ||
+		  ((this.getDir() == TANK_DIR.W) && tankEast(tanks)));
+	}
+
+	protected boolean tankLeft(List<Tank> tanks){
+		return(((this.getDir() == TANK_DIR.N) && tankWest(tanks)) ||
+		  ((this.getDir() == TANK_DIR.E) && tankNorth(tanks)) ||
+		  ((this.getDir() == TANK_DIR.S) && tankEast(tanks)) ||
+		  ((this.getDir() == TANK_DIR.W) && tankSouth(tanks)));
+	}
+
+	protected boolean wallFront(int size){
+		return(((this.getCoord().getY() == 1) && (this.getDir() == TANK_DIR.N)) ||
+		  ((this.getCoord().getX() == size - 2) && (this.getDir() == TANK_DIR.E)) ||
+		  ((this.getCoord().getY() == size - 2) && (this.getDir() == TANK_DIR.S)) ||
+		  ((this.getCoord().getX() == 1) && (this.getDir() == TANK_DIR.W)));
+	}
+
+	protected boolean wallRight(int size){
+		return(((this.getCoord().getY() == 1) && (this.getDir() == TANK_DIR.W)) ||
+		  ((this.getCoord().getX() == size - 2) && (this.getDir() == TANK_DIR.N)) ||
+		  ((this.getCoord().getY() == size - 2) && (this.getDir() == TANK_DIR.E)) ||
+		  ((this.getCoord().getX() == 1) && (this.getDir() == TANK_DIR.S)));
+	}
+
+	protected boolean wallBehind(int size){
+		return(((this.getCoord().getY() == 1) && (this.getDir() == TANK_DIR.S)) ||
+		  ((this.getCoord().getX() == size - 2) && (this.getDir() == TANK_DIR.W)) ||
+		  ((this.getCoord().getY() == size - 2) && (this.getDir() == TANK_DIR.N)) ||
+		  ((this.getCoord().getX() == 1) && (this.getDir() == TANK_DIR.E)));
+	}
+
+	protected boolean wallLeft(int size){
+		return(((this.getCoord().getY() == 1) && (this.getDir() == TANK_DIR.E)) ||
+		  ((this.getCoord().getX() == size - 2) && (this.getDir() == TANK_DIR.S)) ||
+		  ((this.getCoord().getY() == size - 2) && (this.getDir() == TANK_DIR.W)) ||
+		  ((this.getCoord().getX() == 1) && (this.getDir() == TANK_DIR.N)));
+	}
+
+	protected TANK_DIR rightDir(){
+		switch(this.getDir()){
+			case N:
+				return TANK_DIR.E;
+			case E:
+				return TANK_DIR.S;
+			case S:
+				return TANK_DIR.W;
+			default:
+				return TANK_DIR.N;
+		}
+	}
+
+	protected TANK_DIR leftDir(){
+		switch(this.getDir()){
+			case N:
+				return TANK_DIR.W;
+			case W:
+				return TANK_DIR.S;
+			case S:
+				return TANK_DIR.E;
+			default:
+				return TANK_DIR.N;
+		}
+	}
+
+	protected TANK_DIR behindDir(){
+		switch(this.getDir()){
+			case N:
+				return TANK_DIR.S;
+			case S:
+				return TANK_DIR.N;
+			case E:
+				return TANK_DIR.W;
+			default:
+				return TANK_DIR.E;
+		}
+	}
 }
 
