@@ -53,6 +53,9 @@ public class Game {
     
     //this is the passphrase used to prevent the user from updating their own wins
     private String statsPassword = "poekillsKylo33#d@rn";
+    
+    //this is the fog of war distance
+    private int sightDistance = this.boardSize/3;
 
     public Game() {
         this.moves = new MoveTracker();
@@ -345,8 +348,8 @@ public class Game {
 		
 		for(Tank t: tanks){
 			Coordinate checkCoord = t.getCoord();
-			if((checkCoord.getX() <= (currCoord.getX() + (this.boardSize/3))) && (checkCoord.getX() >= (currCoord.getX() - (this.boardSize/3)))
-					&& ((checkCoord.getY() <= (currCoord.getY() + (this.boardSize/3))) && ((checkCoord.getY() >= (currCoord.getY() - (this.boardSize/3)))))){
+			if((checkCoord.getX() <= (currCoord.getX() + sightDistance)) && (checkCoord.getX() >= (currCoord.getX() - sightDistance))
+					&& ((checkCoord.getY() <= (currCoord.getY() + sightDistance)) && ((checkCoord.getY() >= (currCoord.getY() - sightDistance))))){
 				visTanks.add(t);
 			}
 		}
