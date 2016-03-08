@@ -76,14 +76,13 @@ var CenterPiece = React.createClass({
     	var tanks = this.props.tanks_in_game;
         return (
         	<div>
-            	<h1>Tanks in Game: {tanks.length}</h1>
             	<div className="centerPanel">
 	            	{tanks.map(function(tank,i) {
 	                       return <PlayerPanel tank={tank} removeTank={removeTank} key={i}/>;
 	                })}
 	            </div>
 	            {this.props.tanks_in_game.length!=4 ? null : 
-                	<input onClick={this.props.startGame} type="submit" className="btn btn-success btn-lg btn-block" value="Start Game!" />
+                	<button onClick={this.props.startGame} type="submit" className="btn btn-success button btn-lg btn-block">Start Game!</button>
 		        }
 			</div>
         )}

@@ -47,10 +47,8 @@ var App = React.createClass({
 
                     <div className="collapse navbar-collapse" id="bs-navbar">
                       <ul className="nav navbar-nav">
-                        {Auth.loggedIn() ? null : <li><Link to="home">Home</Link></li> }
-                        {Auth.loggedIn() ? null : <li><Link to="register">Register</Link></li> }
                         {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="your_games">See Your Games</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="your_games">Watch My Games</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="user">Armory</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="sandbox">Sandbox</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="manual">Manual</Link></li> : null }

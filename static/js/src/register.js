@@ -1,4 +1,5 @@
 var Auth = require('./authentication.js');
+var WatchGame = require('./watch_game.js');
 
 var Register = React.createClass({
     handleSubmit: function(e) {
@@ -15,10 +16,9 @@ var Register = React.createClass({
                           }
                       }.bind(this));
                   },
-    render: function() { 
+    render: function() {
                 return (
                         <div className="registerUser">
-                            <h1>Register User</h1>
                             <form onSubmit={this.handleSubmit}>
                                 <div className="input-group">
                                     <span className="input-group-addon">Username:</span>

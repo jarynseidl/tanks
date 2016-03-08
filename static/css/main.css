@@ -2,10 +2,6 @@ div.mainContent {
     margin: 20px;
 }
 
-div.registerUser {
-    max-width: 100%;
-}
-
 div.registerUser .input-group {
     margin-top: 10px;
 }
@@ -62,6 +58,17 @@ img.home-screen-shot {
 }
 
 /**************************************************************************
+CSS For the Login Class
+**************************************************************************/
+div.registerUser {
+    max-width: 300px;
+    position: absolute;
+  	margin-left: 500px;
+  	margin-top:200px;
+}
+
+
+/**************************************************************************
 CSS For the TankCard Class
 **************************************************************************/
 .tankCard{
@@ -105,23 +112,26 @@ CSS For the TankCard Class
     margin:5px;
     box-shadow: 3px 3px 3px #888888;
     background-color:#800000 !important;
-    border-color:#800000 !important;    
+    border-color:#800000 !important;  
+    color:white;  
 }
 
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
 /**************************************************************************
 CSS For the PlayerPanel Class
 **************************************************************************/
 .centerPanel {
     display: flex;
     flex-wrap:wrap;
+    justify-content:space-around;
 }
 
 .inGamePanel {
-    width:45%;
-    height:170px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #5bc0de;
+    width:250px;
+    height:250px;
+    background-color: #262626;
     border-radius: 20px;
     text-align:center;
     position: relative;
@@ -142,7 +152,7 @@ CSS For the Dark Background
     height:auto;
     max-height:700px !important;
     padding:15px;
-    overflow-y:auto;
+    overflow-y:scroll;
 }
 
 .dark-background {
@@ -204,4 +214,32 @@ CSS For the Armory
     overflow: hidden;
     position: absolute;
     z-index: -1;
+}
+
+/**************************************************************************
+CSS For the Scrollbar
+**************************************************************************/
+.tankPanel::-webkit-scrollbar{
+	width:8px;
+} 
+.tankPanel::-webkit-scrollbar-thumb{
+    background-color: #800000;
+	border-radius:10px;
+}
+.tankPanel::-webkit-scrollbar-thumb:hover{
+    background-color: #800022;
+	border:1px solid #333333;
+}
+
+body::-webkit-scrollbar{
+	width:16px;
+	margin:0;
+} 
+body::-webkit-scrollbar-thumb{
+    background-color: #262626;
+	border-radius:10px;
+}
+body::-webkit-scrollbar-thumb:hover{
+    background-color: #262626;
+	border:1px solid #333333;
 }
