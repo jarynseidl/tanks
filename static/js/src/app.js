@@ -2,7 +2,6 @@ var Router = require('react-router').Router
 var Route = require('react-router').Route
 var IndexRoute = require('react-router').IndexRoute
 var Link = require('react-router').Link
-var Register = require('./register.js');
 var User = require('./user.js');
 var Home = require('./home.js');
 var ArenaHome = require('./arena_home.js');
@@ -73,7 +72,6 @@ var App = React.createClass({
 const routes = (
         <Router>
             <Route name="app" path="/" component={App}>
-                <Route name="register" path="/register" component={Register} />
                 <Route name="user" path="/user/:userId" component={User} />
                 <Route name ="arena_home" path="/arena_home" component={ArenaHome} />
                 <Route name ="get_started" path="/get_started" component={GetStarted} />
