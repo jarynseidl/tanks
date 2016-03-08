@@ -1,5 +1,4 @@
 var Login = require('./login.js');
-var Register = require('./register.js');
 var WatchGame = require('./watch_game.js');
 
 var Home = React.createClass({
