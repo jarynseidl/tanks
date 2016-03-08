@@ -243,3 +243,44 @@ body::-webkit-scrollbar-thumb:hover{
     background-color: #262626;
 	border:1px solid #333333;
 }
+
+/**************************************************************************
+CSS For the Logout
+**************************************************************************/
+
+.userIcon {
+    height:45px;
+    width:45px;
+}
+
+.userInfo {
+    display:none;
+}
+
+.logout:hover .userInfo {
+    display:block;
+    color:white;
+    background-color: #262626;
+    width:230px;
+    height:170px;
+    position:absolute;
+    left:-160px;
+    z-index: 100;
+}
+
+.logout a {
+    color:white;
+    font-size: 125%;
+    font-weight: 600;
+    margin: 15px;
+}
+
+.userImage {
+    width:35%;
+    height:45%;
+    background-color: #3366ff;
+}
+
+.userInfo div {
+    margin:15px;
+}
