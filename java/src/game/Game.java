@@ -9,6 +9,7 @@ import game.user.User;
 import game.util.Coordinate;
 import game.util.MoveTracker;
 import game.util.TANK_MOVES;
+import game.util.LogItem;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
@@ -48,6 +49,8 @@ public class Game {
     private int maxTurns = 1000;
     public boolean ready;
     private int status;
+    @Embedded
+    private List<LogItem> errors;
 
     public Game() {
         this.moves = new MoveTracker();
