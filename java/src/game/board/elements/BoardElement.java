@@ -10,5 +10,5 @@ import org.mongodb.morphia.annotations.Embedded;
 public interface BoardElement {
     public Coordinate getCoord();
 
-    public void setCoord(Coordinate coord, String passphrase);
+    public void setCoord(Coordinate coord);
 }

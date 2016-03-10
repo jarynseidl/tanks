@@ -12,11 +12,11 @@ public class User {
     private ObjectId tankID;
     
     //Values needed for armory
-    private int gamesWon = 0;
-    private int gamesLost = 0;
+    private int wins = 0;
+    private int deaths = 0;
     private int draws = 0;
     private int gamesPlayed = 0;
-    private int tanksKilled = 0;
+    private int kills = 0;
 
     public User() {
     }
@@ -61,29 +61,29 @@ public class User {
     }
     
 	public int getGamesWon() {
-		return gamesWon;
+		return wins;
 	}
 
 	public void incGamesWon() {
-		gamesWon++;
+		wins++;
 		gamesPlayed++;
 	}
 
 	public int getGamesLost() {
-		return gamesLost;
+		return deaths;
 	}
 
 	public void incGamesLost() {
-		gamesLost++;
+		deaths++;
 		gamesPlayed++;
 	}
 
 	public int getTanksKilled() {
-		return tanksKilled;
+		return kills;
 	}
 
 	public void incTanksKilled() {
-		this.tanksKilled ++;
+		kills++;
 	}
 
 	public int getDraws() {

@@ -17,9 +17,6 @@ import java.util.List;
 public class SquareBoardImpl implements Board {
     private List<List<BoardElement>> board;
     private int size;
-
-    //this is the passphrase used to prevent the user from updating their own wins, coordinates, or dir
-    private String statsPassword = "poekillsKylo33#d@rn";
     
     public SquareBoardImpl(int size) {
 
@@ -39,23 +36,23 @@ public class SquareBoardImpl implements Board {
         switch (which) {
             case 0:
                 setElementAt(0, 0, t);
-                t.setDir(TANK_DIR.S, statsPassword);
-                t.setCoord(new Coordinate(0, 0), statsPassword);
+                t.setDir(TANK_DIR.S);
+                t.setCoord(new Coordinate(0, 0));
                 break;
             case 1:
                 setElementAt(size - 1, size - 1, t);
-                t.setDir(TANK_DIR.N, statsPassword);
-                t.setCoord(new Coordinate(size - 1, size - 1), statsPassword);
+                t.setDir(TANK_DIR.N);
+                t.setCoord(new Coordinate(size - 1, size - 1));
                 break;
             case 2:
                 setElementAt(size - 2, 1, t);
-                t.setDir(TANK_DIR.N, statsPassword);
-                t.setCoord(new Coordinate(size - 2, 1), statsPassword);
+                t.setDir(TANK_DIR.N);
+                t.setCoord(new Coordinate(size - 2, 1));
                 break;
             case 3:
                 setElementAt(1, size - 2, t);
-                t.setDir(TANK_DIR.S, statsPassword);
-                t.setCoord(new Coordinate(1, size - 2), statsPassword);
+                t.setDir(TANK_DIR.S);
+                t.setCoord(new Coordinate(1, size - 2));
                 break;
         }
     }

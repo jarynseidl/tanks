@@ -89,10 +89,10 @@ public class Game {
                             shoot(t);
                             break;
                         case TURN_RIGHT:
-                            t.setDir(t.getDir().rotateRight(t.getDir()), statsPassword);
+                            t.setDir(t.getDir().rotateRight(t.getDir()));
                             break;
                         case TURN_LEFT:
-                            t.setDir(t.getDir().rotateLeft(t.getDir()), statsPassword);
+                            t.setDir(t.getDir().rotateLeft(t.getDir()));
                             break;
                         case WAIT:
                             break;
@@ -178,7 +178,7 @@ public class Game {
             }
 
             board.setElementAt(t.getCoord().getX(), t.getCoord().getY(), null);
-            t.setCoord(new Coordinate(x, y), statsPassword);
+            t.setCoord(new Coordinate(x, y));
             board.setElementAt(x, y, t);
             return move;
 

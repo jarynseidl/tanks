@@ -10,9 +10,6 @@ import org.mongodb.morphia.annotations.Embedded;
 @Embedded
 public class Wall implements BoardElement {
     private Coordinate coord;
-    
-    //this is the passphrase used to prevent the user from updating their own wins, coordinates, or dir
-    private String statsPassword = "poekillsKylo33#d@rn";
 
     public Wall() {
 
@@ -24,8 +21,7 @@ public class Wall implements BoardElement {
     }
 
     @Override
-    public void setCoord(Coordinate coord, String passphrase) {
-    	if(passphrase.equals(statsPassword))
-    		this.coord = coord;
+    public void setCoord(Coordinate coord) {
+    	this.coord = coord;
     }
 }
