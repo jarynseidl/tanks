@@ -3,6 +3,7 @@ package pregameprocessor;
 import database.DBTank;
 import database.GameDatabase;
 import database.GameDatabaseImpl;
+import game.board.elements.CoreTank;
 import game.board.elements.Tank;
 import game.util.JavaSourceFromString;
 import org.bson.types.ObjectId;
@@ -117,6 +118,9 @@ public class TankCodeLoader {
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
                     Class<?> cs = Class.forName(name, true, classLoader);
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class);
+                    //compile as CoreTank, throw error if fail
+                    CoreTank c = (CoreTank)ctor.newInstance(tankId, "Core Tank");
+                    //compile as Tank, actual object to return
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank");
                     return t;
                 } catch (Exception e) {
