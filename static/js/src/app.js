@@ -27,11 +27,19 @@ var Manual = require('./manual.js');
 
 var App = React.createClass({
   render: function() {
+      var navBarStyle = {
+          backgroundColor: '#262626'
+      };
+
+      var fontStyle = {
+          color: '#E1E1E1'
+
+        };
     return (
       <div>
         <div className="master">
             <nav className="navbar navbar-default">
-                  <div className="container-fluid">
+                  <div className="container-fluid" style={navBarStyle}>
                     <div className="navbar-header">
                       <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-expanded="false">
                         <span className="sr-only">Toggle navigation</span>
@@ -40,17 +48,17 @@ var App = React.createClass({
                         <span className="icon-bar"></span>
                       </button>
                       <a className="navbar-brand" href="#">
-                        <img alt="Brand" src="/images/brand.png" height="24" />
+                        <img alt="Brand" src="/images/brandWhite.png" height="24" />
                       </a>
                     </div>
 
-                    <div className="collapse navbar-collapse" id="bs-navbar">
+                    <div className="collapse navbar-collapse" id="bs-navbar" >
                       <ul className="nav navbar-nav">
-                        {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="your_games">Watch My Games</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="user">Armory</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="sandbox">Sandbox</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="manual">Manual</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="games" style={fontStyle}>Join a Fight</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="your_games" style={fontStyle}>Watch My Games</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="user" style={fontStyle}>Armory</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="sandbox" style={fontStyle}>Sandbox</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="manual" style={fontStyle}>Manual</Link></li> : null }
                       </ul>
                       <ul className="nav navbar-nav navbar-right">
                         {Auth.loggedIn() ? <li><Logout history={this.props.history} /></li> : null }
