@@ -70,29 +70,56 @@ CSS For the TankCard Class
     height: 100px;
     background-color: #a6a6a6;
     margin: 10px 0px 10px 0px;*/
+    height: 8em;
     background-color: white;
     border-radius: 3px;
     margin: 10px 0;
-    padding: 0 10px;
-}
-
-.tankCard .delete-btn {
-    line-height: 6em;
+    padding: 10px;
 }
 
 .tankCard.card-selected {
-    background-color: rgb(122, 165, 208);
+    border-style: solid;
+    border-width: medium;;
+    border-color: rgb(193, 66, 66);
 }
 
-.tankCard .delete-btn {
-    visibility: hidden;
+.tankCard .tank-info, .tankCard .tank-stats {
+    height: 100%;
 }
 
-.tankCard.card-selected .delete-btn {
-    visibility: visible;
+.tankCard .tank-info .tank-image {
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
 
-.tankCard:hover {
+.tankCard .edit-btn {
+    display: none;
+}
+
+.tankCard .edit-btn button {
+    font-size: 1em;
+}
+
+/*.edit-btn {
+    height: 100%;
+    align-items: flex-end;
+    justify-content: space-between;
+    display: flex;
+}*/
+
+.edit-btn .download-btn, .edit-btn .upload-btn, .edit-btn .delete-btn {
+    font-size: 1em;
+}
+
+.tankCard.card-selected .edit-btn {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.tankCard:not(.card-selected):hover {
     background-color: rgb(184, 243, 243);
 }
 
@@ -132,6 +159,20 @@ CSS For the TankCard Class
     background-color:#800000 !important;
     border-color:#800000 !important;
 
+}
+
+.close-icon {
+    height: 21px;
+    width: 21px;
+    text-align: center;
+}
+
+.close-circle:hover {
+    height: 21px;
+    width: 21px;
+    background: rgba(191, 63, 63, 1);
+    border-radius: 20px;
+    float: right;
 }
 
 /**************************************************************************

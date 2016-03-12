@@ -252,6 +252,7 @@ var Armory = React.createClass({
                                 selectedTank={this.state.selectedTank}
                                 onSelectTank={this.handleSelectTank}
                                 deleteTank={this.deleteTank}
+                                uploadFile={this.uploadFile}
                             />
                         </div>
                     </div>

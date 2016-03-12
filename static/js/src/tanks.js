@@ -144,9 +144,6 @@ var TankCard = React.createClass({
             margin: '10px 0',
             padding: '0 10px'
         }
-        var statsStyle = {
-            verticalAlign: 'bottom'
-        }
 
         var cardClass = classNames({
             'tankCard': true,
@@ -154,21 +151,32 @@ var TankCard = React.createClass({
         });
         return (
             <div className={cardClass} id={this.props.tank._id} onClick={this.handleSelect}>
-                <div className="row">
-                    <div className="col-md-3">
-                        <div ref="tankName">{this.props.tank.name}</div>
-                        <img className="tank-image" src="/images/BlueEast.gif"></img>
+                <div className="tank-info">
+                    <div className="col-md-3 tank-image">
+                        <img className="" src="/images/BlueEast.gif"></img>
                     </div>
-                    <div className="col-md-6">
-                        <div ref="tankDesc">This tank brings death.</div>
-                        <div ref="tankStats" style={statsStyle}>
-                            <span>Won:</span>
-                            <span>Lost:</span>
-                            <span>Kills:</span>
+
+                    <div className="col-md-4 tank-stats">
+                        <h4>
+                            {this.props.tank.name}
+                        </h4>
+                        <div ref="tankStats">
+                            <div>W: 32</div>
+                            <div>L: 32</div>
+                            <div>K: 32</div>
                         </div>
                     </div>
-                    <div className="col-md-3 delete-btn">
-                        <button type="button" className="btn btn-danger" onClick={this.props.deleteTank}>Delete</button>
+                    <div className="col-md-5 edit-btn">
+                        <button className="btn btn-primary">
+                            <i className="download-btn fa fa-download"></i>
+                        </button>
+                        <input className="inputfile" ref="tankFile" onChange={this.uploadFile} type="file" name="tankFile" id="tankFile" accept="java/*" />
+                        <label className="btn btn-primary" htmlFor="tankFile">
+                            <i className="upload-btn fa fa-upload"></i>
+                        </label>
+                        <button className="btn btn-danger" onClick={this.props.deleteTank}>
+                            <i className="delete-btn fa fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -206,6 +214,7 @@ var TankList = React.createClass({
                             selected={self.props.selectedTank ? self.props.selectedTank._id === tank._id : false}
                             onSelectTank={self.handleSelectTank}
                             deleteTank={self.props.deleteTank}
+                            uploadFile={self.props.uploadFile}
                           />
                 })}
             </div>
