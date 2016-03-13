@@ -9,6 +9,7 @@ import game.user.User;
 import game.util.Coordinate;
 import game.util.MoveTracker;
 import game.util.TANK_MOVES;
+import game.util.LogItem;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
@@ -55,6 +56,9 @@ public class Game {
     //this is the passphrase used to prevent the user from updating their own wins, coordinates, or dir
     private String statsPassword = "poekillsKylo33#d@rn";
 
+    @Embedded
+    private List<LogItem> errors;
+
     public Game() {
         this.moves = new MoveTracker();
         this.users = new ArrayList<User>();
@@ -87,6 +91,9 @@ public class Game {
                     move = t.calculateTurn(Collections.unmodifiableList(tanks), boardSize);
                     switch (move) {
                         case SHOOT:
+
+                            //if tank has shot, fall to reload
+
                             if(!t.getShot()){
                                 shoot(t);
                                 t.setShot(true);

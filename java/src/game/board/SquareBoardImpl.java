@@ -70,6 +70,7 @@ public class SquareBoardImpl implements Board {
     	for(int tx = Math.max(x - 1, 0); tx <= Math.min(x + 1, size - 1); ++tx){
     		for(int ty = Math.max(y - 1, 0); ty <= Math.min(y + 1, size - 1); ++ty){
      			elem = board.get(tx).get(ty);
+    			elem = board.get(tx).get(ty);
     			if(elem != null && elem instanceof Tank)
     				return elem;
     		}
