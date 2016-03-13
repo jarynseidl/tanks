@@ -51,4 +51,40 @@ public class DBTank {
         this.code = code;
     }
 
+    public int getKills() {
+        return kills;
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public void addDeaths(int deaths) {
+        this.deaths += deaths;
+    }
+
+    public void addWins(int wins) {
+        this.wins += wins;
+    }
+
+    public void addKills(int kills) {
+        this.kills += kills;
+    }
+
 }

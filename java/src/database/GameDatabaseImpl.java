@@ -44,6 +44,7 @@ public class GameDatabaseImpl implements GameDatabase {
     public boolean saveGame(Game game) {
         try {
             gameDAO.save(game);
+            userDAO.updateStats(game.getUsers());
         } catch (Exception ex) {
             System.out.println("Error saving game:");
             ex.printStackTrace();
