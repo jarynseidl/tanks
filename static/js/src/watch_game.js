@@ -603,7 +603,7 @@ var WatchGame = React.createClass({
             }
 
             console.log(this.state.tanksLeft);
-
+            
             if (this.state.tanksLeft <= 1)
             {
                 this.DisplayWinner();

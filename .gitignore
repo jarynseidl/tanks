@@ -10,6 +10,11 @@ java/tanks.iml
 /bin/
 .classpath
 .project
+<<<<<<< HEAD
 Vagrant*
 .vagrant/
+=======
+java/src/*
+java/out/
+>>>>>>> refs/remotes/origin/Sean-GameStats2
 *.class

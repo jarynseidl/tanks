@@ -19,16 +19,16 @@ var User = React.createClass({
         }.bind(this));
     },
     deleteTank: function (tankId,e) {
-		var self = this;
-		console.log("Delete tank with id: " + tankId);
-    	$.ajax({
+        var self = this;
+        console.log("Delete tank with id: " + tankId);
+        $.ajax({
             url: '/api/users/' + Auth.getUsername() + '/tanks/'+ tankId,
             type: 'DELETE',
             contentType: 'application/json',
             success: function(data) {
-				var newArray = $.grep(self.state.user.tanks, function(a) {
-					return a._id !== tankId;
-				});
+                var newArray = $.grep(self.state.user.tanks, function(a) {
+                    return a._id !== tankId;
+                });
                 var modified = self.state.user;
                 modified.tanks = newArray;
                 self.setState({user: modified, tankCount: modified.tanks.length});

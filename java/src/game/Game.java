@@ -48,6 +48,12 @@ public class Game {
     private int maxTurns = 1000;
     public boolean ready;
     private int status;
+    
+    //this is where to get the error codes from
+    private String compFailureResponse = "";
+    
+    //this is the passphrase used to prevent the user from updating their own wins, coordinates, or dir
+    private String statsPassword = "poekillsKylo33#d@rn";
 
     public Game() {
         this.moves = new MoveTracker();
@@ -81,7 +87,14 @@ public class Game {
                     move = t.calculateTurn(Collections.unmodifiableList(tanks), boardSize);
                     switch (move) {
                         case SHOOT:
-                            shoot(t);
+                            if(!t.getShot()){
+                                shoot(t);
+                                t.setShot(true);
+                                break;
+                            }
+                            move = TANK_MOVES.RELOAD;
+                        case RELOAD:
+                            t.setShot(false);
                             break;
                         case TURN_RIGHT:
                             t.setDir(t.getDir().rotateRight(t.getDir()));
@@ -113,6 +126,9 @@ public class Game {
             }
 
             if (currentTurn > maxTurns) {
+            	for (Tank t: tanks){
+            		t.incDraws(statsPassword);
+            	}
                 return;
             }
         }
@@ -121,7 +137,12 @@ public class Game {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getTankID() == t.getTankID()) {
                 id = users.get(i).getUserID();
+                users.get(i).incGamesWon();
+                t.incGamesWon(statsPassword);
             }
+            
+            else
+            	users.get(i).incGamesLost();
         }
         winnerID = id;
 
@@ -156,12 +177,22 @@ public class Game {
                     x += 1;
                 break;
         }
-        if (y < 0 || y > boardSize || x < 0 || x > boardSize) {
+        
+        //if tank center < 1 or > boardSize - 2, tank edge is out of bounds
+        if (y < 1 || y > boardSize - 2 || x < 1 || x > boardSize - 2) {
 
             return TANK_MOVES.WAIT;
         } else {
-            if (board.getElementAt(x, y) != null) {
-                return TANK_MOVES.WAIT;
+        	//elem is the BoardElement in the spot we want to go
+        	BoardElement elem = board.getElementAt(x, y);
+        	//if elem is not an empty spot
+            if (elem != null) {
+            	//if elem is a wall
+            	if(elem instanceof Wall ||
+            			//or a tank other than ourselves
+            			(elem instanceof Tank && (Tank)elem != t))
+            		//we can't move there, so wait instead
+            		return TANK_MOVES.WAIT;
             }
 
             board.setElementAt(t.getCoord().getX(), t.getCoord().getY(), null);
@@ -180,8 +211,15 @@ public class Game {
                     if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
+                        	((Tank) elem).incGamesLost(statsPassword);
                             ttanks.add((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
+                            for (int f = 0; f < users.size(); f++) {
+                                if (users.get(f).getTankID() == t.getTankID()) {
+                                    users.get(f).incTanksKilled();
+                                    t.incTanksKilled(statsPassword);
+                                }
+                            }
                         }
 
                         break;
@@ -194,8 +232,15 @@ public class Game {
                     if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
+                        	((Tank) elem).incGamesLost(statsPassword);
                             ttanks.add((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
+                            for (int f = 0; f < users.size(); f++) {
+                                if (users.get(f).getTankID() == t.getTankID()) {
+                                    users.get(f).incTanksKilled();
+                                    t.incTanksKilled(statsPassword);
+                                }
+                            }
                         }
                         break;
                     }
@@ -207,8 +252,15 @@ public class Game {
                     if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
+                        	((Tank) elem).incGamesLost(statsPassword);
                             ttanks.add((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
+                            for (int f = 0; f < users.size(); f++) {
+                                if (users.get(f).getTankID() == t.getTankID()) {
+                                    users.get(f).incTanksKilled();
+                                    t.incTanksKilled(statsPassword);
+                                }
+                            }
                         }
                         break;
                     }
@@ -220,8 +272,15 @@ public class Game {
                     if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
+                        	((Tank) elem).incGamesLost(statsPassword);
                             ttanks.add((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
+                            for (int f = 0; f < users.size(); f++) {
+                                if (users.get(f).getTankID() == t.getTankID()) {
+                                    users.get(f).incTanksKilled();
+                                    t.incTanksKilled(statsPassword);
+                                }
+                            }
                         }
                         break;
                     }
@@ -289,6 +348,16 @@ public class Game {
     public void setStatus(int status) {
         this.status = status;
     }
+
+	public String getCompFailureResponse() {
+		return compFailureResponse;
+	}
+
+	public void setCompFailureResponse(String compFailureResponse) {
+		this.compFailureResponse = compFailureResponse;
+	}
+    
+    
 }
 
 
