@@ -119,13 +119,81 @@ CSS For the TankCard Class
 .btn:focus, .btn:active:focus, .btn.active:focus {
     outline: 0 none;
 }
+
+/**************************************************************************
+CSS For the GameCard Class
+**************************************************************************/
+
+.gameCard{
+    display:inline-flex;
+    width:100%;
+    height: 100px;
+    background-color: #a6a6a6;
+    margin: 10px 0px 10px 0px;
+}
+
+.gameImage {
+    width:70px;
+    height:70px;
+}
+
+.gameCard h4 {
+    margin: 5px 0px 5px 0px;
+}
+
+.gameCard h5 {
+    margin: 5px 0px 5px 0px;
+}
+
+.gameCardSection1 {
+    display: flex;
+    flex-direction:column;
+    width:30%;
+}
+
+.gameCard .players {
+    width:60%;
+    font-weight: 600;
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.players span {
+    width:50%;
+    margin-top:15px;
+}
+
+.topRight {
+    position: relative;
+    top: 3px;
+    right: -10px;
+    color:red;
+}
+
+.remove {
+    margin-top:5px;
+    margin-left:15px;
+}
+
+/**************************************************************************
+CSS For the Game Page
+**************************************************************************/
+.gameButtons {
+    margin-bottom:15px;
+}
+
+.gameButtons .button {
+        box-shadow: 3px 3px 3px black;
+}
+
+
 /**************************************************************************
 CSS For the PlayerPanel Class
 **************************************************************************/
 .centerPanel {
     display: flex;
     flex-wrap:wrap;
-    justify-content:space-around;
+    justify-content:flex-start;
 }
 
 .inGamePanel {
@@ -161,6 +229,10 @@ CSS For the Dark Background
 
 body {
     background-color: #595656 !important;
+}
+
+.fixed {
+    position: fixed;
 }
 
 /**************************************************************************
