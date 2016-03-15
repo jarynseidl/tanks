@@ -351,6 +351,9 @@ CSS For the Logout
     width:35%;
     height:45%;
     background-color: #3366ff;
+    background-image: url("/images/user_white.png");
+    background-repeat: no-repeat;
+    background-size:contain;
 }
 
 .userInfo div {
