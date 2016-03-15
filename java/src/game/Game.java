@@ -141,30 +141,66 @@ public class Game {
     private TANK_MOVES move(Tank t, boolean forward, TANK_MOVES move) {
         int x = t.getCoord().getX();
         int y = t.getCoord().getY();
+        //spots to check for obstructions
+        //(the 3 spots that the tank's edge is trying to move into)
+        Coordinate[] checkSpots = new Coordinate[] {null, null, null};
         switch (t.getDir()) {
             case N:
-                if (forward)
+                if (forward){
                     y -= 1;
-                else
+                    //the 3 checkSpots
+                    checkSpots[0] = new Coordinate(x-1, y-1);
+                    checkSpots[1] = new Coordinate(x, y-1);
+                    checkSpots[2] = new Coordinate(x+1, y-1);
+                }
+                else{
                     y += 1;
+                    checkSpots[0] = new Coordinate(x-1, y+1);
+                    checkSpots[1] = new Coordinate(x, y+1);
+                    checkSpots[2] = new Coordinate(x+1, y+1);
+                }
                 break;
             case E:
-                if (forward)
+                if (forward){
                     x += 1;
-                else
+                    checkSpots[0] = new Coordinate(x+1, y-1);
+                    checkSpots[1] = new Coordinate(x+1, y);
+                    checkSpots[2] = new Coordinate(x+1, y+1);
+                }
+                else{
                     x -= 1;
+                    checkSpots[0] = new Coordinate(x-1, y-1);
+                    checkSpots[1] = new Coordinate(x-1, y);
+                    checkSpots[2] = new Coordinate(x-1, y+1);
+                }
                 break;
             case S:
-                if (forward)
+                if (forward){
                     y += 1;
-                else
+                    checkSpots[0] = new Coordinate(x-1, y+1);
+                    checkSpots[1] = new Coordinate(x, y+1);
+                    checkSpots[2] = new Coordinate(x+1, y+1);
+                }
+                else{
                     y -= 1;
+                    checkSpots[0] = new Coordinate(x-1, y-1);
+                    checkSpots[1] = new Coordinate(x, y-1);
+                    checkSpots[2] = new Coordinate(x+1, y-1);
+                }
                 break;
             case W:
-                if (forward)
+                if (forward){
                     x -= 1;
-                else
+                    checkSpots[0] = new Coordinate(x-1, y-1);
+                    checkSpots[1] = new Coordinate(x-1, y);
+                    checkSpots[2] = new Coordinate(x-1, y+1);
+                }
+                else{
                     x += 1;
+                    checkSpots[0] = new Coordinate(x+1, y-1);
+                    checkSpots[1] = new Coordinate(x+1, y);
+                    checkSpots[2] = new Coordinate(x+1, y+1);
+                }
                 break;
         }
         
@@ -173,16 +209,12 @@ public class Game {
 
             return TANK_MOVES.WAIT;
         } else {
-        	//elem is the BoardElement in the spot we want to go
-        	BoardElement elem = board.getElementAt(x, y);
-        	//if elem is not an empty spot
-            if (elem != null) {
-            	//if elem is a wall
-            	if(elem instanceof Wall ||
-            			//or a tank other than ourselves
-            			(elem instanceof Tank && (Tank)elem != t))
-            		//we can't move there, so wait instead
+            //for each checkSpot
+            for(int i = 0; i < 3; ++i){
+	            //if not empty
+	            if (board.getElementAt(checkSpots[i]) != null) {
             		return TANK_MOVES.WAIT;
+	            }
             }
 
             board.setElementAt(t.getCoord().getX(), t.getCoord().getY(), null);
