@@ -1,8 +1,11 @@
 
 var Manual = React.createClass({
     render: function() {
+		var manualStyle = {
+			color: '#E1E1E1'
+		};
         return (
-            <div className="row">
+            <div className="row" style={manualStyle}>
                 <div className="col-md-6">
 					<h1>Game Rules</h1>
 
