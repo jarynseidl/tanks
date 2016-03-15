@@ -71,7 +71,7 @@ CSS For the TankCard Class
     background-color: #a6a6a6;
     margin: 10px 0px 10px 0px;*/
     height: 8em;
-    background-color: white;
+    background-color: #595656;
     border-radius: 3px;
     margin: 10px 0;
     padding: 10px;
@@ -85,6 +85,7 @@ CSS For the TankCard Class
 
 .tankCard .tank-info, .tankCard .tank-stats {
     height: 100%;
+    color: white;
 }
 
 .tankCard .tank-info .tank-image {
