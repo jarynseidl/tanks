@@ -28,7 +28,8 @@ var Manual = require('./manual.js');
 var App = React.createClass({
   render: function() {
       var navBarStyle = {
-          backgroundColor: '#262626'
+          backgroundColor: '#262626',
+          borderColor: '#262626'
       };
 
       var fontStyle = {
@@ -37,9 +38,9 @@ var App = React.createClass({
         };
     return (
       <div>
-        <div className="master">
-            <nav className="navbar navbar-default">
-                  <div className="container-fluid" style={navBarStyle}>
+        <div className="master"  style={navBarStyle}>
+            <nav className="navbar navbar-default" style={navBarStyle}>
+                  <div className="container-fluid" >
                     <div className="navbar-header">
                       <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-expanded="false">
                         <span className="sr-only">Toggle navigation</span>
