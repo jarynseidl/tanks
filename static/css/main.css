@@ -78,7 +78,7 @@ CSS For the TankCard Class
     background-color: #a6a6a6;
     margin: 10px 0px 10px 0px;*/
     height: 8em;
-    background-color: white;
+    background-color: #595656;
     border-radius: 3px;
     margin: 10px 0;
     padding: 10px;
@@ -86,12 +86,13 @@ CSS For the TankCard Class
 
 .tankCard.card-selected {
     border-style: solid;
-    border-width: medium;;
+    border-width: medium;
     border-color: rgb(193, 66, 66);
 }
 
 .tankCard .tank-info, .tankCard .tank-stats {
     height: 100%;
+    color: #E1E1E1;
 }
 
 .tankCard .tank-info .tank-image {
@@ -127,7 +128,7 @@ CSS For the TankCard Class
 }
 
 .tankCard:not(.card-selected):hover {
-    background-color: rgb(184, 243, 243);
+    box-shadow: 5px 5px 5px #000000;
 }
 
 .tankCard h4 {
