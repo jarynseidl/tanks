@@ -10,7 +10,7 @@ var Login = React.createClass({
     render: function() {
                 return (
                       <div className="logout">
-                        <div><img className="userIcon" src="../../images/user.jpg"></img></div>
+                        <div><img className="userIcon" src="../../images/user_white.png"></img></div>
                         <div className="userInfo">
                           <a className="pull-right" href="#" onClick={this.handleLogout}>Logout </a>
                           <div className="userImage">

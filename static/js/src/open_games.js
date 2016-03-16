@@ -161,6 +161,7 @@ var OpenGames = React.createClass({
     },
     showModal: function(modalName, e) {
         if (e) {e.preventDefault();}
+        console.log(modalName);
         $('#' + modalName).modal('show');
     },
     render: function() {
