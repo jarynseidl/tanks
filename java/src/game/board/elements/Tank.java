@@ -3,10 +3,12 @@ package game.board.elements;
 import game.util.Coordinate;
 import game.util.TANK_DIR;
 import game.util.TANK_MOVES;
+
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Transient;
 
+import java.awt.Image;
 import java.util.List;
 
 /**
@@ -35,6 +37,18 @@ public abstract class Tank implements BoardElement {
 	private int diagCost = 4;
 	private int reloadCost = 4;
 	private int damage = 7;
+	
+	//These are the values needed for the armory
+	private int gamesWon = 0;
+	private int gamesLost = 0;
+	private int draws = 0;
+	private int tanksKilled = 0;
+	private int gamesPlayed = 0;
+	//How are we storing tank images? I'm not really sure
+	private Image tankImage;
+	
+	//Kind of shoehorning it, but to prevent them editing things they shouldn't
+	private String password = "poekillsKylo33#d@rn";
 
     public Tank() {
     }
@@ -62,7 +76,7 @@ public abstract class Tank implements BoardElement {
 
     @Override
     public final void setCoord(Coordinate coord) {
-        this.coord = coord;
+    	this.coord = coord;
     }
 
     public final ObjectId getTankID() {
@@ -87,7 +101,7 @@ public abstract class Tank implements BoardElement {
     }
 
     public final void setDir(TANK_DIR dir) {
-        this.dir = dir;
+    	this.dir = dir;
     }
 
     public int getAlias() {
@@ -137,7 +151,7 @@ public abstract class Tank implements BoardElement {
 	public void setShot(boolean shot){
 		this.shot = shot;
 	}
-
+	
 	protected boolean tankNorth(List<Tank> tanks){
 		for(int i = 0; i < tanks.size(); ++i)
 			if(Math.abs(tanks.get(i).getCoord().getX() - this.getCoord().getX()) <= 1 &&
@@ -263,6 +277,55 @@ public abstract class Tank implements BoardElement {
 			default:
 				return TANK_DIR.E;
 		}
+	}
+	/*
+	 * here's wins/losses/kill counts
+	 */
+	
+	public int getGamesWon() {
+		return gamesWon;
+	}
+
+	public void incGamesWon(String passphrase) {
+		if(passphrase.equals(password)){
+			gamesWon++;
+			gamesPlayed++;
+		}
+	}
+
+	public int getGamesLost() {
+		return gamesLost;
+	}
+
+	public void incGamesLost(String passphrase) {
+		if(passphrase.equals(password)){
+			gamesLost++;
+			gamesPlayed++;
+		}
+	}
+
+	public int getTanksKilled() {
+		return tanksKilled;
+	}
+
+	public void incTanksKilled(String passphrase) {
+		if(passphrase.equals(password))
+			tanksKilled++;
+	}
+
+	public int getDraws() {
+		return draws;
+	}
+
+	public void incDraws(String passphrase) {
+		if(passphrase.equals(password)){
+			draws++;
+			gamesPlayed++;
+		}
+	}
+
+	public int getGamesPlayed() {
+		return gamesPlayed;
 	}
 }
 

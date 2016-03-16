@@ -3,11 +3,14 @@ package pregameprocessor;
 import database.DBTank;
 import database.GameDatabase;
 import database.GameDatabaseImpl;
+import game.Game;
 import game.board.elements.Tank;
 import game.util.JavaSourceFromString;
+
 import org.bson.types.ObjectId;
 
 import javax.tools.*;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.URL;
@@ -59,7 +62,7 @@ public class TankCodeLoader {
     	"\\s*java\\.util.*"
     };
 
-    public static Tank loadTank(ObjectId tankId, String name) {
+    public static Tank loadTank(ObjectId tankId, String name, Game game) {
         try {
         	
         	// 0) get info and tank code text
@@ -121,6 +124,7 @@ public class TankCodeLoader {
                     return t;
                 } catch (Exception e) {
                     System.err.format("Reflection failed");
+                    game.setCompFailureResponse(e.getMessage());
                     e.printStackTrace();
                     return null;
                 }
@@ -129,6 +133,7 @@ public class TankCodeLoader {
                 return null;
             }
         } catch (Exception e) {
+        	game.setCompFailureResponse(e.getMessage());
             e.printStackTrace();
             return null;
         }
