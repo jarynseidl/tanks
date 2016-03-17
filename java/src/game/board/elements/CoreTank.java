@@ -9,7 +9,7 @@ import org.mongodb.morphia.annotations.Transient;
 import java.util.List;
 
 @Embedded
-public abstract class CoreTank implements BoardElement {
+public abstract class CoreTank {
     private Coordinate coord;
     private ObjectId tankID;
     private String tankName;
@@ -29,7 +29,7 @@ public abstract class CoreTank implements BoardElement {
     public CoreTank() {
     }
 
-    public CoreTank(ObjectId tankID, String tankName, String tankType) {
+    public CoreTank(ObjectId tankID, String tankName) {
     }
 
     public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);

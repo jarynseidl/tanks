@@ -13,7 +13,7 @@ import java.util.List;
  * Created by gladi on 11/12/2015.
  */
 @Embedded
-public abstract class Tank extends CoreTank {
+public abstract class Tank implements BoardElement {
     private Coordinate coord;
     private ObjectId tankID;
     private String tankName;

@@ -62,34 +62,43 @@ public class TankCodeLoader {
 
     public static Tank loadTank(ObjectId tankId, String name) {
         try {
+            String nameCore = name + "Core";
         	
         	// 0) get info and tank code text
             DBTank tank = db.loadDBTank(tankId);
+
             String code = tank.getCode();
+            String codeCore = toCore(code);
             
             // 1) Rename the tank to guarantee unique tank class names
         	// 		within the game
             code = replaceTankClassName(code, name);
+            codeCore = replaceTankClassName(codeCore, nameCore);
             
             // 2) Remove all code before imports
             //	WARNING: must be called before removing unapproved imports
             //	or else code will become jumbled!!!!!
             code = removePackageDeclaration(code);
+            codeCore = removePackageDeclaration(codeCore);
             
             // 3) Remove all imports that aren't whitelisted
             code = removeUnapprovedImports(code);
+            codeCore = removeUnapprovedImports(codeCore);
             
             // 4) Remove calls that can create threads
             code = removeThreadAndRunnableCalls(code);
+            codeCore = removeThreadAndRunnableCalls(codeCore);
             
             // 5) Remove java.lang included functionality
             //    This includes Runtime (allows system calls), System (allows file streams),
             //    and SecurityManager (could potentially brick our running program)
             code = removeOtherJavaLangProblems(code);
+            codeCore = removeOtherJavaLangProblems(codeCore);
 
             // 6) Take the code out
             //		Save it to a file
             JavaFileObject file = new JavaSourceFromString(name, code);
+            JavaFileObject fileCore = new JavaSourceFromString(nameCore, codeCore);
 
             // 7) Set up variables (classpath) necessary
             JavaCompiler comp = ToolProvider.getSystemJavaCompiler();
@@ -98,10 +107,14 @@ public class TankCodeLoader {
             //StandardJavaFileManager fileManager = comp.getStandardFileManager(diagnostics, null, null);
 
             Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
+            Iterable<? extends JavaFileObject> compilationUnitsCore = Arrays.asList(fileCore);
 
             StandardJavaFileManager fileManager = comp.getStandardFileManager( null, null, null);
             fileManager.setLocation(StandardLocation.CLASS_OUTPUT,Arrays.asList(new File("src")));
+
             JavaCompiler.CompilationTask task = comp.getTask(null, fileManager,null,null, null, compilationUnits);
+            JavaCompiler.CompilationTask taskCore = comp.getTask(null, fileManager, null, null, null, compilationUnitsCore);
+
             //for (Diagnostic diagnostic : diagnostics.getDiagnostics())
             //    System.out.format("Error on line %d in %s%n",
             //            diagnostic.getLineNumber(),
@@ -109,17 +122,25 @@ public class TankCodeLoader {
 
             //fileManager.close();
             //System.err.println(name);
-            boolean success = task.call();
+            boolean success = taskCore.call() && task.call();
 
             if (success) {
                 try {
                     File f = new File("src");
+                    File fCore = new File("src");
+
                     //System.err.println(f.toURI().toURL());
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
+                    URLClassLoader classLoaderCore = URLClassLoader.newInstance(new URL[]{fCore.toURI().toURL()});
+
                     Class<?> cs = Class.forName(name, true, classLoader);
+                    Class<?> csCore = Class.forName(nameCore, true, classLoaderCore);
+
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class);
+                    Constructor<?> ctorCore = csCore.getConstructor(ObjectId.class, String.class);
+
                     //compile as CoreTank, throw error if fail
-                    CoreTank c = (CoreTank)ctor.newInstance(tankId, "Core Tank");
+                    CoreTank c = (CoreTank)ctorCore.newInstance(tankId, "Core Tank");
                     //compile as Tank, actual object to return
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank");
                     return t;
@@ -343,5 +364,13 @@ public class TankCodeLoader {
         }
         
         return code;
+    }
+
+    private static String toCore(String code){
+        String codeCore = code;
+        codeCore = codeCore.replaceAll("BasicTank", "CoreTank");
+        codeCore = codeCore.replaceAll("HeavyTank", "CoreTank");
+        codeCore = codeCore.replaceAll("LightTank", "CoreTank");
+        return codeCore;
     }
 }
