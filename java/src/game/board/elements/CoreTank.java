@@ -30,6 +30,8 @@ public abstract class CoreTank {
     }
 
     public CoreTank(ObjectId tankID, String tankName) {
+        this.tankID = tankID;
+        this.tankName = tankName;
     }
 
     public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);
