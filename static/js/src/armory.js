@@ -232,11 +232,6 @@ var Armory = React.createClass({
     render: function() {
         var user_tanks = this.props.tanks;
         var editTank = this.editTank;
-        var listStyle = {
-            height: '40em',
-            overflowY: 'auto',
-            overflowX: 'hidden'
-        };
         var editorWrapperStyle = {
             height: '45em',
             padding: '10px'
@@ -244,9 +239,9 @@ var Armory = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className="col-md-3 armory-top flex" style={listStyle}>
-                        <button type="submit" className="btn btn-primary button" onClick={this.createTank}>Create New Tank</button>
+                    <div className="col-md-3 armory-top flex">
                         <div className="tankPanel dark-background ">
+                            <button type="submit" className="btn btn-primary button" onClick={this.createTank}>Create New Tank</button>
                             <TankList
                                 tanks={this.state.user.tanks}
                                 selectedTank={this.state.selectedTank}

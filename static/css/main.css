@@ -230,7 +230,13 @@ CSS For the Armory
 
 .armory-top .tankPanel {
     flex-grow:2;
+    height:40em;
+    overflowY:auto;
+    overflowX:hidden;
+    background-color:#262626;
 }
+
+
 
 .flex {
     display:flex;
