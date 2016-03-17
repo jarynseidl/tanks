@@ -50,6 +50,7 @@ public class TankCodeLoader {
     private static final String COMMENT_SYSTEM = "/*Thou shalt not use java.lang.System!*/";
     private static final String COMMENT_SECURITY = "/*Thou shalt not set app security!*/";
     private static final String COMMENT_PROCESS = "/*Thou shalt not use java.lang.Process(Builder)!*/";
+    private static final String CORE_TANK = "CoreTank";
     
     
     // approved Java package name patterns
@@ -58,6 +59,12 @@ public class TankCodeLoader {
     	"\\s*org\\.bson.*",
     	"\\s*org\\.mongodb.*",
     	"\\s*java\\.util.*"
+    };
+
+    private static final String[] TANK_CLASSES = {
+        "BasicTank",
+        "HeavyTank",
+        "LightTank"
     };
 
     public static Tank loadTank(ObjectId tankId, String name) {
@@ -366,11 +373,12 @@ public class TankCodeLoader {
         return code;
     }
 
+    //replace tank class (eg BasicTank) with CoreTank
     private static String toCore(String code){
         String codeCore = code;
-        codeCore = codeCore.replaceAll("BasicTank", "CoreTank");
-        codeCore = codeCore.replaceAll("HeavyTank", "CoreTank");
-        codeCore = codeCore.replaceAll("LightTank", "CoreTank");
+        for(int i = 0; i < TANK_CLASSES.length; ++i){
+        	codeCore = codeCore.replaceAll(TANK_CLASSES[i], CORE_TANK);
+        }
         return codeCore;
     }
 }
