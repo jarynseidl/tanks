@@ -52,6 +52,7 @@ public class Game {
     
     //this is where to get the error codes from
     private String compFailureResponse = "";
+    private String runFailureResponse = "";
     
     //this is the passphrase used to prevent the user from updating their own wins, coordinates, or dir
     private String statsPassword = "poekillsKylo33#d@rn";
@@ -121,6 +122,10 @@ public class Game {
                     moves.addMove(t.getAlias(), move);
                 } catch (Exception e) {
                     // Send the output of e to the user for debugging
+                	System.err.format("Runtime error");
+                	this.setRunFailureResponse(e.getMessage());
+                	e.printStackTrace();
+                	
                     moves.addMove(t.getAlias(), TANK_MOVES.WAIT);
                 }
             }
@@ -394,6 +399,14 @@ public class Game {
 
 	public void setCompFailureResponse(String compFailureResponse) {
 		this.compFailureResponse = compFailureResponse;
+	}
+
+	public String getRunFailureResponse() {
+		return runFailureResponse;
+	}
+
+	public void setRunFailureResponse(String runFailureResponse) {
+		this.runFailureResponse = runFailureResponse;
 	}
     
     
