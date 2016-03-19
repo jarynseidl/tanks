@@ -34,9 +34,9 @@ var TankCard = React.createClass({
 });
 
 var TankdCard = React.createClass({
-    render: function() {
-        var inArmory = this.props.inArmory;
-        var tank = this.props.tank;
+    // render: function() {
+    //     var inArmory = this.props.inArmory;
+    //     var tank = this.props.tank;
 
     render: function() {
         var cardStyle = {
