@@ -37,7 +37,7 @@ var uploadTank =  function() {
                 code: self.tank_code
             }),
             success: function(data) {
-                self.props.history.pushState(null, '/user/' + Auth.getUsername());
+                self.props.history.pushState(null, '/test');
             },
             error: function(xhr, status, err) {
             }
@@ -82,6 +82,8 @@ var UploadEditor = React.createClass({
             borderRadius: '5px'
         };
 
+        console.log(this.refs)
+
         return (
             <form onSubmit={this.uploadText}>
                 <div className="input-group">
@@ -111,7 +113,7 @@ var UploadTank = React.createClass({
             self.tank_code = reader.result;
             editor.setValue(self.tank_code);
             self.fileLoaded = true;
-            
+
         }
         reader.readAsText(self.file);
     },
@@ -139,4 +141,4 @@ var UploadTank = React.createClass({
     }
 });
 
-    module.exports = UploadTank;
+module.exports = UploadTank;
