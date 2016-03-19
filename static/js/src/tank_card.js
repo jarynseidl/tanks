@@ -38,13 +38,19 @@ var TankdCard = React.createClass({
         var inArmory = this.props.inArmory;
         var tank = this.props.tank;
 
+    render: function() {
+        var cardStyle = {
+            border: '5px',
+            backgroundColor: 'green',
+            borderColor: 'blue',
+            borderStyle: 'solid'
+        }
         return (
-                <div className="tankCard">
-                    <div className="tankCardSection1">
-                        <h4>{tank.name}</h4>
-                        <div>
-                            <img className="tankImage" src="../../images/BlueEast.gif"></img>
-                        </div>
+            <div id={this.props.tank._id} style={cardStyle} onClick={this.props.onSelectTank.bind(null, this.props.tank)}>
+                <div className="row">
+                    <div className="col-md-3">
+                        <h4 ref="tankName">{this.props.tank.name}</h4>
+                        <img className="tank-image" src="/images/BlueEast.gif"></img>
                     </div>
                     <div className="tankCardStats">
                         <h4>Stats:</h4>
@@ -63,7 +69,9 @@ var TankdCard = React.createClass({
                             }
                     </div>
                 </div>
-        );
+            </div>
+        )
+
     }
 });
 
