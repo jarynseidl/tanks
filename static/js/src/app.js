@@ -2,7 +2,6 @@ var Router = require('react-router').Router
 var Route = require('react-router').Route
 var IndexRoute = require('react-router').IndexRoute
 var Link = require('react-router').Link
-var Register = require('./register.js');
 var User = require('./user.js');
 var Home = require('./home.js');
 var ArenaHome = require('./arena_home.js');
@@ -14,7 +13,7 @@ var OpenGames = require('./open_games.js');
 var WatchGame = require('./watch_game.js');
 var Auth = require('./authentication.js')
 var TankList = require('./tanks.js');
-var Sandbox = require('./sandbox.js');
+var Games = require('./games.js');
 var Armory = require('./armory.js');
 var defaultPageComponent;
 
@@ -29,11 +28,20 @@ var Test = require('./test.js');
 
 var App = React.createClass({
   render: function() {
+      var navBarStyle = {
+          backgroundColor: '#262626',
+          borderColor: '#262626'
+      };
+
+      var fontStyle = {
+          color: '#E1E1E1'
+
+        };
     return (
       <div>
-        <div className="master">
-            <nav className="navbar navbar-default">
-                  <div className="container-fluid">
+        <div className="master"  style={navBarStyle}>
+            <nav className="navbar navbar-default" style={navBarStyle}>
+                  <div className="container-fluid" >
                     <div className="navbar-header">
                       <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-expanded="false">
                         <span className="sr-only">Toggle navigation</span>
@@ -42,18 +50,19 @@ var App = React.createClass({
                         <span className="icon-bar"></span>
                       </button>
                       <a className="navbar-brand" href="#">
-                        <img alt="Brand" src="/images/brand.png" height="24" />
+                        <img alt="Brand" src="/images/brandWhite.png" height="24" />
                       </a>
                     </div>
 
-                    <div className="collapse navbar-collapse" id="bs-navbar">
+                    <div className="collapse navbar-collapse" id="bs-navbar" >
                       <ul className="nav navbar-nav">
-                        {Auth.loggedIn() ? null : <li><Link to="home">Home</Link></li> }
-                        {Auth.loggedIn() ? null : <li><Link to="register">Register</Link></li> }
-                        {Auth.loggedIn() ? <li><Link to="games">Join a Fight</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="your_games">See Your Games</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="user">Armory</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="sandbox">Sandbox</Link></li> : null }
+
+                        {Auth.loggedIn() ? <li><Link to="games" style={fontStyle}>Join a Fight</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="your_games" style={fontStyle}>Watch My Games</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="user" style={fontStyle}>Armory</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="sandbox" style={fontStyle}>Sandbox</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="manual" style={fontStyle}>Manual</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="games_main">Games</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="manual">Manual</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="test">Test</Link></li> : null }
 
@@ -78,7 +87,6 @@ var App = React.createClass({
 const routes = (
         <Router>
             <Route name="app" path="/" component={App}>
-                <Route name="register" path="/register" component={Register} />
                 <Route name="user" path="/user/:userId" component={User} />
                 <Route name ="arena_home" path="/arena_home" component={ArenaHome} />
                 <Route name ="get_started" path="/get_started" component={GetStarted} />
@@ -86,7 +94,7 @@ const routes = (
                 <Route name ="your_games" path="/your_games" component={YourGames} />
                 <Route name ="open_games" path="/games" component={OpenGames} />
                 <Route name ="watch_game" path="/games/:gameId/watch" component={WatchGame} />
-                <Route name ="sandbox" path="/sandbox" component={Sandbox} />
+                <Route name ="games_main" path="/games_main" component={Games} />
                 <Route name ="manual" path="/manual" component={Manual} />
                 <Route name ="test" path="/test" component={Test} />
                 <Route path="*" component={Home} />

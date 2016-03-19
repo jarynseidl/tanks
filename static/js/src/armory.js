@@ -199,7 +199,7 @@ var Armory = React.createClass({
                             <button type="submit" className="btn btn-primary button">Download</button>
                             <button type="submit" className="btn btn-primary button" onClick={this.deleteTank}>Delete</button>
                         </div>
-                        <div className="registerUser">
+                        <div>
                             <UploadEditor ref="upload_editor" history={this.props.history}/>
                         </div>
                     </div>
