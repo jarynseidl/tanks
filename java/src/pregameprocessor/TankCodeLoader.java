@@ -52,7 +52,9 @@ public class TankCodeLoader {
     private static final String COMMENT_SYSTEM = "/*Thou shalt not use java.lang.System!*/";
     private static final String COMMENT_SECURITY = "/*Thou shalt not set app security!*/";
     private static final String COMMENT_PROCESS = "/*Thou shalt not use java.lang.Process(Builder)!*/";
-    
+    private static final String ERR_BAD_IMPORTS = "[ERROR] You have used unapproved import statements. Please remove them.";
+    private static final String ERR_THREADS_RUNNABLE = "[ERROR] You have used Thread and/or Runnable code, which is forbidden. Please remove these calls.";
+    private static final String ERR_OTHERS = "[ERROR] You have made calls to Runtime, System, or SecurityManager packages. This is not permitted.";
     
     // approved Java package name patterns
     private static final String[] APPROVED_PACKAGES = {
@@ -79,15 +81,24 @@ public class TankCodeLoader {
             code = removePackageDeclaration(code);
             
             // 3) Remove all imports that aren't whitelisted
-            code = removeUnapprovedImports(code);
+            if (containsUnapprovedImports(code)) {
+                game.setCompFailureResponse(ERR_BAD_IMPORTS);
+                return null;
+            }
             
             // 4) Remove calls that can create threads
-            code = removeThreadAndRunnableCalls(code);
+            if (containsThreadAndRunnableCalls(code)) {
+                game.setCompFailureResponse(ERR_THREADS_RUNNABLE);
+                return null;
+            }
             
             // 5) Remove java.lang included functionality
             //    This includes Runtime (allows system calls), System (allows file streams),
             //    and SecurityManager (could potentially brick our running program)
-            code = removeOtherJavaLangProblems(code);
+            if (containsOtherJavaLangProblems(code)) {
+                game.setCompFailureResponse(ERR_OTHERS);
+                return null;
+            }
 
             // 6) Take the code out
             //		Save it to a file
@@ -155,7 +166,7 @@ public class TankCodeLoader {
         return code;
     }
     
-    private static String removeThreadAndRunnableCalls(String code) {
+    private static boolean containsThreadAndRunnableCalls(String code) {
     	
     	// Right now, there's no guaranteed security setup
     	// So, we want to prevent user code from creating Threads or Runnable
@@ -165,27 +176,27 @@ public class TankCodeLoader {
     	//
     	// WARNING: currently not comment-safe (will remove instances of 
     	// these strings from comments as well as live code)
-    	
+    	String oldCode = code;
     	code = code.replace(THREAD_STR, COMMENT_THREADS);
     	code = code.replace(RUNNABLE_STR, COMMENT_THREADS);
     	code = code.replace(EXT_THREAD_STR, COMMENT_THREADS);
     	code = code.replace(THREAD_CALL_STR, COMMENT_THREADS);
-    	return code;
+    	return !code.equals(oldCode);
     }
     
-    private static String removeOtherJavaLangProblems(String code) {
+    private static boolean containsOtherJavaLangProblems(String code) {
     	
     	// The Runtime object comes with java.lang and therefore reqires no import
     	// statements. It can give the programmer access to the command line by
     	// taking in Strings that can be evaluated as shell commands!
     	//
     	// This cannot be permitted. Go forth and slay them!
-    	
+    	String oldCode = code;
     	code = code.replace(RUNNABLE_STR, COMMENT_RUNTIME);
     	code = code.replace(SEC_MAN_STR, COMMENT_SECURITY);
     	code = code.replace(SYSTEM_STR, COMMENT_SYSTEM);
     	code = code.replace(PROCESS_STR, COMMENT_PROCESS);
-    	return code;
+    	return !code.equals(oldCode);
     }
     
     private static String removePackageDeclaration(String code) {
@@ -296,7 +307,9 @@ public class TankCodeLoader {
     	return code;
     }
     
-    private static String removeUnapprovedImports(String code) {
+    private static boolean containsUnapprovedImports(String code) {
+    	
+    	String oldCode = code;
     	
     	// pre-compile regex patterns for acceptable package names
     	Pattern[] packagePatterns = new Pattern[APPROVED_PACKAGES.length];
@@ -321,7 +334,7 @@ public class TankCodeLoader {
         		break;
         	}
         	
-        	// extract package name, and check it for approval
+        	// extract import name, and check it for approval
         	String packageInQuestion = code.substring(packageIdx, end);
         	boolean packageApproved = false;
         	for(int i=0; i<packagePatterns.length; i++) {
@@ -332,7 +345,7 @@ public class TankCodeLoader {
         		}
         	}
         	
-        	// remove the package declaration if it is NOT approved
+        	// remove the import declaration if it is NOT approved
         	// set the "checked up to" index to either the end of this import
         	// or to where we removed it from appropriately
         	if (!packageApproved) {
@@ -343,6 +356,6 @@ public class TankCodeLoader {
         	}
         }
         
-        return code;
+        return !code.equals(oldCode);
     }
 }
