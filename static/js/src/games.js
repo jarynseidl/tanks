@@ -224,8 +224,8 @@ var TankList = React.createClass({
         	<div>
             	<div>
 	            	{tanks.map(function(tank,i) {
-	                       return <TankCard tank={tank} key={i} inArmory={false} joinGame={joinGame}/>;
-	                })}
+	                       return <TankCard onSelectTank={joinGame} tank={tank} key={i} inArmory={false} joinGame={joinGame}/>;
+	                }.bind(this))}
 	            </div>
             </div>
         )}
