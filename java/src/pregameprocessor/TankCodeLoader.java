@@ -4,6 +4,7 @@ import database.DBTank;
 import database.GameDatabase;
 import database.GameDatabaseImpl;
 import game.Game;
+import game.board.elements.CoreTank;
 import game.board.elements.Tank;
 import game.util.JavaSourceFromString;
 
@@ -52,6 +53,7 @@ public class TankCodeLoader {
     private static final String COMMENT_SYSTEM = "/*Thou shalt not use java.lang.System!*/";
     private static final String COMMENT_SECURITY = "/*Thou shalt not set app security!*/";
     private static final String COMMENT_PROCESS = "/*Thou shalt not use java.lang.Process(Builder)!*/";
+    private static final String CORE_TANK = "CoreTank";
     
     
     // approved Java package name patterns
@@ -62,36 +64,51 @@ public class TankCodeLoader {
     	"\\s*java\\.util.*"
     };
 
+    private static final String[] TANK_CLASSES = {
+        "BasicTank",
+        "HeavyTank",
+        "LightTank"
+    };
+
     public static Tank loadTank(ObjectId tankId, String name, Game game) {
         try {
+            String nameCore = name + "Core";
         	
         	// 0) get info and tank code text
             DBTank tank = db.loadDBTank(tankId);
+
             String code = tank.getCode();
+            String codeCore = toCore(code);
             
             // 1) Rename the tank to guarantee unique tank class names
         	// 		within the game
             code = replaceTankClassName(code, name);
+            codeCore = replaceTankClassName(codeCore, nameCore);
             
             // 2) Remove all code before imports
             //	WARNING: must be called before removing unapproved imports
             //	or else code will become jumbled!!!!!
             code = removePackageDeclaration(code);
+            codeCore = removePackageDeclaration(codeCore);
             
             // 3) Remove all imports that aren't whitelisted
             code = removeUnapprovedImports(code);
+            codeCore = removeUnapprovedImports(codeCore);
             
             // 4) Remove calls that can create threads
             code = removeThreadAndRunnableCalls(code);
+            codeCore = removeThreadAndRunnableCalls(codeCore);
             
             // 5) Remove java.lang included functionality
             //    This includes Runtime (allows system calls), System (allows file streams),
             //    and SecurityManager (could potentially brick our running program)
             code = removeOtherJavaLangProblems(code);
+            codeCore = removeOtherJavaLangProblems(codeCore);
 
             // 6) Take the code out
             //		Save it to a file
             JavaFileObject file = new JavaSourceFromString(name, code);
+            JavaFileObject fileCore = new JavaSourceFromString(nameCore, codeCore);
 
             // 7) Set up variables (classpath) necessary
             JavaCompiler comp = ToolProvider.getSystemJavaCompiler();
@@ -100,10 +117,14 @@ public class TankCodeLoader {
             //StandardJavaFileManager fileManager = comp.getStandardFileManager(diagnostics, null, null);
 
             Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
+            Iterable<? extends JavaFileObject> compilationUnitsCore = Arrays.asList(fileCore);
 
             StandardJavaFileManager fileManager = comp.getStandardFileManager( null, null, null);
             fileManager.setLocation(StandardLocation.CLASS_OUTPUT,Arrays.asList(new File("src")));
+
             JavaCompiler.CompilationTask task = comp.getTask(null, fileManager,null,null, null, compilationUnits);
+            JavaCompiler.CompilationTask taskCore = comp.getTask(null, fileManager, null, null, null, compilationUnitsCore);
+
             //for (Diagnostic diagnostic : diagnostics.getDiagnostics())
             //    System.out.format("Error on line %d in %s%n",
             //            diagnostic.getLineNumber(),
@@ -111,15 +132,26 @@ public class TankCodeLoader {
 
             //fileManager.close();
             //System.err.println(name);
-            boolean success = task.call();
+            boolean success = taskCore.call() && task.call();
 
             if (success) {
                 try {
                     File f = new File("src");
+                    File fCore = new File("src");
+
                     //System.err.println(f.toURI().toURL());
                     URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{f.toURI().toURL()});
+                    URLClassLoader classLoaderCore = URLClassLoader.newInstance(new URL[]{fCore.toURI().toURL()});
+
                     Class<?> cs = Class.forName(name, true, classLoader);
+                    Class<?> csCore = Class.forName(nameCore, true, classLoaderCore);
+
                     Constructor<?> ctor = cs.getConstructor(ObjectId.class, String.class);
+                    Constructor<?> ctorCore = csCore.getConstructor(ObjectId.class, String.class);
+
+                    //compile as CoreTank, throw error if fail
+                    CoreTank c = (CoreTank)ctorCore.newInstance(tankId, "Core Tank");
+                    //compile as Tank, actual object to return
                     Tank t = (Tank) ctor.newInstance(tankId, "My Tank");
                     return t;
                 } catch (Exception e) {
@@ -344,5 +376,14 @@ public class TankCodeLoader {
         }
         
         return code;
+    }
+
+    //replace tank class (eg BasicTank) with CoreTank
+    private static String toCore(String code){
+        String codeCore = code;
+        for(int i = 0; i < TANK_CLASSES.length; ++i){
+        	codeCore = codeCore.replaceAll(TANK_CLASSES[i], CORE_TANK);
+        }
+        return codeCore;
     }
 }
