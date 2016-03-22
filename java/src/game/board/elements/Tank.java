@@ -9,13 +9,14 @@ import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Transient;
 
 import java.awt.Image;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by gladi on 11/12/2015.
  */
 @Embedded
-public abstract class Tank implements BoardElement {
+public abstract class Tank implements BoardElement , Comparator<Tank> {
     private Coordinate coord;
     private ObjectId tankID;
     private String tankName;
@@ -23,7 +24,7 @@ public abstract class Tank implements BoardElement {
     private TANK_DIR dir;
     @Transient
     private int alias;
-    private int actionPoints;
+    private int actionPoints = 0;
     //if tank has shot without reloading
     private boolean shot;
     
@@ -150,6 +151,10 @@ public abstract class Tank implements BoardElement {
 
 	public void setShot(boolean shot){
 		this.shot = shot;
+	}
+
+	public void addActionPoints(int add){
+		actionPoints+=add;
 	}
 	
 	protected boolean tankNorth(List<Tank> tanks){
@@ -326,6 +331,11 @@ public abstract class Tank implements BoardElement {
 
 	public int getGamesPlayed() {
 		return gamesPlayed;
+	}
+
+	@Override
+	public int compare(Tank o1, Tank o2) {
+		return o1.actionPoints - o2.actionPoints;
 	}
 }
 
