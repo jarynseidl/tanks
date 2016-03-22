@@ -6,10 +6,15 @@ import game.util.TANK_MOVES;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Transient;
+
+import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Comparator is for the new priority queue
+ */
 @Embedded
-public abstract class CoreTank {
+public abstract class CoreTank implements Comparator<CoreTank> {
     private Coordinate coord;
     private ObjectId tankID;
     private String tankName;
@@ -17,7 +22,7 @@ public abstract class CoreTank {
     private TANK_DIR dir;
     @Transient
     private int alias;
-    private int actionPoints;
+    private int actionPoints = 0;
     private boolean shot;
 	private int moveCost;
 	private int shootCost;
@@ -217,5 +222,11 @@ public abstract class CoreTank {
 			default:
 				return TANK_DIR.E;
 		}
+	}
+
+	//compares CoreTanks and returns which one has the lowest number.
+	@Override
+	public int compare(CoreTank o1, CoreTank o2) {
+		return o1.actionPoints - o2.actionPoints;
 	}
 }

@@ -3,6 +3,7 @@ package game;
 import game.board.Board;
 import game.board.SquareBoardImpl;
 import game.board.elements.BoardElement;
+import game.board.elements.CoreTank;
 import game.board.elements.Tank;
 import game.board.elements.Wall;
 import game.user.User;
@@ -10,6 +11,7 @@ import game.util.Coordinate;
 import game.util.MoveTracker;
 import game.util.TANK_MOVES;
 import game.util.LogItem;
+import javafx.scene.layout.Priority;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
@@ -19,6 +21,7 @@ import org.mongodb.morphia.annotations.Transient;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Created by gladi on 11/12/2015.
@@ -39,8 +42,6 @@ public class Game {
     private ObjectId winnerID;
     @Transient
     private int boardSize = 30;
-    @Transient
-    private List<Tank> ttanks;
     @Embedded
     private MoveTracker moves;
     @Transient
@@ -49,6 +50,12 @@ public class Game {
     private int maxTurns = 1000;
     public boolean ready;
     private int status;
+
+    /**
+     * Priority queue of tanks
+     */
+    @Transient
+    private PriorityQueue<Tank> tankQueue;
     
     //this is where to get the error codes from
     private String compFailureResponse = "";
@@ -65,6 +72,7 @@ public class Game {
         this.users = new ArrayList<User>();
         this.tanks = new ArrayList<Tank>();
         this.board = new SquareBoardImpl(boardSize);
+        tankQueue = new PriorityQueue<>();
     }
 
     public Game(List<User> user, List<Tank> tanks, Board board) {
@@ -79,15 +87,17 @@ public class Game {
         for (int i = 0; i < tanks.size(); i++) {
             board.addTank(tanks.get(i), i);
             tanks.get(i).setAlias(i);
+            tankQueue.add(tanks.get(i));
         }
         TANK_MOVES move;
 
-        while (tanks.size() > 1) {
-            ttanks = new ArrayList<Tank>();
+        //go until there is only 1 tank left
+        while (tankQueue.size() > 1) {
 
-            for (Tank t : tanks) {
-                if (ttanks.contains(t))
-                    continue;
+
+            //pull out the highest priority tank
+            Tank t = tankQueue.poll();
+
                 try {
                     move = t.calculateTurn(Collections.unmodifiableList(tanks), boardSize);
                     switch (move) {
@@ -128,23 +138,20 @@ public class Game {
                 	
                     moves.addMove(t.getAlias(), TANK_MOVES.WAIT);
                 }
-            }
+            //}
             moves.newTurn();
             currentTurn += 1;
 
-
-            for (int i = 0; i < ttanks.size(); i++) {
-                tanks.remove(ttanks.get(i));
-            }
+            tankQueue.add(t);
 
             if (currentTurn > maxTurns) {
-            	for (Tank t: tanks){
-            		t.incDraws(statsPassword);
+            	for (Tank tt: tanks){
+            		tt.incDraws(statsPassword);
             	}
                 return;
             }
         }
-        Tank t = tanks.get(0);
+        Tank t = tankQueue.peek();
         ObjectId id = new ObjectId();
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getTankID() == t.getTankID()) {
@@ -256,7 +263,8 @@ public class Game {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                         	((Tank) elem).incGamesLost(statsPassword);
-                            ttanks.add((Tank) elem);
+                            //if dead remove from queue
+                            tankQueue.remove((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
@@ -277,7 +285,8 @@ public class Game {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                         	((Tank) elem).incGamesLost(statsPassword);
-                            ttanks.add((Tank) elem);
+                            //if dead remove from queue
+                            tankQueue.remove((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
@@ -297,7 +306,8 @@ public class Game {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                         	((Tank) elem).incGamesLost(statsPassword);
-                            ttanks.add((Tank) elem);
+                            //if dead remove from queue
+                            tankQueue.remove((Tank) elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
@@ -317,7 +327,8 @@ public class Game {
                         ((Tank) elem).takeDamage(t.getDamage());
                         if (((Tank) elem).getHealth() == 0) {
                         	((Tank) elem).incGamesLost(statsPassword);
-                            ttanks.add((Tank) elem);
+                            //if dead remove from queue
+                            tankQueue.remove((Tank) elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
