@@ -16,7 +16,7 @@ import java.util.List;
  * Created by gladi on 11/12/2015.
  */
 @Embedded
-public abstract class Tank implements BoardElement , Comparator<Tank> {
+public abstract class Tank implements BoardElement , Comparable<Tank> {
     private Coordinate coord;
     private ObjectId tankID;
     private String tankName;
@@ -334,8 +334,8 @@ public abstract class Tank implements BoardElement , Comparator<Tank> {
 	}
 
 	@Override
-	public int compare(Tank o1, Tank o2) {
-		return o1.actionPoints - o2.actionPoints;
+	public int compareTo(Tank o) {
+		return this.actionPoints - o.actionPoints;
 	}
 }
 

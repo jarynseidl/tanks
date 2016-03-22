@@ -14,7 +14,7 @@ import java.util.List;
  * Comparator is for the new priority queue
  */
 @Embedded
-public abstract class CoreTank implements Comparator<CoreTank> {
+public abstract class CoreTank {
     private Coordinate coord;
     private ObjectId tankID;
     private String tankName;
@@ -226,11 +226,5 @@ public abstract class CoreTank implements Comparator<CoreTank> {
 			default:
 				return TANK_DIR.E;
 		}
-	}
-
-	//compares CoreTanks and returns which one has the lowest number.
-	@Override
-	public int compare(CoreTank o1, CoreTank o2) {
-		return o1.actionPoints - o2.actionPoints;
 	}
 }
