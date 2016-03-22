@@ -152,6 +152,10 @@ public abstract class Tank implements BoardElement , Comparator<Tank> {
 	public void setShot(boolean shot){
 		this.shot = shot;
 	}
+
+	public void addActionPoints(int add){
+		actionPoints+=add;
+	}
 	
 	protected boolean tankNorth(List<Tank> tanks){
 		for(int i = 0; i < tanks.size(); ++i)

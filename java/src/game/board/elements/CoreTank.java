@@ -39,6 +39,10 @@ public abstract class CoreTank implements Comparator<CoreTank> {
         this.tankName = tankName;
     }
 
+	public void addActionPoints(int add){
+		actionPoints+=add;
+	}
+
     public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);
 
     public Coordinate getCoord() {

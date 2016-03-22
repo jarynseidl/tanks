@@ -112,22 +112,30 @@ public class Game {
                                 break;
                             }
                             move = TANK_MOVES.RELOAD;
+                            t.addActionPoints(t.getShootCost());
+                            break;
                         case RELOAD:
                             t.setShot(false);
+                            t.addActionPoints(t.getReloadCost());
                             break;
                         case TURN_RIGHT:
                             t.setDir(t.getDir().rotateRight(t.getDir()));
+                            t.addActionPoints(t.getTurnCost());
                             break;
                         case TURN_LEFT:
                             t.setDir(t.getDir().rotateLeft(t.getDir()));
+                            t.addActionPoints(t.getTurnCost());
                             break;
                         case WAIT:
+                            t.addActionPoints(1);
                             break;
                         case MOVE_FORWARD:
                             move = move(t, true, move);
+                            t.addActionPoints(t.getMoveCost());
                             break;
                         case MOVE_BACKWARD:
                             move = move(t, false, move);
+                            t.addActionPoints(t.getMoveCost());
                             break;
                     }
                     moves.addMove(t.getAlias(), move);
