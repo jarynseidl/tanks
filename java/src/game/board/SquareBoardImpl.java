@@ -4,6 +4,7 @@ import game.board.elements.BoardElement;
 import game.board.elements.Tank;
 import game.util.Coordinate;
 import game.util.TANK_DIR;
+
 import org.mongodb.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
@@ -16,8 +17,7 @@ import java.util.List;
 public class SquareBoardImpl implements Board {
     private List<List<BoardElement>> board;
     private int size;
-
-
+    
     public SquareBoardImpl(int size) {
 
         this.size = size;
@@ -69,7 +69,7 @@ public class SquareBoardImpl implements Board {
     	//this only applies to tanks
     	for(int tx = Math.max(x - 1, 0); tx <= Math.min(x + 1, size - 1); ++tx){
     		for(int ty = Math.max(y - 1, 0); ty <= Math.min(y + 1, size - 1); ++ty){
-    			elem = board.get(tx).get(ty);
+     			elem = board.get(tx).get(ty);
     			if(elem != null && elem instanceof Tank)
     				return elem;
     		}

@@ -14,4 +14,8 @@ java/src/*
 java/out/
 Vagrant*
 .vagrant/
+=======
+Vagrant*
+.vagrant/
+java/out/
 *.class

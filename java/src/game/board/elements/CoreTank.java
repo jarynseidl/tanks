@@ -3,19 +3,13 @@ package game.board.elements;
 import game.util.Coordinate;
 import game.util.TANK_DIR;
 import game.util.TANK_MOVES;
-
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Transient;
-
-import java.awt.Image;
 import java.util.List;
 
-/**
- * Created by gladi on 11/12/2015.
- */
 @Embedded
-public abstract class Tank implements BoardElement {
+public abstract class CoreTank {
     private Coordinate coord;
     private ObjectId tankID;
     private String tankName;
@@ -24,102 +18,52 @@ public abstract class Tank implements BoardElement {
     @Transient
     private int alias;
     private int actionPoints;
-    //if tank has shot without reloading
     private boolean shot;
-    
-    //in case they decide to implement the superclass for some reason
-    // it's just the same stats as the BasicTank
-    //each tank class has their own ap costs
-    // I'm thinking it can then be called in the game class in that big switch?
-	private int moveCost = 2;
-	private int shootCost = 2;
-	private int turnCost = 1;
-	private int diagCost = 4;
-	private int reloadCost = 4;
-	private int damage = 7;
-	
-	//These are the values needed for the armory
-	private int gamesWon = 0;
-	private int gamesLost = 0;
-	private int draws = 0;
-	private int tanksKilled = 0;
-	private int gamesPlayed = 0;
-	//How are we storing tank images? I'm not really sure
-	private Image tankImage;
-	
-	//Kind of shoehorning it, but to prevent them editing things they shouldn't
-	private String password = "poekillsKylo33#d@rn";
+	private int moveCost;
+	private int shootCost;
+	private int turnCost;
+	private int diagCost;
+	private int reloadCost;
+	private int damage;
 
-    public Tank() {
+    public CoreTank() {
     }
 
-    public Tank(ObjectId tankID, String tankName, String tankType) {
+    public CoreTank(ObjectId tankID, String tankName) {
         this.tankID = tankID;
         this.tankName = tankName;
-        if(tankType.equals("Heavy"))
-        	health = 50;
-        else if(tankType.equals("Basic"))
-        	health = 35;
-        else if(tankType.equals("Light"))
-        	health = 20;
-        else
-        	health = 35;
-        shot = false;
     }
 
     public abstract TANK_MOVES calculateTurn(List<Tank> tanks, int size);
 
-    @Override
-    public final Coordinate getCoord() {
+    public Coordinate getCoord() {
         return this.coord;
     }
 
-    @Override
-    public final void setCoord(Coordinate coord) {
-    	this.coord = coord;
-    }
-
-    public final ObjectId getTankID() {
+    public ObjectId getTankID() {
         return tankID;
     }
 
-
-    public final String getTankName() {
+    public String getTankName() {
         return tankName;
     }
 
-    public final int getHealth() {
+    public int getHealth() {
         return health;
     }
 
-    public final void takeDamage(int damage) {
-        this.health -= damage;
-    }
-
-    public final TANK_DIR getDir() {
+    public TANK_DIR getDir() {
         return dir;
-    }
-
-    public final void setDir(TANK_DIR dir) {
-    	this.dir = dir;
     }
 
     public int getAlias() {
         return alias;
     }
 
-    public void setAlias(int alias) {
-        this.alias = alias;
-    }
-    
     public int getActionPoints() {
     	return actionPoints;
     }
 
-    /*
-     * These are the AP cost get statements
-     */
-    
 	public int getMoveCost() {
 		return moveCost;
 	}
@@ -148,10 +92,6 @@ public abstract class Tank implements BoardElement {
 		return shot;
 	}
 
-	public void setShot(boolean shot){
-		this.shot = shot;
-	}
-	
 	protected boolean tankNorth(List<Tank> tanks){
 		for(int i = 0; i < tanks.size(); ++i)
 			if(Math.abs(tanks.get(i).getCoord().getX() - this.getCoord().getX()) <= 1 &&
@@ -278,54 +218,4 @@ public abstract class Tank implements BoardElement {
 				return TANK_DIR.E;
 		}
 	}
-	/*
-	 * here's wins/losses/kill counts
-	 */
-	
-	public int getGamesWon() {
-		return gamesWon;
-	}
-
-	public void incGamesWon(String passphrase) {
-		if(passphrase.equals(password)){
-			gamesWon++;
-			gamesPlayed++;
-		}
-	}
-
-	public int getGamesLost() {
-		return gamesLost;
-	}
-
-	public void incGamesLost(String passphrase) {
-		if(passphrase.equals(password)){
-			gamesLost++;
-			gamesPlayed++;
-		}
-	}
-
-	public int getTanksKilled() {
-		return tanksKilled;
-	}
-
-	public void incTanksKilled(String passphrase) {
-		if(passphrase.equals(password))
-			tanksKilled++;
-	}
-
-	public int getDraws() {
-		return draws;
-	}
-
-	public void incDraws(String passphrase) {
-		if(passphrase.equals(password)){
-			draws++;
-			gamesPlayed++;
-		}
-	}
-
-	public int getGamesPlayed() {
-		return gamesPlayed;
-	}
 }
-
