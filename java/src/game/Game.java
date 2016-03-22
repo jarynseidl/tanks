@@ -105,37 +105,37 @@ public class Game {
                         case SHOOT:
 
                             //if tank has shot, fall to reload
-
+                            t.addActionPoints(t.getShootCost());
                             if(!t.getShot()){
                                 shoot(t);
                                 t.setShot(true);
                                 break;
                             }
                             move = TANK_MOVES.RELOAD;
-                            t.addActionPoints(t.getShootCost());
+
                             break;
                         case RELOAD:
-                            t.setShot(false);
                             t.addActionPoints(t.getReloadCost());
+                            t.setShot(false);
                             break;
                         case TURN_RIGHT:
-                            t.setDir(t.getDir().rotateRight(t.getDir()));
                             t.addActionPoints(t.getTurnCost());
+                            t.setDir(t.getDir().rotateRight(t.getDir()));
                             break;
                         case TURN_LEFT:
-                            t.setDir(t.getDir().rotateLeft(t.getDir()));
                             t.addActionPoints(t.getTurnCost());
+                            t.setDir(t.getDir().rotateLeft(t.getDir()));
                             break;
                         case WAIT:
                             t.addActionPoints(1);
                             break;
                         case MOVE_FORWARD:
-                            move = move(t, true, move);
                             t.addActionPoints(t.getMoveCost());
+                            move = move(t, true, move);
                             break;
                         case MOVE_BACKWARD:
-                            move = move(t, false, move);
                             t.addActionPoints(t.getMoveCost());
+                            move = move(t, false, move);
                             break;
                     }
                     moves.addMove(t.getAlias(), move);
