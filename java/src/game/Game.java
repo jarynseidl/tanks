@@ -274,6 +274,7 @@ public class Game {
                         	((Tank) elem).incGamesLost(statsPassword);
                             //if dead remove from queue
                             tankQueue.remove((Tank) elem);
+                            tanks.remove(elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
@@ -296,6 +297,7 @@ public class Game {
                         	((Tank) elem).incGamesLost(statsPassword);
                             //if dead remove from queue
                             tankQueue.remove((Tank) elem);
+                            tanks.remove(elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
@@ -317,6 +319,7 @@ public class Game {
                         	((Tank) elem).incGamesLost(statsPassword);
                             //if dead remove from queue
                             tankQueue.remove((Tank) elem);
+                            tanks.remove(elem);
                             board.setElementAt(t.getCoord().getX(), i, null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
@@ -338,6 +341,7 @@ public class Game {
                         	((Tank) elem).incGamesLost(statsPassword);
                             //if dead remove from queue
                             tankQueue.remove((Tank) elem);
+                            tanks.remove(elem);
                             board.setElementAt(i, t.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
