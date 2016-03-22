@@ -81,6 +81,7 @@ public class Game {
 
         this.tanks = tanks;
         this.board = board;
+        tankQueue = new PriorityQueue<>();
     }
 
     public void startGame() {
