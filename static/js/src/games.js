@@ -84,6 +84,7 @@ var Games = React.createClass({
         });
     },
     createGame: function(gameName,e) {
+        e.preventDefault();
     	console.log("in create game");
         var url = '/api/games';
         $.ajax({
@@ -96,7 +97,7 @@ var Games = React.createClass({
             success: function (res) {
             	console.log("Game created");
                 this.refresh();
-                $("#" + "CreateGameModal").modal('hide');
+                $("#CreateGameModal").modal('hide');
             }.bind(this),
             error: function(xhr, status, err) {
                 console.log(status);
@@ -170,7 +171,7 @@ var CenterPiece = React.createClass({
     	var game= this.props.game;
     	var tanks = [];
         	if(game != null)
-        		tanks = game.tanks;
+        		tanks = game.tankIds;
         return (
         	<div>
         		{game==null ? <h1>No game selected.</h1> : null}
@@ -265,10 +266,11 @@ var CreateGameModal = React.createClass({
     hideModal: function(result) {
         $('#' + this.props.modalName).modal('hide');
     },
-    handleSubmit: function() {
+    handleSubmit: function(e) {
     	var name = this.refs.gameName.value.trim();
+        this.refs.gameName.value = ''; // Blank out the field
     	console.log(this.props);
-    	this.props.createGame(name,this);
+    	this.props.createGame(name,e);
     },
     render: function () {
         return (
