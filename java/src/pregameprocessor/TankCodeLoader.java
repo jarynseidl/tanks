@@ -53,15 +53,11 @@ public class TankCodeLoader {
     private static final String COMMENT_SYSTEM = "/*Thou shalt not use java.lang.System!*/";
     private static final String COMMENT_SECURITY = "/*Thou shalt not set app security!*/";
     private static final String COMMENT_PROCESS = "/*Thou shalt not use java.lang.Process(Builder)!*/";
-<<<<<<< HEAD
     private static final String CORE_TANK = "CoreTank";
-    
-=======
     private static final String ERR_BAD_IMPORTS = "[ERROR] You have used unapproved import statements. Please remove them.";
     private static final String ERR_THREADS_RUNNABLE = "[ERROR] You have used Thread and/or Runnable code, which is forbidden. Please remove these calls.";
     private static final String ERR_OTHERS = "[ERROR] You have made calls to Runtime, System, or SecurityManager packages. This is not permitted.";
->>>>>>> tommy-security-reporting
-    
+
     // approved Java package name patterns
     private static final String[] APPROVED_PACKAGES = {
     	"\\s*game.*",
@@ -98,14 +94,6 @@ public class TankCodeLoader {
             codeCore = removePackageDeclaration(codeCore);
             
             // 3) Remove all imports that aren't whitelisted
-<<<<<<< HEAD
-            code = removeUnapprovedImports(code);
-            codeCore = removeUnapprovedImports(codeCore);
-            
-            // 4) Remove calls that can create threads
-            code = removeThreadAndRunnableCalls(code);
-            codeCore = removeThreadAndRunnableCalls(codeCore);
-=======
             if (containsUnapprovedImports(code)) {
                 game.setCompFailureResponse(ERR_BAD_IMPORTS);
                 return null;
@@ -116,20 +104,14 @@ public class TankCodeLoader {
                 game.setCompFailureResponse(ERR_THREADS_RUNNABLE);
                 return null;
             }
->>>>>>> tommy-security-reporting
-            
+
             // 5) Remove java.lang included functionality
             //    This includes Runtime (allows system calls), System (allows file streams),
             //    and SecurityManager (could potentially brick our running program)
-<<<<<<< HEAD
-            code = removeOtherJavaLangProblems(code);
-            codeCore = removeOtherJavaLangProblems(codeCore);
-=======
             if (containsOtherJavaLangProblems(code)) {
                 game.setCompFailureResponse(ERR_OTHERS);
                 return null;
             }
->>>>>>> tommy-security-reporting
 
             // 6) Take the code out
             //		Save it to a file
