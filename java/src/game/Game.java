@@ -11,7 +11,6 @@ import game.util.Coordinate;
 import game.util.MoveTracker;
 import game.util.TANK_MOVES;
 import game.util.LogItem;
-import javafx.scene.layout.Priority;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
@@ -105,15 +104,14 @@ public class Game {
                         case SHOOT:
 
                             //if tank has shot, fall to reload
-                            t.addActionPoints(t.getShootCost());
                             if(!t.getShot()){
+                                t.addActionPoints(t.getShootCost());
                                 shoot(t);
                                 t.setShot(true);
                                 break;
                             }
                             move = TANK_MOVES.RELOAD;
 
-                            break;
                         case RELOAD:
                             t.addActionPoints(t.getReloadCost());
                             t.setShot(false);
