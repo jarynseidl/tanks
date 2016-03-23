@@ -10,4 +10,8 @@ java/tanks.iml
 /bin/
 .classpath
 .project
+java/out/
+Vagrant*
+.vagrant/
 *.class
+*.iml

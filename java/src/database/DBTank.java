@@ -1,7 +1,13 @@
 package database;
 
+import game.util.LogItem;
+import game.util.TANK_SKIN;
+import game.util.TANK_STATUS;
+import game.util.TANK_TYPE;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Id;
+
+import java.util.List;
 
 /**
  * Created by nathand on 11/28/15.
@@ -12,6 +18,14 @@ public class DBTank {
     private ObjectId id;
     private String name;
     private String code;
+    private TANK_STATUS status;
+    private TANK_TYPE type;
+    private TANK_SKIN skin;
+    private int kills;
+    private int deaths;
+    private int wins;
+    private List<LogItem> errors;
+
 
     public ObjectId getId() {
         return id;

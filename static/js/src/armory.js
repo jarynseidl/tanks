@@ -1,5 +1,7 @@
 var Auth = require('./authentication.js');
-var TankCard = require('./tank_card.js');
+// var TankCard = require('./tank_card.js');
+var TankList = require('./tanks.js');
+var Editor = require('./code_editor.js');
 
 var ExampleTanks = React.createClass({
     render: function() {
@@ -55,11 +57,23 @@ var UploadEditor = React.createClass({
 });
 
 var Armory = React.createClass({
-    //the current tank in the editing area
-    curr_tank: null,
-    //boolean indicating whether or not the current code is for a new tank or an existing one
-    is_new: true,
-    //reset the editor to have default values on it
+    getInitialState: function() {
+        return {
+            user: {tanks: []},
+            username: "",
+            tankCount: 0,
+            selectedTank: null
+        };
+    },
+    componentDidMount: function() {
+        $.get('/api/users/' + Auth.getUsername(), function(result) {
+            this.setState({
+                user: result,
+                username: result["username"],
+                tankCount: result["tanks"].length
+            });
+        }.bind(this));
+    },
     resetEditor: function(){
         var editor = this.refs.upload_editor;
         var tankName = this.refs.tankName;
@@ -77,34 +91,33 @@ var Armory = React.createClass({
             var contents = e.target.result;
             self.tank_code = reader.result;
             editor.setValue(self.tank_code);
-            self.fileLoaded = true; 
+            self.fileLoaded = true;
         }
         reader.readAsText(self.file);
     },
     //deletes a tank
     deleteTank: function () {
-        //grab the current tank in the editing area
-        var tank = this.curr_tank;
-        var update = this.props.update;
-        var resetEditor = this.resetEditor;
-        //if there is no tank in the editing area, do nothing
-        if(tank==null)
-            return;
-        //set the current tank variable to null because it will be deleted
-        this.curr_tank = null;
+        if (this.state.selectedTank === null) return;
         var self = this;
-        var tankId = tank._id;
-        this.is_new = true;
+        var deletedTank = this.state.selectedTank;
+
         $.ajax({
-            url: '/api/users/' + Auth.getUsername() + '/tanks/'+ tankId,
+            url: '/api/users/' + Auth.getUsername() + '/tanks/' + deletedTank._id,
             type: 'DELETE',
             contentType: 'application/json',
             success: function(data) {
-                //callback to update the state component in user.js
-                update();
-                resetEditor();
+                var updatedList = self.state.user.tanks;
+
+                updatedList = updatedList.filter(function(tank) {
+                    return tank._id !== deletedTank._id;
+                })
+                self.setState({
+                    selectedTank: null,
+                    user: {tanks: updatedList}
+                })
             },
             error: function(xhr, status, err) {
+                console.log(err);
             }
         });
     },
@@ -115,6 +128,26 @@ var Armory = React.createClass({
         editor.setValue(tank.code);
         this.refs.tankName.value = tank.name;
         this.curr_tank = tank;
+    },
+    createTank: function() {
+        var initCode = "\nimport game.board.elements.Tank;" +
+                        "\nimport game.util.TANK_DIR;" +
+                        "\nimport game.util.TANK_MOVES;" +
+                        "\nimport org.bson.types.ObjectId;" +
+                        "\nimport org.mongodb.morphia.annotations.Embedded;" +
+                        "\nimport java.util.List;" +
+                        "\n\n@Embedded\npublic class YourTank extends Tank {\n\tpublic YourTank() {\n\t}\n\n\tpublic YourTank(ObjectId tankID, String tankName, int health) {\n\t\tsuper(tankID, tankName, health);" +
+                        "\n\t}\n\n\t@Override\n\tpublic TANK_MOVES calculateTurn(List<Tank> tanks, int size) {\n\t\tif (this.getDir() != TANK_DIR.E) {\n\t\t\treturn TANK_MOVES.TURN_RIGHT;" +
+                        "\n\t\t}\n\t\telse {\n\t\t\treturn TANK_MOVES.SHOOT;" +
+                        "\n\t\t}\n\t}\n}";
+        var newTank = {
+            name: "New Tank",
+            code: initCode,
+        };
+
+        this.setState({
+            selectedTank: newTank
+        });
     },
     //set the current tank in the editing area
     setCurrTank: function(tank) {
@@ -141,7 +174,7 @@ var Armory = React.createClass({
             //set the route and type to this if the tank is brand new
             if(this.is_new){
                 route = '/api/users/' + Auth.getUsername() + '/tanks';
-                reqType = 'POST'; 
+                reqType = 'POST';
             }
             //set the route and type to this if the tank is being updated
             else {
@@ -172,35 +205,61 @@ var Armory = React.createClass({
         this.resetEditor();
 
     },
+    handleSelectTank: function(tank) {
+        this.setState({selectedTank: tank});
+    },
+    updateList: function(updatedTank) {
+        var updatedList = this.state.user.tanks;
+        var updated = false
+        for (var i = 0; i < updatedList.length; i++) {
+            if (updatedList[i]._id == updatedTank._id) {
+                updatedList[i] = updatedTank;
+                updated = true;
+                break;
+            }
+        }
+
+        // Add updatedTank to the list if it does not exist in the list
+        if (!updated) {
+            updatedList.push(updatedTank);
+        }
+
+        this.setState({
+            user : {tanks: updatedList},
+            selectedTank: updatedTank
+        });
+    },
     render: function() {
         var user_tanks = this.props.tanks;
         var editTank = this.editTank;
+        var editorWrapperStyle = {
+            height: '45em',
+            padding: '10px'
+        };
         return (
             <div>
                 <div className="row">
                     <div className="col-md-3 armory-top flex">
-                        <button type="submit" className="btn btn-primary button" onClick={this.newTank}>Create New Tank</button>
                         <div className="tankPanel dark-background ">
-                            {user_tanks.map(function(tank,i) {
-                                   return <TankCard tank={tank} key={i} inArmory={true} editTank={editTank}/>;
-                            })}
+                            <button type="submit" className="btn btn-primary button" onClick={this.createTank}>Create New Tank</button>
+                            <TankList
+                                tanks={this.state.user.tanks}
+                                selectedTank={this.state.selectedTank}
+                                onSelectTank={this.handleSelectTank}
+                                deleteTank={this.deleteTank}
+                                uploadFile={this.uploadFile}
+                            />
                         </div>
                     </div>
                     <div className="col-md-9 armory-top flex">
-                        <div className="input-group">
-                            <span className="input-group-addon">Name: </span>
-                            <input ref="tankName" type="text" className="form-control"/>
-                        </div>
-                        <div className="horizontal">
-                            <button type="submit" className="btn btn-primary button" onClick={this.saveTank}>Save</button>
-                            <button type="submit" className="btn btn-primary button" onClick={this.props.update}>Run</button>
-                            <input className="inputfile" ref="tankFile" onChange={this.uploadFile} type="file" name="tankFile" id="tankFile" accept="java/*" />
-                            <label className="btn btn-primary button" htmlFor="tankFile">Upload</label>
-                            <button type="submit" className="btn btn-primary button">Download</button>
-                            <button type="submit" className="btn btn-primary button" onClick={this.deleteTank}>Delete</button>
-                        </div>
-                        <div>
-                            <UploadEditor ref="upload_editor" history={this.props.history}/>
+                        <div style={editorWrapperStyle}>
+                            {this.state.selectedTank ?
+                                <Editor.View
+                                    selectedTank={this.state.selectedTank}
+                                    update={this.updateList}
+                                    history={this.props.history}
+                                />
+                            : <Editor.Placeholder /> }
                         </div>
                     </div>
                 </div>
