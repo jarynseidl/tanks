@@ -132,36 +132,36 @@ var TankCard = React.createClass({
             'tankCard': true,
             'card-selected': this.state.isSelected
         });
-        console.log(this.props.tank)
+        // console.log(this.props.tank)
+        console.log("Rendering Card")
         return (
-            <div className={cardClass} id={this.props.tank._id} onClick={this.handleSelect}>
-                <div className="tank-info col-md-12">
-                    <div className="col-md-12">
+            <div className={cardClass} key={this.props.tank._id} onClick={this.handleSelect}>
+                    <div className="col-md-12 tank-info tank-info-top">
+                        <div className="col-md-11">
                         <h4>{this.props.tank.name}</h4>
-                    </div>
-                    <div className="col-md-3 tank-image">
-                        <img className="" src="/images/BlueEast.gif"></img>
-                    </div>
-
-                    <div className="col-md-4 tank-stats">
-                        <div ref="tankStats">
-                            <div>W: 32</div>
-                            <div>L: 32</div>
-                            <div>K: 32</div>
+                        </div>
+                        <div className="col-md-1" onClick={this.props.deleteTank}>
+                        <i className="fa fa-times-circle-o x-btn"></i>
                         </div>
                     </div>
-                    <div className="col-md-5 edit-btn">
-                        <button className="btn btn-primary">
-                            <i className="download-btn fa fa-download"></i>
-                        </button>
-                        <input className="inputfile" ref="tankFile" onChange={this.uploadFile} type="file" name="tankFile" id="tankFile" accept="java/*" />
-                        <label className="btn btn-primary" htmlFor="tankFile">
-                            <i className="upload-btn fa fa-upload"></i>
-                        </label>
-                        <button className="btn btn-danger" onClick={this.props.deleteTank}>
-                            <i className="delete-btn fa fa-trash"></i>
-                        </button>
-                    </div>
+                    <div className="col-md-12 tank-info tank-info-btm">
+                        <div className="col-md-3 tank-image">
+                            <img className="" src="/images/BlueEast.gif"></img>
+                        </div>
+                        <div className="col-md-5 tank-stats">
+                            <span>W: 32</span>
+                            <span>L: 32</span>
+                            <span>K: 32</span>
+                        </div>
+                        <div className="col-md-4 edit-btn">
+                            <button className="btn btn-primary">
+                                <i className="download-btn fa fa-download"></i>
+                            </button>
+                            <span className="btn btn-primary btn-file">
+                                <i className="upload-btn fa fa-upload"></i>
+                                <input type="file" ref="tankFile" onChange={this.props.uploadFile} name="tankFile" id="tankFile" accept="java/*"  />
+                            </span>
+                        </div>
                 </div>
             </div>
         )
@@ -182,6 +182,8 @@ var TankList = React.createClass({
         });
     },
     render: function() {
+        console.log("Rendering List")
+
         var accordionId = Auth.getUsername() + "_tankList";
 		var self = this;
         var listStyle = {
@@ -190,7 +192,7 @@ var TankList = React.createClass({
             overflowX: 'hidden'
         };
         return (
-            <div ref="container tankList">
+            <div className="" ref="tankList">
                 {this.props.tanks.map(function(tank) {
                    return <TankCard
                             tank={tank}

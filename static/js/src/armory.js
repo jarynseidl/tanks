@@ -236,6 +236,7 @@ var Armory = React.createClass({
             height: '45em',
             padding: '10px'
         };
+        console.log("Render Armory")
         return (
             <div>
                 <div className="row">
