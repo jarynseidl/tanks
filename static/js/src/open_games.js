@@ -26,6 +26,8 @@ var SmallTankList = React.createClass({
                     <tbody>
                         {this.state.tanks.map(function(tank) {
                            var key = tank._id;
+                           
+                       	   //test for bad tanks here, store in a new list, if tank does not compile correctly either dont show or indicate a problem
                            return (
                             <tr key={key}>
                                 <td>{tank.name}</td>
@@ -159,6 +161,7 @@ var OpenGames = React.createClass({
     },
     showModal: function(modalName, e) {
         if (e) {e.preventDefault();}
+        console.log(modalName);
         $('#' + modalName).modal('show');
     },
     render: function() {

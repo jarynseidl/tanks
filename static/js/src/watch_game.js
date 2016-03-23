@@ -597,15 +597,17 @@ var WatchGame = React.createClass({
                     exists = true;
                 console.log("after");
             }
-
-            if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
+            console.log("out of game");
+            console.log("Window: " + window.location.href);
+            if(!this.isMounted())
                 return;
-            }
+           // if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
+            //    return;
+            //}
 
             console.log(this.state.tanksLeft);
             
-            if (this.state.tanksLeft <= 1)
-            {
+            if (this.state.tanksLeft <= 1 && !this.props.loginPage){
                 this.DisplayWinner();
                 return;
             }
@@ -615,6 +617,7 @@ var WatchGame = React.createClass({
             }.bind(this),this.state.TURN_LENGTH);
      },
      componentDidMount: function() {
+        console.log(this.props.location.pathname);
        var pathname = this.props.location.pathname;
        var pieces = pathname.split("/");
        var gameID = pieces[2];
@@ -676,7 +679,6 @@ var WatchGame = React.createClass({
             <div className = "wrapper">
                 <div className ="container">
                     <center>
-                    <h1>Watch Game</h1>
                     <table className="gameBoard Test"><tbody>
                             {board.map(function (row) {
                                 return (
