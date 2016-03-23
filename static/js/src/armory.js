@@ -1,6 +1,6 @@
 var Auth = require('./authentication.js');
 // var TankCard = require('./tank_card.js');
-var TankList = require('./tanks.js');
+var TankList = require('./tanks.js').List;
 var Editor = require('./code_editor.js');
 
 var ExampleTanks = React.createClass({

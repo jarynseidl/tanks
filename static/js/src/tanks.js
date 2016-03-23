@@ -207,4 +207,4 @@ var TankList = React.createClass({
             )}
 });
 
-module.exports = TankList;
+module.exports = {List:TankList, Card:TankCard};
