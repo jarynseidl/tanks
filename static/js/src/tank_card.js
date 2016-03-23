@@ -1,6 +1,5 @@
 var Auth = require('./authentication.js');
 
-
 var TankCard = React.createClass({
 
     render: function() {
@@ -32,7 +31,7 @@ var TankCard = React.createClass({
 
     }
 });
-
+/*
 var TankdCard = React.createClass({
     // render: function() {
     //     var inArmory = this.props.inArmory;
@@ -75,4 +74,5 @@ var TankdCard = React.createClass({
     }
 });
 
+*/
 module.exports = TankCard;

@@ -35,7 +35,9 @@ public class Poller {
                 g.ready = false;
                 g.setStatus(1);
             } catch (Exception e) {
+                e.printStackTrace();
                 g.ready = false;
+                g.setCompFailureResponse(e.getMessage());
                 g.setStatus(-1);
             }
             db.saveGame(g);

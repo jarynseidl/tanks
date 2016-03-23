@@ -57,9 +57,12 @@ exports.addTank = function (req, res) {
     var gameid = req.params.gameid;
     Games.findById(gameid, function(err, game) {
         var tank = req.body.tank;
-        console.log(req);
+        if (tank === undefined) {
+            error = "Tank is undefined when trying to add to game";
+            console.log(error);
+            return res.status(400).send(error);
+        }
         console.log(tank);
-        game.tanks.push(tank);
         game.tankIds.push(tank._id);
         if (game.tankIds.length >= 4) {
             game.ready = true;
