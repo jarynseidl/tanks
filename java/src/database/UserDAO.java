@@ -19,16 +19,16 @@ public class UserDAO extends BasicDAO<DBUser, ObjectId> {
     public void updateStats(List<User> users) {
         for (User user : users){
             DBUser player = this.get(user.getUserID());
-            player.addDeaths(0);
-            player.addKills(0);
-            player.addWins(0);
+            player.addDeaths(user.getGamesLost());
+            player.addKills(user.getTanksKilled());
+            player.addWins(user.getGamesWon());
 
             List<DBTank> dbtanks = player.getTanks();
             for (DBTank tank : dbtanks) {
                 if(tank.getId()==user.getTankID()){
-                    player.addDeaths(0);
-                    player.addKills(0);
-                    player.addWins(0);
+                    tank.addDeaths(user.getGamesLost());
+                    tank.addKills(user.getTanksKilled());
+                    tank.addWins(user.getGamesWon());
                 }
             }
 
