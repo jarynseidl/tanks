@@ -2,7 +2,8 @@ var Auth = require('./authentication.js');
 
 var Login = React.createClass({
     isRegistering: false,
-    swapPage: function() {
+    swapPage: function(e) {
+      e.preventDefault();
       this.isRegistering = !this.isRegistering;
       this.forceUpdate();
     },
@@ -29,6 +30,7 @@ var LoginPage = React.createClass({
         }.bind(this));
     },
     handleRegister:function (e) {
+      e.preventDefault();
       this.props.history.pushState(this.props, '/register');
     },
     render: function() {         
