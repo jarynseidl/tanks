@@ -188,20 +188,6 @@ var Games = React.createClass({
 				 		<CenterPiece game={this.currGame}/>
 				 	</div>
 
-				 	<div className="col-md-3  dark-background">
-				 		<h1 className="white">Games</h1>
-				 		<div className="horizontal gameButtons">
-                            <button type="submit" className="btn btn-primary button" onClick={this.toggleGames}>{this.gamesButton}</button>
-                            {this.show_open ? null : <button type="submit" className="btn btn-primary button" onClick={this.watchGame}>Battle!</button>}
-                            {this.show_open ? <button type="submit" className="btn btn-primary button" onClick={this.showModal.bind(this, "CreateGameModal")}>Create Game</button> : null}
-                            <CreateGameModal createGame={this.createGame} modalName="CreateGameModal"/>
-                        </div>
-				 		<div className="tankPanel">
-				 			{this.show_open ? <GameList selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.open_games} />
-				 			: <GameList selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.your_games} /> }
-				 		</div>
-				 	</div>
-
 				 	<div className="col-md-3  armory-top flex">
     				 	<div className="tankPanel dark-background">
                         	<div className="horizontal gameButtons">
