@@ -77,7 +77,7 @@ var WatchGame = React.createClass({
         var tempLasers = [];
         switch(this.state.tanks[tankNo].dir){
             case("S"):
-                for(var y = this.state.tanks[tankNo].coord.y+1; y < 30; y++){
+                for(var y = this.state.tanks[tankNo].coord.y+1; y < 10; y++){
                     if(!this.hasTank(this.state.tanks[tankNo].coord.x,y)){
                         tempLasers.push({"y" : true, "coord": {"x": this.state.tanks[tankNo].coord.x,"y": y}});
                     }
@@ -123,7 +123,7 @@ var WatchGame = React.createClass({
                 }
             break;
             case("E"):
-                for(var x = this.state.tanks[tankNo].coord.x+1; x < 30; x++){
+                for(var x = this.state.tanks[tankNo].coord.x+1; x < 10; x++){
                     if(!this.hasTank(x,this.state.tanks[tankNo].coord.y)){
                         tempLasers.push({"x" : true, "coord": {"x": x,"y": this.state.tanks[tankNo].coord.y}});
                     }
@@ -597,15 +597,17 @@ var WatchGame = React.createClass({
                     exists = true;
                 console.log("after");
             }
-
-            if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
+            console.log("out of game");
+            console.log("Window: " + window.location.href);
+            if(!this.isMounted())
                 return;
-            }
+           // if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
+            //    return;
+            //}
 
             console.log(this.state.tanksLeft);
             
-            if (this.state.tanksLeft <= 1)
-            {
+            if (this.state.tanksLeft <= 1 && !this.props.loginPage){
                 this.DisplayWinner();
                 return;
             }
@@ -615,6 +617,7 @@ var WatchGame = React.createClass({
             }.bind(this),this.state.TURN_LENGTH);
      },
      componentDidMount: function() {
+        console.log(this.props.location.pathname);
        var pathname = this.props.location.pathname;
        var pieces = pathname.split("/");
        var gameID = pieces[2];
@@ -635,15 +638,11 @@ var WatchGame = React.createClass({
     },
     render: function() {
         var board = new Array(
-            new Array(30), new Array(30), new Array(30), new Array(30), new Array(30),
-            new Array(30), new Array(30), new Array(30), new Array(30), new Array(30),
-            new Array(30), new Array(30), new Array(30), new Array(30), new Array(30),
-            new Array(30), new Array(30), new Array(30), new Array(30), new Array(30),
-            new Array(30), new Array(30), new Array(30), new Array(30), new Array(30),
-            new Array(30), new Array(30), new Array(30), new Array(30), new Array(30)
+            new Array(10), new Array(10), new Array(10), new Array(10), new Array(10),
+            new Array(10), new Array(10), new Array(10), new Array(10), new Array(10)
             );
         board.forEach(function(ar) {
-            for (var i = 0; i < 30; i++) {
+            for (var i = 0; i < 10; i++) {
                 ar[i] = "a";
                 ar[i] = undefined;
             }
@@ -674,13 +673,12 @@ var WatchGame = React.createClass({
             }
             image_url = '/images/'+tank.index +'/' + image_url;
             if (tank.visible){
-                board[tank.coord.y-1][tank.coord.x-1] = image_url;}
+                board[tank.coord.y][tank.coord.x] = image_url;}
         });
         return (
             <div className = "wrapper">
                 <div className ="container">
                     <center>
-                    <h1>Watch Game</h1>
                     <table className="gameBoard Test"><tbody>
                             {board.map(function (row) {
                                 return (
@@ -690,7 +688,7 @@ var WatchGame = React.createClass({
                                             if (cell) {
                                                 image_url = cell;
                                             }
-                                            return (<td><img height="21" width="21" src={image_url} /></td>);
+                                            return (<td><img height="65" width="65" src={image_url} /></td>);
                                         })}
                                     </tr>);
                             })}
@@ -700,7 +698,7 @@ var WatchGame = React.createClass({
                         {this.state.tanks.map(function (tank){
                            var tankName = tank.name;
                            var image_url = '/images/' +tank.index +'/EastS.png';
-                           return(<td className="Legend"><img height ="48" width="48" src={image_url} /><br/><center><b> {tankName} </b></center></td>);
+                           return(<td className="Legend"><img height ="50" width="50" src={image_url} /><br/><center><b> {tankName} </b></center></td>);
                         })}
                        </tr>
                     </tbody></table>

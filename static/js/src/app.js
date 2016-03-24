@@ -57,9 +57,8 @@ var App = React.createClass({
                     <div className="collapse navbar-collapse" id="bs-navbar" >
                       <ul className="nav navbar-nav">
                         {Auth.loggedIn() ? <li><Link to="user" style={fontStyle}>Armory</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="games_main" style={fontStyle}>Games</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="manual" style={fontStyle}>Manual</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="games_main">Games</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="manual">Manual</Link></li> : null }
                       </ul>
                       <ul className="nav navbar-nav navbar-right">
                         {Auth.loggedIn() ? <li><Logout history={this.props.history} /></li> : null }
@@ -85,7 +84,7 @@ const routes = (
                 <Route name ="arena_home" path="/arena_home" component={ArenaHome} />
                 <Route name ="get_started" path="/get_started" component={GetStarted} />
                 <Route name ="user" path="/user" component={User} />
-                <Route name ="your_games" path="/your_games/:gameId" component={YourGames} />
+                <Route name ="your_games" path="/your_games" component={YourGames} />
                 <Route name ="open_games" path="/games" component={OpenGames} />
                 <Route name ="watch_game" path="/games/:gameId/watch" component={WatchGame} />
                 <Route name ="games_main" path="/games_main" component={Games} />
