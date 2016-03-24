@@ -268,12 +268,12 @@ public class Game {
                     BoardElement elem = board.getElementAt(t.getCoord().getX(), i);
                     if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
-                        if (((Tank) elem).getHealth() == 0) {
+                        if (((Tank) elem).getHealth() <= 0) {
                         	((Tank) elem).incGamesLost(statsPassword);
                             //if dead remove from queue
                             tankQueue.remove((Tank) elem);
                             tanks.remove(elem);
-                            board.setElementAt(t.getCoord().getX(), i, null);
+                            board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
@@ -291,12 +291,12 @@ public class Game {
                     BoardElement elem = board.getElementAt(i, t.getCoord().getY());
                     if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
-                        if (((Tank) elem).getHealth() == 0) {
+                        if (((Tank) elem).getHealth() <= 0) {
                         	((Tank) elem).incGamesLost(statsPassword);
                             //if dead remove from queue
                             tankQueue.remove((Tank) elem);
                             tanks.remove(elem);
-                            board.setElementAt(i, t.getCoord().getY(), null);
+                            board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
@@ -313,12 +313,12 @@ public class Game {
                     BoardElement elem = board.getElementAt(t.getCoord().getX(), i);
                     if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
-                        if (((Tank) elem).getHealth() == 0) {
+                        if (((Tank) elem).getHealth() <= 0) {
                         	((Tank) elem).incGamesLost(statsPassword);
                             //if dead remove from queue
                             tankQueue.remove((Tank) elem);
                             tanks.remove(elem);
-                            board.setElementAt(t.getCoord().getX(), i, null);
+                            board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
@@ -335,12 +335,12 @@ public class Game {
                     BoardElement elem = board.getElementAt(i, t.getCoord().getY());
                     if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
                         ((Tank) elem).takeDamage(t.getDamage());
-                        if (((Tank) elem).getHealth() == 0) {
+                        if (((Tank) elem).getHealth() <= 0) {
                         	((Tank) elem).incGamesLost(statsPassword);
                             //if dead remove from queue
                             tankQueue.remove((Tank) elem);
                             tanks.remove(elem);
-                            board.setElementAt(i, t.getCoord().getY(), null);
+                            board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
