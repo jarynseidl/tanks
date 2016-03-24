@@ -109,7 +109,8 @@ var TankCard = React.createClass({
         this.setState({
             isSelected: true
         });
-
+        if(!this.props.inArmory)
+          this.props.joinGame;
     },
     trimName: function(name) {
         if (name.length > 11) {
