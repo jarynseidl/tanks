@@ -1,6 +1,7 @@
 var Auth = require('./authentication.js');
 var TankCard = require('./tank_card.js');
 var Link = require('react-router').Link
+var TankList = require('./tanks.js').List; 
 
 //In the sandbox, pass into the centerpiece as a variable anything you need in there
 //In the TankLists, pass in the list of tanks you want from the state. Like other tanks or your tanks
@@ -49,9 +50,9 @@ var Games = React.createClass({
             }.bind(this));
         }
     },
-    joinGame: function(tank,e) {
+    joinGame: function(tank) {
     	console.log("in joinGame");
-    	e.preventDefault();
+//    	e.preventDefault();
     	var game = this.currGame;
     	if(game==null) return;
     	if(game.tanks.length==4)return;
@@ -168,7 +169,13 @@ var Games = React.createClass({
 				 	<div className="col-md-3 tankPanel dark-background">
 				 		<h1 className="white">Your Tanks</h1>
 				 		<div>
-				        	<TankList joinGame={this.joinGame} tanks={user_tanks} joinGame={this.joinGame}/>
+				        	<TankList
+                                tanks={user_tanks}
+                                selectedTank={this.state.selectedTank}
+                                onSelectTank={this.joinGame}
+                                deleteTank={this.deleteTank}
+                                uploadFile={this.uploadFile}
+                            />
 				        </div>
 				 	</div>
 				 	<div className="col-md-6">
@@ -263,7 +270,7 @@ var GameList = React.createClass({
 
 //You'll need two tank lists. One for your tanks, another for the other tanks
 //Look at the tanklist in tanks.js to see how to do a for each tank in tanks
-var TankList = React.createClass({
+/*var TankList = React.createClass({
     render: function() {
 		var tanks = this.props.tanks;
 		var joinGame = this.props.joinGame;
@@ -271,13 +278,13 @@ var TankList = React.createClass({
         	<div>
             	<div>
 	            	{tanks.map(function(tank,i) {
-	                       return <TankCard onSelectTank={joinGame} tank={tank} key={i} inArmory={false} joinGame={joinGame}/>;
+	                       return <TankCard tank={tank} key={i} inArmory={false} joinGame={joinGame}/>;
 	                }.bind(this))}
 	            </div>
             </div>
         )}
 });
-
+*/
 var GameCard = React.createClass({
     render: function() {
     	var game = this.props.game;

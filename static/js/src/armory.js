@@ -1,6 +1,6 @@
 var Auth = require('./authentication.js');
 // var TankCard = require('./tank_card.js');
-var TankList = require('./tanks.js');
+var TankList = require('./tanks.js').List;
 var Editor = require('./code_editor.js');
 
 var ExampleTanks = React.createClass({
@@ -130,6 +130,7 @@ var Armory = React.createClass({
         this.curr_tank = tank;
     },
     createTank: function() {
+        var self = this;
         var initCode = "\nimport game.board.elements.Tank;" +
                         "\nimport game.util.TANK_DIR;" +
                         "\nimport game.util.TANK_MOVES;" +
@@ -144,17 +145,32 @@ var Armory = React.createClass({
             name: "New Tank",
             code: initCode,
         };
+        var route = '/api/users/' + Auth.getUsername() + '/tanks';
+        var reqType = 'POST';
 
-        this.setState({
-            selectedTank: newTank
+        $.ajax({
+            url: route,
+            type: reqType,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                name: newTank.name,
+                code: newTank.code
+            }),
+            success: function(data) {
+                self.updateList(data);
+            },
+            error: function(xhr, status, err) {
+            }
         });
+
+
     },
     //set the current tank in the editing area
     setCurrTank: function(tank) {
         this.curr_tank = tank;
     },
     //save tank to the database
-    saveTank:  function(e) {
+    saveTank:  function() {
         var update = this.props.update;
         var curr_tank = this.curr_tank;
         var tankName = this.refs.tankName.value.trim();
@@ -236,6 +252,7 @@ var Armory = React.createClass({
             height: '45em',
             padding: '10px'
         };
+        console.log("Render Armory")
         return (
             <div>
                 <div className="row">

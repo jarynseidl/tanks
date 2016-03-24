@@ -80,11 +80,12 @@ CSS For the TankCard Class
     /*height: 8em;*/
     background-color: #595656;
     border-radius: 3px;
-    margin: 10px 0;
+    margin: 13px 3px;
     padding: 10px;
 }
 
 .tankCard.card-selected {
+    margin: 10px 0;
     border-style: solid;
     border-width: medium;
     border-color: rgb(193, 66, 66);
@@ -99,6 +100,8 @@ CSS For the TankCard Class
 .tankCard .tank-stats {
     height: 100%;
     color: #E1E1E1;
+    display: flex;
+    justify-content: space-around;
 }
 
 .tankCard .tank-info .tank-image {
@@ -107,8 +110,30 @@ CSS For the TankCard Class
     align-items: center;
 }
 
-.tankCard .edit-btn {
+.tankCard .tank-info-top div {
+    padding: 0;
+}
+
+.col-height {
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+
+.tankCard .x-btn {
+    float: right;
+}
+
+.tankCard .x-btn:hover {
+    color: rgb(193, 66, 66);
+}
+
+.tankCard .edit-btn, .tankCard .x-btn {
     display: none;
+}
+
+.tankCard.card-selected .x-btn {
+    display: inline;
+    cursor: pointer;
 }
 
 .tankCard .edit-btn button {
@@ -381,12 +406,32 @@ CSS For the Armory
 }
 
 .inputfile {
-    width: 0.1px;
-    height: 0.1px;
+    width: 100%;
+    height: 100%;
     opacity: 0;
     overflow: hidden;
     position: absolute;
-    z-index: -1;
+    /*z-index: -1;*/
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
 }
 
 /**************************************************************************
