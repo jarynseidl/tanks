@@ -221,13 +221,8 @@ CSS For the TankCard Class
 /**************************************************************************
 CSS For the GameCard Class
 **************************************************************************/
-
-.gameCard{
-    display:inline-flex;
-    width:100%;
-    height: 100px;
-    background-color: #a6a6a6;
-    margin: 10px 0px 10px 0px;
+.gameCard {
+    color: #E1E1E1;
 }
 
 .gameImage {
@@ -288,6 +283,10 @@ CSS For the Game Page
 /**************************************************************************
 CSS For the PlayerPanel Class
 **************************************************************************/
+.centerpiece h1 {
+    text-align:center;
+}
+
 .centerPanel {
     display: flex;
     flex-wrap:wrap;
@@ -295,12 +294,13 @@ CSS For the PlayerPanel Class
 }
 
 .inGamePanel {
-    width:250px;
-    height:250px;
+    width:45%;
+    position: relative;
+    height: 0;
+    padding-bottom: 45%;
     background-color: #262626;
     border-radius: 20px;
     text-align:center;
-    position: relative;
     margin:10px;
 
 }
@@ -367,6 +367,7 @@ CSS For the Armory
     width:100%;
     display:inline-flex;
     justify-content:space-around;
+    margin-bottom:0;
 }
 
 .name-input {
