@@ -57,6 +57,10 @@ img.home-screen-shot {
     margin-right:5px;
 }
 
+div.mainContent {
+    margin: 20px;
+}
+
 /**************************************************************************
 CSS For the Login Class
 **************************************************************************/
@@ -74,9 +78,7 @@ CSS For the NavBar Class
     margin-bottom: 0px;
 }
 
-div.mainContent {
-    margin: 20px;
-}
+
 
 
 /**************************************************************************
@@ -352,7 +354,7 @@ CSS For the Dark Background
 **************************************************************************/
 .tankPanel {
     height:auto;
-    max-height:700px !important;
+    max-height:80vh !important;
     padding:0 15px;
     overflow-y:auto;
 }
@@ -373,25 +375,27 @@ body {
 CSS For the Armory
 **************************************************************************/
 .armory-top {
-    height:600px;
     padding-left: 0px;
+    height: 80vh;
 }
 
 .armory-top .tankPanel {
     flex-grow:2;
-    height:40em;
     overflowY:auto;
     overflowX:hidden;
     background-color:#262626;
 }
 
+.
+
 .flex {
     display:flex;
     flex-direction:column;
+    height: 80vh;
 }
 
 .editorStyle {
-    height:522px;
+    height: 80vh;
 }
 
 .ace {
@@ -410,13 +414,13 @@ CSS For the Armory
 }
 
 .side-margin {
-    margin-left: 00px;
-    margin-right: 00px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .compiler-output {
-    margin-top:20px;
-    height:150px;
+    margin-top:10px;
+    height:15vh;
 }
 
 .inputfile {

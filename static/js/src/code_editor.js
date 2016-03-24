@@ -10,7 +10,7 @@ var Placeholder = React.createClass({
             verticalAlign: 'middle',
             textShadow: '1px 4px 6px #BDBCBC, 0 0 0 #000, 1px 4px 6px #BDBCBC',
             borderRadius: '5px',
-            height: '8em',
+            height: '80vh',
             lineHeight: '8em'
         }
         return (
@@ -95,26 +95,13 @@ var Editor = React.createClass({
     },
     render: function() {
         var editorStyle =  {
-            height: '43em',
+            height: '75vh',
             width: '100%',
             margin: '10px 0',
             borderRadius: '5px'
         };
         return (
             <form onSubmit={this.saveTank}>
-                <div className="row">
-                    <div className="col-md-9">
-                        <div className="input-group">
-                            <span className="input-group-addon">Name</span>
-                            <input ref="tankName" type="text" className="form-control" onChange={this.handleChange} value={this.state.name}/>
-                        </div>
-                    </div>
-                    <div className="col-md-3">
-                        <div className="input-group blue btn-block">
-                            <input type="button" className="btn btn-primary btn-block" onClick={this.saveTank} value="Save tank" />
-                        </div>
-                    </div>
-                </div>
                 <div className="row">
                     <div className="col-md-12">
                         <div className="input-group" ref="editor" style={editorStyle}></div>
