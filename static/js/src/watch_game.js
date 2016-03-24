@@ -1,13 +1,19 @@
 var Auth = require('./authentication.js')
 
+var boardWidth = 30 // (x)
+var boardHeight = 30 // (y)
+
 var WatchGame = React.createClass({
     getInitialState: function() {
         return {
+            /*
+             * For when we use a 30 x 30 grid
+             */
             tanks: [
-                {"coord" : { "x" : 0, "y" : 0 }, "dir" : "S", "visible" : true, "index": 0, "name": ""},
-                {"coord" : { "x" : 9, "y" : 9 }, "dir" : "N", "visible" : true, "index": 1, "name": ""},
-                {"coord" : { "x" : 8, "y" : 1 }, "dir" : "N", "visible" : true, "index": 2, "name": ""},
-                {"coord" : { "x" : 1, "y" : 8 }, "dir" : "S", "visible" : true, "index": 3, "name": ""}
+                {"coord" : { "x" : 4, "y" : 1 }, "dir" : "E", "visible" : true, "index": 0, "name": ""},
+                {"coord" : { "x" : 28, "y" : 4 }, "dir" : "S", "visible" : true, "index": 1, "name": ""},
+                {"coord" : { "x" : 25, "y" : 28 }, "dir" : "W", "visible" : true, "index": 2, "name": ""},
+                {"coord" : { "x" : 1, "y" : 25 }, "dir" : "N", "visible" : true, "index": 3, "name": ""}
             ],
             game: {},
             tanksLeft: 4,
@@ -77,7 +83,7 @@ var WatchGame = React.createClass({
         var tempLasers = [];
         switch(this.state.tanks[tankNo].dir){
             case("S"):
-                for(var y = this.state.tanks[tankNo].coord.y+1; y < 10; y++){
+                for(var y = this.state.tanks[tankNo].coord.y+1; y < boardHeight; y++){
                     if(!this.hasTank(this.state.tanks[tankNo].coord.x,y)){
                         tempLasers.push({"y" : true, "coord": {"x": this.state.tanks[tankNo].coord.x,"y": y}});
                     }
@@ -123,7 +129,7 @@ var WatchGame = React.createClass({
                 }
             break;
             case("E"):
-                for(var x = this.state.tanks[tankNo].coord.x+1; x < 10; x++){
+                for(var x = this.state.tanks[tankNo].coord.x+1; x < boardWidth; x++){
                     if(!this.hasTank(x,this.state.tanks[tankNo].coord.y)){
                         tempLasers.push({"x" : true, "coord": {"x": x,"y": this.state.tanks[tankNo].coord.y}});
                     }
@@ -144,477 +150,158 @@ var WatchGame = React.createClass({
      {
             this.makeMove(0,0)
      },
-
-     makeMove: function(index1, index2)
-     {
-            if(index1 >= this.state.game.moves.listOfMoves.length){
-                return;}
-
-                       switch(index2){
-                            case(0):
-                                switch(this.state.game.moves.listOfMoves[index1]['0']){
-                                    case("SHOOT"):
-                                      console.log("Shooting");
-                                      this.fire(0)
-                                    break;
-                                    case("TURN_RIGHT"):
-                                    console.log("Turning right!");
-                                      switch(this.state.tanks[0].dir){
-                                          case("S"):
-                                            this.state.tanks[0].dir = "W";
-                                            this.forceUpdate();
-                                          break;
-                                          case("N"):
-                                            this.state.tanks[0].dir = "E";
-                                            this.forceUpdate();
-                                          break
-                                          case("W"):
-                                            this.state.tanks[0].dir = "N";
-                                            this.forceUpdate();
-                                          break;
-                                          case("E"):
-                                            this.state.tanks[0].dir = "S";
-                                            this.forceUpdate();
-                                          break;
-                                      }
-                                    break;
-                                    case("TURN_LEFT"):
-                                    console.log("Turning left!");
-                                        switch(this.state.tanks[0].dir){
-                                            case("S"):
-                                                this.state.tanks[0].dir = "E";
-                                                this.forceUpdate();
-                                            break;
-                                            case("N"):
-                                                this.state.tanks[0].dir = "W";
-                                                this.forceUpdate();
-                                            break
-                                            case("W"):
-                                                this.state.tanks[0].dir = "S";
-                                                this.forceUpdate();
-                                            break;
-                                            case("E"):
-                                                this.state.tanks[0].dir = "N";
-                                                this.forceUpdate();
-                                            break;
-                                        }
-                                    break;
-                                    case("MOVE_FORWARD"):
-                                    console.log("Moving Forward!");
-                                        switch(this.state.tanks[0].dir){
-                                          case("S"):
-                                            this.state.tanks[0].coord.y+=1;
-                                            this.forceUpdate();
-                                          break;
-                                          case("N"):
-                                            this.state.tanks[0].coord.y-=1;
-                                            this.forceUpdate();
-                                          break
-                                          case("W"):
-                                            this.state.tanks[0].coord.x-=1;
-                                            this.forceUpdate();
-                                          break;
-                                          case("E"):
-                                            this.state.tanks[0].coord.x+=1;
-                                            this.forceUpdate();
-                                          break;
-                                      }
-                                    break;
-                                    case("MOVE_BACKWARD"):
-                                    console.log("Moving Backward");
-                                        switch(this.state.tanks[0].dir){
-                                            case("S"):
-                                                this.state.tanks[0].coord.y-=1;
-                                                this.forceUpdate();
-                                            break;
-                                            case("N"):
-                                                this.state.tanks[0].coord.y+=1;
-                                                this.forceUpdate();
-                                            break
-                                            case("W"):
-                                                this.state.tanks[0].coord.x+=1;
-                                                this.forceUpdate();
-                                            break;
-                                            case("E"):
-                                                this.state.tanks[0].coord.x-=1;
-                                                this.forceUpdate();
-                                            break;
-                                        }
-                                    break;
-                                }
-                            break;
-                            case(1):
-                            switch(this.state.game.moves.listOfMoves[index1]['1']){
-                                    case("SHOOT"):
-                                        console.log("Shooting");
-                                          this.fire(1)
-                                    break;
-                                    case("TURN_RIGHT"):
-                                    console.log("Turning right!");
-                                      switch(this.state.tanks[1].dir){
-                                          case("S"):
-                                            this.state.tanks[1].dir = "W";
-                                            this.forceUpdate();
-                                          break;
-                                          case("N"):
-                                            this.state.tanks[1].dir = "E";
-                                            this.forceUpdate();
-                                          break
-                                          case("W"):
-                                            this.state.tanks[1].dir = "N";
-                                            this.forceUpdate();
-                                          break;
-                                          case("E"):
-                                            this.state.tanks[1].dir = "S";
-                                            this.forceUpdate();
-                                          break;
-                                      }
-                                    break;
-                                    case("TURN_LEFT"):
-                                    console.log("Turning left!");
-                                        switch(this.state.tanks[1].dir){
-                                            case("S"):
-                                                this.state.tanks[1].dir = "E";
-                                                this.forceUpdate();
-                                            break;
-                                            case("N"):
-                                                this.state.tanks[1].dir = "W";
-                                                this.forceUpdate();
-                                            break
-                                            case("W"):
-                                                this.state.tanks[1].dir = "S";
-                                                this.forceUpdate();
-                                            break;
-                                            case("E"):
-                                                this.state.tanks[1].dir = "N";
-                                                this.forceUpdate();
-                                            break;
-                                        }
-                                    break;
-                                    case("MOVE_FORWARD"):
-                                    console.log("Moving Forward!");
-                                        switch(this.state.tanks[1].dir){
-                                          case("S"):
-                                            this.state.tanks[1].coord.y+=1;
-                                            this.forceUpdate();
-                                          break;
-                                          case("N"):
-                                            this.state.tanks[1].coord.y-=1;
-                                            this.forceUpdate();
-                                          break
-                                          case("W"):
-                                            this.state.tanks[1].coord.x-=1;
-                                            this.forceUpdate();
-                                          break;
-                                          case("E"):
-                                            this.state.tanks[1].coord.x+=1;
-                                            this.forceUpdate();
-                                          break;
-                                      }
-                                    break;
-                                    case("MOVE_BACKWARD"):
-                                        switch(this.state.tanks[1].dir){
-                                            case("S"):
-                                                this.state.tanks[1].coord.y-=1;
-                                                this.forceUpdate();
-                                            break;
-                                            case("N"):
-                                                this.state.tanks[1].coord.y+=1;
-                                                this.forceUpdate();
-                                            break
-                                            case("W"):
-                                                this.state.tanks[1].coord.x+=1;
-                                                this.forceUpdate();
-                                            break;
-                                            case("E"):
-                                                this.state.tanks[1].coord.x-=1;
-                                                this.forceUpdate();
-                                            break;
-                                        }
-                                    break;
-                                }
-                            break;
-                            case(2):
-                                switch(this.state.game.moves.listOfMoves[index1]['2']){
-                                    case("SHOOT"):
-                                        console.log("Shooting");
-                                        this.fire(2)
-                                    break;
-                                    case("TURN_RIGHT"):
-                                    console.log("Turning right!");
-                                      switch(this.state.tanks[2].dir){
-                                          case("S"):
-                                            this.state.tanks[2].dir = "W";
-                                            this.forceUpdate();
-                                          break;
-                                          case("N"):
-                                            this.state.tanks[2].dir = "E";
-                                            this.forceUpdate();
-                                          break
-                                          case("W"):
-                                            this.state.tanks[2].dir = "N";
-                                            this.forceUpdate();
-                                          break;
-                                          case("E"):
-                                            this.state.tanks[2].dir = "S";
-                                            this.forceUpdate();
-                                          break;
-                                      }
-                                    break;
-                                    case("TURN_LEFT"):
-                                    console.log("Turning left!");
-                                        switch(this.state.tanks[2].dir){
-                                            case("S"):
-                                                this.state.tanks[2].dir = "E";
-                                                this.forceUpdate();
-                                            break;
-                                            case("N"):
-                                                this.state.tanks[2].dir = "W";
-                                                this.forceUpdate();
-                                            break
-                                            case("W"):
-                                                this.state.tanks[2].dir = "S";
-                                                this.forceUpdate();
-                                            break;
-                                            case("E"):
-                                                this.state.tanks[2].dir = "N";
-                                                this.forceUpdate();
-                                            break;
-                                        }
-                                    break;
-                                    case("MOVE_FORWARD"):
-                                    console.log("Moving Forward!");
-                                        switch(this.state.tanks[2].dir){
-                                          case("S"):
-                                            this.state.tanks[2].coord.y+=1;
-                                            this.forceUpdate();
-                                          break;
-                                          case("N"):
-                                            this.state.tanks[2].coord.y-=1;
-                                            this.forceUpdate();
-                                          break
-                                          case("W"):
-                                            this.state.tanks[2].coord.x-=1;
-                                            this.forceUpdate();
-                                          break;
-                                          case("E"):
-                                            this.state.tanks[2].coord.x+=1;
-                                            this.forceUpdate();
-                                          break;
-                                      }
-                                    break;
-                                    case("MOVE_BACKWARD"):
-                                    console.log("Moving Backward");
-                                        switch(this.state.tanks[2].dir){
-                                            case("S"):
-                                                this.state.tanks[2].coord.y-=1;
-                                                this.forceUpdate();
-                                            break;
-                                            case("N"):
-                                                this.state.tanks[2].coord.y+=1;
-                                                this.forceUpdate();
-                                            break
-                                            case("W"):
-                                                this.state.tanks[2].coord.x+=1;
-                                                this.forceUpdate();
-                                            break;
-                                            case("E"):
-                                                this.state.tanks[2].coord.x-=1;
-                                                this.forceUpdate();
-                                            break;
-                                        }
-                                    break;
-                                }
-                            break;
-                            case(3):
-                                switch(this.state.game.moves.listOfMoves[index1]['3']){
-                                    case("SHOOT"):
-                                        console.log("Shooting");
-                                        this.fire(3)
-                                    break;
-                                    case("TURN_RIGHT"):
-                                    console.log("Turning right!");
-                                      switch(this.state.tanks[3].dir){
-                                          case("S"):
-                                            this.state.tanks[3].dir = "W";
-                                            this.forceUpdate();
-                                          break;
-                                          case("N"):
-                                            this.state.tanks[3].dir = "E";
-                                            this.forceUpdate();
-                                          break
-                                          case("W"):
-                                            this.state.tanks[3].dir = "N";
-                                            this.forceUpdate();
-                                          break;
-                                          case("E"):
-                                            this.state.tanks[3].dir = "S";
-                                            this.forceUpdate();
-                                          break;
-                                      }
-                                    break;
-                                    case("TURN_LEFT"):
-                                    console.log("Turning left!");
-                                        switch(this.state.tanks[3].dir){
-                                            case("S"):
-                                                this.state.tanks[3].dir = "E";
-                                                this.forceUpdate();
-                                            break;
-                                            case("N"):
-                                                this.state.tanks[3].dir = "W";
-                                                this.forceUpdate();
-                                            break
-                                            case("W"):
-                                                this.state.tanks[3].dir = "S";
-                                                this.forceUpdate();
-                                            break;
-                                            case("E"):
-                                                this.state.tanks[3].dir = "N";
-                                                this.forceUpdate();
-                                            break;
-                                        }
-                                    break;
-                                    case("MOVE_FORWARD"):
-                                    console.log("Moving Forward!");
-                                        switch(this.state.tanks[3].dir){
-                                          case("S"):
-                                            this.state.tanks[3].coord.y+=1;
-                                            this.forceUpdate();
-                                          break;
-                                          case("N"):
-                                            this.state.tanks[3].coord.y-=1;
-                                            this.forceUpdate();
-                                          break
-                                          case("W"):
-                                            this.state.tanks[3].coord.x-=1;
-                                            this.forceUpdate();
-                                          break;
-                                          case("E"):
-                                            this.state.tanks[3].coord.x+=1;
-                                            this.forceUpdate();
-                                          break;
-                                      }
-                                    break;
-                                    case("MOVE_BACKWARD"):
-                                    console.log("Moving Backward");
-                                        switch(this.state.tanks[3].dir){
-                                            case("S"):
-                                                this.state.tanks[3].coord.y-=1;
-                                                this.forceUpdate();
-                                            break;
-                                            case("N"):
-                                                this.state.tanks[3].coord.y+=1;
-                                                this.forceUpdate();
-                                            break
-                                            case("W"):
-                                                this.state.tanks[3].coord.x+=1;
-                                                this.forceUpdate();
-                                            break;
-                                            case("E"):
-                                                this.state.tanks[3].coord.x-=1;
-                                                this.forceUpdate();
-                                            break;
-                                        }
-                                    break;
-                                }
-                            break;
-                        }
-
-
-            //check to see if the next tank in line exists, if not push it to the next tank and run again - this way we're not waiting.
-            if(index2 != 3){
-                index2 ++;
-            }
-
-            else{
-                index2 = 0;
-                index1++;
-            }
-
-            var exists = false;
-            while(!exists)
-            {
-                console.log("Before" + this.state.tanksLeft);
-                switch(index2)
-                {
-
-                    case(0):
-                        if(this.state.game.moves.listOfMoves[index1]['0']){
-                            exists = true;}
-                        else{
-                            console.log("Tank 0 died.");
-                            if(this.state.tanks[0].visible == true){
-                                this.state.tanksLeft--;
-                            }
-                            this.state.tanks[0].visible = false;
+    tankMove: function(move, tankIndex) {
+        switch(move){
+            case("SHOOT"):
+                console.log("Shooting");
+                this.fire(tankIndex);
+                break;
+            case("TURN_RIGHT"):
+                console.log("Turning right!");
+                  switch(this.state.tanks[tankIndex].dir){
+                      case("S"):
+                        this.state.tanks[tankIndex].dir = "W";
+                        this.forceUpdate();
+                      break;
+                      case("N"):
+                        this.state.tanks[tankIndex].dir = "E";
+                        this.forceUpdate();
+                      break
+                      case("W"):
+                        this.state.tanks[tankIndex].dir = "N";
+                        this.forceUpdate();
+                      break;
+                      case("E"):
+                        this.state.tanks[tankIndex].dir = "S";
+                        this.forceUpdate();
+                      break;
+                  }
+                break;
+            case("TURN_LEFT"):
+                console.log("Turning left!");
+                    switch(this.state.tanks[tankIndex].dir){
+                        case("S"):
+                            this.state.tanks[tankIndex].dir = "E";
                             this.forceUpdate();
-                            index2++;
-                            }
-                    break;
-                    case(1):
-                        if(this.state.game.moves.listOfMoves[index1]['1']){
-                            exists = true;}
-                        else{
-                            console.log("Tank 1 died.");
-                            if(this.state.tanks[1].visible == true){
-                                this.state.tanksLeft--;
-                            }
-                             this.state.tanks[1].visible = false;
+                        break;
+                        case("N"):
+                            this.state.tanks[tankIndex].dir = "W";
                             this.forceUpdate();
-                            index2++;
-                            }
-                    break;
-                    case(2):
-                        if(this.state.game.moves.listOfMoves[index1]['2']){
-                            exists = true;}
-                        else{
-                            console.log("Tank 2 died.");
-                            if(this.state.tanks[2].visible == true){
-                                this.state.tanksLeft--;
-                            }
-                            this.state.tanks[2].visible = false;
+                        break
+                        case("W"):
+                            this.state.tanks[tankIndex].dir = "S";
                             this.forceUpdate();
-                            index2++;
-                            }
-                    break;
-                    case(3):
-                         if(this.state.game.moves.listOfMoves[index1]['3']){
-                            exists = true;}
-                        else{
-                            console.log("Tank 3 died.");
-                            if(this.state.tanks[3].visible == true){
-                                this.state.tanksLeft--;
-                            }
-                            this.state.tanks[3].visible = false;
+                        break;
+                        case("E"):
+                            this.state.tanks[tankIndex].dir = "N";
                             this.forceUpdate();
-                            index2 =0;
-                            index1++;
-
-                            }
-                    break;
+                        break;
+                    }
+                break;
+            case("MOVE_FORWARD"):
+                console.log("Moving Forward!");
+                    switch(this.state.tanks[tankIndex].dir){
+                      case("S"):
+                        this.state.tanks[tankIndex].coord.y+=1;
+                        this.forceUpdate();
+                      break;
+                      case("N"):
+                        this.state.tanks[tankIndex].coord.y-=1;
+                        this.forceUpdate();
+                      break
+                      case("W"):
+                        this.state.tanks[tankIndex].coord.x-=1;
+                        this.forceUpdate();
+                      break;
+                      case("E"):
+                        this.state.tanks[tankIndex].coord.x+=1;
+                        this.forceUpdate();
+                      break;
+                  }
+                break;
+            case("MOVE_BACKWARD"):
+                console.log("Moving Backward");
+                    switch(this.state.tanks[tankIndex].dir){
+                        case("S"):
+                            this.state.tanks[tankIndex].coord.y-=1;
+                            this.forceUpdate();
+                        break;
+                        case("N"):
+                            this.state.tanks[tankIndex].coord.y+=1;
+                            this.forceUpdate();
+                        break
+                        case("W"):
+                            this.state.tanks[tankIndex].coord.x+=1;
+                            this.forceUpdate();
+                        break;
+                        case("E"):
+                            this.state.tanks[tankIndex].coord.x-=1;
+                            this.forceUpdate();
+                        break;
+                    }
+                break;
+            case("DIE"):
+                console.log("Dying");
+                console.log("Tank", tankIndex, "died.");
+                if(this.state.tanks[tankIndex].visible == true){
+                    this.state.tanksLeft--;
                 }
-                if(this.state.tanksLeft <= 1)
-                    exists = true;
-                console.log("after");
-            }
-            console.log("out of game");
-            console.log("Window: " + window.location.href);
-            if(!this.isMounted())
-                return;
-           // if (!window.location.href.split("/")[6].split("?")[0] == "watch"){
-            //    return;
-            //}
+                this.state.tanks[tankIndex].visible = false;
+                this.forceUpdate();
+                break;
+        }
+     },
 
-            console.log(this.state.tanksLeft);
-            
-            if (this.state.tanksLeft <= 1 && !this.props.loginPage){
-                this.DisplayWinner();
-                return;
-            }
+     // This is essentially boilerplate for this.tankMove
+     // It does the following:
+     //     - boundary check the move index
+     //     - find the tank index and move
+     //     - run this.tankMove
+     //     - schedules itself to run again
+     makeMove: function(moveIndex)
+     {
+        // Make sure the component has mounted
+        if(!this.isMounted()) return;
 
-            setTimeout(function(){
-                this.makeMove(index1,index2);
-            }.bind(this),this.state.TURN_LENGTH);
+        // Boundary check the move index
+        if(moveIndex >= this.state.game.moves.listOfMoves.length){return;}
+
+        // moveObj is the tankID with the move (ie. {"2", "MOVE_BACKWARDS"})
+        var moveObj = this.state.game.moves.listOfMoves[moveIndex];
+
+        // Check the move for numbers 0-3 and find out which tank the move is for
+        var tankIndex = undefined;
+        for (var i = 0; i < 4; i++) {
+            if (moveObj.hasOwnProperty(i)) {
+                tankIndex = i;
+            }
+        }
+        // Error check and log an error if the tank id wasn't found
+        if (tankIndex === undefined) {
+            console.error("Couldn't find tank for this move:", moveObj);
+            return;
+        }
+
+        // move will store the name of the move (ie. "SHOOT")
+        var move = moveObj[tankIndex];
+
+        // Have the specific tank make a move
+        this.tankMove(move, tankIndex);
+
+        console.log(this.state.tanksLeft);
+        
+        // Display the winner if there is one
+        if (this.state.tanksLeft <= 1 && !this.props.loginPage){
+            this.DisplayWinner();
+            return;
+        }
+
+        // Increment the move to the next move
+        moveIndex++;
+        // Set the next move to take place after TURN_LENGTH milliseconds
+        setTimeout(function(){
+            this.makeMove(moveIndex);
+        }.bind(this),this.state.TURN_LENGTH);
      },
      componentDidMount: function() {
         console.log(this.props.location.pathname);
@@ -637,12 +324,15 @@ var WatchGame = React.createClass({
         }.bind(this));
     },
     render: function() {
-        var board = new Array(
-            new Array(10), new Array(10), new Array(10), new Array(10), new Array(10),
-            new Array(10), new Array(10), new Array(10), new Array(10), new Array(10)
-            );
+        // Board: Array of Arrays
+        // board[y][x]
+        var board = new Array(boardHeight);
+        for (var y=0; y < boardHeight; y++) {
+            board[y] = new Array(boardHeight);
+        }
+        // Initialize the board to undefined
         board.forEach(function(ar) {
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < boardWidth; i++) {
                 ar[i] = "a";
                 ar[i] = undefined;
             }
