@@ -2,6 +2,8 @@ var Auth = require('./authentication.js');
 var TankCard = require('./tank_card.js');
 var Link = require('react-router').Link
 var TankList = require('./tanks.js').List; 
+var classNames = require('classnames');
+
 
 //In the sandbox, pass into the centerpiece as a variable anything you need in there
 //In the TankLists, pass in the list of tanks you want from the state. Like other tanks or your tanks
@@ -40,6 +42,7 @@ var Games = React.createClass({
                 user_tanks: result["tanks"],
             });
         }.bind(this));
+
     },
     loadOpenGamesFromServer: function() {
         if(this.isMounted()){
@@ -51,11 +54,12 @@ var Games = React.createClass({
         }
     },
     joinGame: function(tank) {
-    	console.log("in joinGame");
+    	console.log(tank);
 //    	e.preventDefault();
     	var game = this.currGame;
+        console.log(game);
     	if(game==null) return;
-    	if(game.tanks.length==4)return;
+    	if(game.tankIds.length>=4)return;
         var url = "/api/games/" + game._id + "/tanks";
         $.ajax({
             url: url,
@@ -168,9 +172,9 @@ var Games = React.createClass({
         return (
             <div>
             	<div className="row">
-				 	<div className="col-md-3 tankPanel dark-background">
-				 		<h1 className="white">Your Tanks</h1>
-				 		<div>
+				 	<div className="col-md-3 armory-top flex">
+				 		<div className="tankPanel dark-background">
+                            <button type="submit" className="btn btn-primary button">Prebuilt Tanks</button>
 				        	<TankList
                                 tanks={user_tanks}
                                 selectedTank={this.state.selectedTank}
@@ -183,6 +187,7 @@ var Games = React.createClass({
 				 	<div className="col-md-6">
 				 		<CenterPiece game={this.currGame}/>
 				 	</div>
+
 				 	<div className="col-md-3  dark-background">
 				 		<h1 className="white">Games</h1>
 				 		<div className="horizontal gameButtons">
@@ -196,6 +201,20 @@ var Games = React.createClass({
 				 			: <GameList selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.your_games} /> }
 				 		</div>
 				 	</div>
+
+				 	<div className="col-md-3  armory-top flex">
+    				 	<div className="tankPanel dark-background">
+                        	<div className="horizontal gameButtons">
+                                <button type="submit" className="btn btn-primary button" onClick={this.toggleGames}>{this.gamesButton}</button>
+    							{this.show_open ? null : <button type="submit" className="btn btn-primary button">Battle!</button>}
+                                {this.show_open ? <button type="submit" className="btn btn-primary button" onClick={this.showModal.bind(this, "CreateGameModal")}>Create Game</button> : null}
+                                <CreateGameModal createGame={this.createGame} modalName="CreateGameModal"/>
+                            </div>
+    			 			{this.show_open ? <GameList currGame={this.currGame} selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.open_games} />
+    			 			: <GameList currGame={this.currGame} selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.your_games} /> }
+				 	    </div>
+                    </div>
+
 				</div>
           	</div>
         )}
@@ -227,9 +246,10 @@ var CenterPiece = React.createClass({
         	if(game != null)
         		tanks = game.tankIds;
         return (
-        	<div>
+        	<div className="centerpiece">
         		{game==null ? <h1>No game selected.</h1> : null}
-        		{game!=null && tanks.length==0 ? <h1>No players in game</h1> : null}
+                {game!=null ? <h1>{game.name}</h1> : null}
+        		{game!=null && tanks.length==0 ? <h1>Click a tank to join game.</h1> : null}
             	{game!=null ? <div className="centerPanel">
 	            	{tanks.map(function(tank,i) {
 	                       return <PlayerPanel tank={tank} key={i}/>;
@@ -258,11 +278,12 @@ var GameList = React.createClass({
 		var selectGame = this.props.selectGame;
 		var deletable = this.props.deletable;
 		var deleteGame = this.props.deleteGame;
+        var currGame = this.props.currGame;
         return (
         	<div>
             	<div>
 	            	{games.map(function(game,i) {
-	                       return <GameCard selectGame={selectGame} deleteGame={deleteGame} deletable={deletable} game={game} key={i}/>;
+	                       return <GameCard selectGame={selectGame} currGame={currGame} deleteGame={deleteGame} deletable={deletable} game={game} key={i}/>;
 	                })}
 	            </div>
             </div>
@@ -288,32 +309,49 @@ var GameList = React.createClass({
 */
 var GameCard = React.createClass({
     render: function() {
+        console.log("Rendering Game Card")
     	var game = this.props.game;
     	var users = game.users;
     	var selectGame = this.props.selectGame;
     	var deletable = this.props.deletable;
+        var currGame = this.props.currGame;
+        var isSelected = false;
+        if(currGame!=null)
+            if(currGame._id == game._id)
+                isSelected = true;
+        var cardStyle = {
+            backgroundColor: 'white',
+            borderRadius: '3px',
+            margin: '10px 0',
+            padding: '0 10px'
+        }
+
+        var cardClass = classNames({
+            'row': true,
+            'tankCard': true,
+            'card-selected': isSelected
+        });
+        // console.log(this.props.tank)
+
         return (
-                <div onClick={selectGame.bind(null,game)}>
-                	<div className="gameCard">
-						<div className="gameCardSection1">
-							<h4>{game.name}</h4>
-							<div>
-								<img className="gameImage" src="../../images/screenshot1.png"></img>
-							</div>
-						</div>
-						<div className="players">
-							{users.map(function(user,i) {
-			                    return <span>P{i+1}: {user.userName}</span>;
-			                })}
-						</div>
-						{deletable ? 
-							<div onClick={this.props.deleteGame.bind(null,game)}>
-								<span className="glyphicon glyphicon-remove red remove"></span>
-							</div> : null}
-					</div>
+            <div className={cardClass} onClick={selectGame.bind(null,game)}>
+              <div className="gameCard">
+                    <div className="gameCardSection1">
+                        <h4>{game.name}</h4>
+                        <div>
+                            <img className="gameImage" src="../../images/screenshot1.png"></img>
+                        </div>
+                    </div>
+                    <div className="players">
+                        {users.map(function(user,i) {
+                            return <span>P{i+1}: {user.userName}</span>;
+                        })}
+                    </div>
                 </div>
+                    
+            </div>
         );
-    }
+      }
 });
 
 var CreateGameModal = React.createClass({
