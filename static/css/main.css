@@ -92,15 +92,13 @@ CSS For the TankCard Class
     margin: 10px 0px 10px 0px;*/
     /*height: 8em;*/
     background-color: #595656;
-    box-shadow: 1px 1px 30px #000000;
+    box-shadow: 1px 1px 1px #000000;
     margin: 10px 0;
 }
 
 .tankCard.card-selected {
     margin: 10px 0;
-    border-style: solid;
-    border-width: medium;
-    border-color: rgb(193, 66, 66);
+    background-color: #7A7777;
 }
 
 .tankCard .tank-info {
