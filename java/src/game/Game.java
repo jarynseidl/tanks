@@ -135,6 +135,10 @@ public class Game {
                             t.addActionPoints(t.getMoveCost());
                             move = move(t, false, move);
                             break;
+                        case DIE:
+                            t.takeDamage(t.getHealth());
+                            this.removeTank(t);
+                            break;
                     }
                     moves.addMove(t.getAlias(), move);
                 } catch (Exception e) {
@@ -149,7 +153,9 @@ public class Game {
             moves.newTurn();
             currentTurn += 1;
 
-            tankQueue.add(t);
+            if (t.getHealth() > 0) {
+                tankQueue.add(t);
+            }
 
             if (currentTurn > maxTurns) {
             	for (Tank tt: tanks){
@@ -261,6 +267,13 @@ public class Game {
         }
     }
 
+    // Remove the dead tank from the queue, list, and board
+    private void removeTank(Tank t) {
+        tankQueue.remove(t);
+        tanks.remove(t);
+        board.setElementAt(t.getCoord().getX(), t.getCoord().getY(), null);
+    }
+
     // Handles the event of a bullet at coordinates (xCoord, yCoord) fired from firingTank
     // Returns true if the bullet hit something, false if it didn't
     private boolean handleBulletAtCoordinates(int xCoord, int yCoord, Tank firingTank) {
@@ -277,10 +290,7 @@ public class Game {
             // Check if it killed the tank
             if (((Tank) elem).getHealth() <= 0) {
 
-                // Remove the dead tank from the queue, list, and board
-                tankQueue.remove((Tank) elem);
-                tanks.remove(elem);
-                board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
+                this.removeTank((Tank) elem);
 
                 // Add a move for the dying tank
                 this.moves.addMove(((Tank) elem).getAlias(), TANK_MOVES.DIE);
