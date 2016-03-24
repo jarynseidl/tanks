@@ -1,5 +1,6 @@
 var Auth = require('./authentication.js');
 var TankCard = require('./tank_card.js');
+var Link = require('react-router').Link
 
 //In the sandbox, pass into the centerpiece as a variable anything you need in there
 //In the TankLists, pass in the list of tanks you want from the state. Like other tanks or your tanks
@@ -130,6 +131,31 @@ var Games = React.createClass({
         $("#" + modalName).modal('show');
         console.log("after");
     },
+    openDialog: function(game, e){
+	  //e.preventDefault();
+	  var currGame = this.currGame;
+	  if(currGame != null){
+		  var $dialog = $('<div>').dialog({
+			title: currGame.name,
+			width: 400,
+			close: function(e){
+			  React.unmountComponentAtNode($dialog);
+			  $( this ).remove();
+			}
+		  });
+		  var closeDialog = function(e){
+			//e.preventDefault();
+			$dialog.dialog('close');
+		  }
+		  React.render(<DialogContent closeDialog={closeDialog} />, $dialog[0]);
+	  }
+	},
+    watchGame: function (gameId, e) {
+	  	if(gameId != null){
+          e.preventDefault();
+          this.props.history.pushState(null, '/your_games/' + gameId._id);
+    	}
+    },
     currGame: null,
     show_open: true,
     gamesButton: "Past Games",
@@ -152,7 +178,8 @@ var Games = React.createClass({
 				 		<h1 className="white">Games</h1>
 				 		<div className="horizontal gameButtons">
                             <button type="submit" className="btn btn-primary button" onClick={this.toggleGames}>{this.gamesButton}</button>
-							{this.show_open ? null : <button type="submit" className="btn btn-primary button">Battle!</button>}
+							{this.show_open ? null : <button type="submit" className="btn btn-primary button" onClick={this.watchGame.bind(this, this.currGame)}>Battle!</button>}
+							
                             {this.show_open ? <button type="submit" className="btn btn-primary button" onClick={this.showModal.bind(this, "CreateGameModal")}>Create Game</button> : null}
                             <CreateGameModal createGame={this.createGame} modalName="CreateGameModal"/>
                         </div>
@@ -164,6 +191,25 @@ var Games = React.createClass({
 				</div>
           	</div>
         )}
+});
+
+//Creates the dialog for the battle button
+var DialogContent = React.createClass({
+  handleSubmit: function(){
+    console.log('Play game?');
+  },
+  restart: function(){
+  	console.log('Replay');
+  },
+  render: function(){
+    return(
+    <div>
+      <form>
+        <button onClick = {this.restart}>Restart</button>
+      </form>
+    </div>
+    )
+  }
 });
 
 var CenterPiece = React.createClass({

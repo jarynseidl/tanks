@@ -285,7 +285,29 @@ CSS For the PlayerPanel Class
     top: 15px;
     right: 15px;
 }
+/**************************************************************************
+CSS For the Watch Games
+**************************************************************************/
+.watchGame {
+    height:640px;
+    max-height:700px !important;
+    padding:0 15px;
+    overflow-y:auto;
 
+    
+}
+
+.textStuff {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.compileCode {
+    height:640px;
+    max-height:700px !important;
+    padding:0 15px;
+    overflow-y:auto;
+}
 /**************************************************************************
 CSS For the Dark Background
 **************************************************************************/
