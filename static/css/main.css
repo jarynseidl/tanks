@@ -67,6 +67,17 @@ div.registerUser {
   	margin-top:200px;
 }
 
+/**************************************************************************
+CSS For the NavBar Class
+**************************************************************************/
+.navbar{
+    margin-bottom: 0px;
+}
+
+div.mainContent {
+    margin: 20px;
+}
+
 
 /**************************************************************************
 CSS For the TankCard Class
@@ -79,9 +90,8 @@ CSS For the TankCard Class
     margin: 10px 0px 10px 0px;*/
     /*height: 8em;*/
     background-color: #595656;
-    border-radius: 3px;
-    margin: 13px 3px;
-    padding: 10px;
+    box-shadow: 1px 1px 30px #000000;
+    margin: 10px 0;
 }
 
 .tankCard.card-selected {
@@ -159,7 +169,7 @@ CSS For the TankCard Class
 }
 
 .tankCard:not(.card-selected):hover {
-    box-shadow: 5px 5px 5px #000000;
+    box-shadow: 5px 5px 3px #000000;
 }
 
 .tankCard h4 {
@@ -194,10 +204,14 @@ CSS For the TankCard Class
 
     /*width:100%;*/
     margin:5px;
-    box-shadow: 3px 3px 3px #888888;
+    box-shadow: 1px 1px 1px #000000;
     background-color:#800000 !important;
     border-color:#800000 !important;
 
+}
+
+.button:hover{
+    box-shadow: 3px 3px 3px #000000;
 }
 
 .close-icon {
@@ -348,7 +362,7 @@ CSS For the Dark Background
 }
 
 body {
-    background-color: #595656 !important;
+    background-color: #000000 !important;
 }
 
 .fixed {
@@ -360,6 +374,7 @@ CSS For the Armory
 **************************************************************************/
 .armory-top {
     height:600px;
+    padding-left: 0px;
 }
 
 .armory-top .tankPanel {
@@ -369,8 +384,6 @@ CSS For the Armory
     overflowX:hidden;
     background-color:#262626;
 }
-
-
 
 .flex {
     display:flex;
@@ -397,8 +410,8 @@ CSS For the Armory
 }
 
 .side-margin {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 00px;
+    margin-right: 00px;
 }
 
 .compiler-output {
@@ -433,6 +446,15 @@ CSS For the Armory
     background: white;
     cursor: inherit;
     display: block;
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+div.mainContent {
+    margin: 0px;
 }
 
 /**************************************************************************
