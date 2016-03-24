@@ -274,6 +274,8 @@ public class Game {
                             tankQueue.remove((Tank) elem);
                             tanks.remove(elem);
                             board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
+                            this.moves.addMove(((Tank) elem).getAlias(), TANK_MOVES.DIE);
+                            this.moves.newTurn();
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
@@ -297,6 +299,8 @@ public class Game {
                             tankQueue.remove((Tank) elem);
                             tanks.remove(elem);
                             board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
+                            this.moves.addMove(((Tank) elem).getAlias(), TANK_MOVES.DIE);
+                            this.moves.newTurn();
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
@@ -319,6 +323,8 @@ public class Game {
                             tankQueue.remove((Tank) elem);
                             tanks.remove(elem);
                             board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
+                            this.moves.addMove(((Tank) elem).getAlias(), TANK_MOVES.DIE);
+                            this.moves.newTurn();
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
@@ -341,6 +347,8 @@ public class Game {
                             tankQueue.remove((Tank) elem);
                             tanks.remove(elem);
                             board.setElementAt(elem.getCoord().getX(), elem.getCoord().getY(), null);
+                            this.moves.addMove(((Tank) elem).getAlias(), TANK_MOVES.DIE);
+                            this.moves.newTurn();
                             for (int f = 0; f < users.size(); f++) {
                                 if (users.get(f).getTankID() == t.getTankID()) {
                                     users.get(f).incTanksKilled();
