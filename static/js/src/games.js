@@ -175,8 +175,8 @@ var Games = React.createClass({
             <div>
             	<div className="row">
 				 	<div className="col-md-3 armory-top flex">
+                        <button type="submit" className="btn btn-primary button">Prebuilt Tanks</button>
 				 		<div className="tankPanel dark-background">
-                            <button type="submit" className="btn btn-primary button">Prebuilt Tanks</button>
 				        	<TankList
                                 tanks={user_tanks}
                                 selectedTank={this.state.selectedTank}
@@ -191,13 +191,13 @@ var Games = React.createClass({
 				 	</div>
 
 				 	<div className="col-md-3  armory-top flex">
+                        <div className="horizontal gameButtons">
+                            <button type="submit" className="btn btn-primary button" onClick={this.toggleGames}>{this.gamesButton}</button>
+                            {this.show_open ? null : <button type="submit" onClick={this.watchGame} className="btn btn-primary button">Battle!</button>}
+                            {this.show_open ? <button type="submit" className="btn btn-primary button" onClick={this.showModal.bind(this, "CreateGameModal")}>Create Game</button> : null}
+                            <CreateGameModal createGame={this.createGame} modalName="CreateGameModal"/>
+                        </div>
     				 	<div className="tankPanel dark-background">
-                        	<div className="horizontal gameButtons">
-                                <button type="submit" className="btn btn-primary button" onClick={this.toggleGames}>{this.gamesButton}</button>
-    							{this.show_open ? null : <button type="submit" onClick={this.watchGame} className="btn btn-primary button">Battle!</button>}
-                                {this.show_open ? <button type="submit" className="btn btn-primary button" onClick={this.showModal.bind(this, "CreateGameModal")}>Create Game</button> : null}
-                                <CreateGameModal createGame={this.createGame} modalName="CreateGameModal"/>
-                            </div>
     			 			{this.show_open ? <GameList currGame={this.currGame} selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.open_games} />
     			 			: <GameList currGame={this.currGame} selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.your_games} /> }
 				 	    </div>
