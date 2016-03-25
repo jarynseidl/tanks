@@ -237,6 +237,7 @@ CSS For the GameCard Class
 **************************************************************************/
 .gameCard {
     color: #E1E1E1;
+    display: inline-flex;
 }
 
 .gameImage {
