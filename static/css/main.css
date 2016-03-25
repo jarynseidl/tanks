@@ -468,15 +468,16 @@ div.mainContent {
 CSS For the Scrollbar
 **************************************************************************/
 .tankPanel::-webkit-scrollbar{
-	width:8px;
+	width:3px;
 }
+
 .tankPanel::-webkit-scrollbar-thumb{
-    background-color: #800000;
-	border-radius:10px;
+    background-color: transparent;
+    border-radius:10px;
 }
-.tankPanel::-webkit-scrollbar-thumb:hover{
+
+.tankPanel:hover::-webkit-scrollbar-thumb{
     background-color: #800022;
-	border:1px solid #333333;
 }
 
 body::-webkit-scrollbar{
@@ -484,7 +485,7 @@ body::-webkit-scrollbar{
 	margin:0;
 }
 body::-webkit-scrollbar-thumb{
-    background-color: #262626;
+    background-color: transparent;
 	border-radius:10px;
 }
 body::-webkit-scrollbar-thumb:hover{
