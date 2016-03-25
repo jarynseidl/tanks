@@ -158,7 +158,9 @@ var Games = React.createClass({
     watchGame: function (e) {
         e.preventDefault();
 	  	if (this.currGame !== null) {
-            this.props.history.pushState(null, '/games/' + this.currGame._id + '/watch');
+	  		console.log(this.currGame);
+	  		if(this.currGame.ready==true)
+            	this.props.history.pushState(null, '/games/' + this.currGame._id + '/watch');
     	} else {
             console.error("Can't watch game...currGame is null");
         }
@@ -192,7 +194,7 @@ var Games = React.createClass({
     				 	<div className="tankPanel dark-background">
                         	<div className="horizontal gameButtons">
                                 <button type="submit" className="btn btn-primary button" onClick={this.toggleGames}>{this.gamesButton}</button>
-    							{this.show_open ? null : <button type="submit" className="btn btn-primary button">Battle!</button>}
+    							{this.show_open ? null : <button type="submit" onClick={this.watchGame} className="btn btn-primary button">Battle!</button>}
                                 {this.show_open ? <button type="submit" className="btn btn-primary button" onClick={this.showModal.bind(this, "CreateGameModal")}>Create Game</button> : null}
                                 <CreateGameModal createGame={this.createGame} modalName="CreateGameModal"/>
                             </div>
