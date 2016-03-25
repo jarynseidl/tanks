@@ -95,15 +95,15 @@ var Editor = React.createClass({
     },
     render: function() {
         var editorStyle =  {
-            height: '75vh',
+            height: '80vh',
             width: '100%',
-            margin: '10px 0',
+            margin: '0px 0',
             borderRadius: '5px'
         };
         return (
             <form onSubmit={this.saveTank}>
                 <div className="row">
-                    <div className="col-md-12">
+                    <div className="col-md-12 editor-box">
                         <div className="input-group" ref="editor" style={editorStyle}></div>
                     </div>
                 </div>

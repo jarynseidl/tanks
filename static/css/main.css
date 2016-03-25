@@ -375,6 +375,7 @@ CSS For the Armory
 **************************************************************************/
 .armory-top {
     padding-left: 0px;
+    padding-right: 0px;
     height: 80vh;
 }
 
@@ -385,7 +386,10 @@ CSS For the Armory
     background-color:#262626;
 }
 
-.
+.editor-box{
+    padding-left: 0px;
+    padding-right: 0px;
+}
 
 .flex {
     display:flex;
