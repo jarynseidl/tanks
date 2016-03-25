@@ -256,8 +256,8 @@ var Armory = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-md-3 armory-top flex">
+                        <button type="submit" className="btn btn-primary button" onClick={this.createTank}>Create New Tank</button>
                         <div className="tankPanel dark-background ">
-                            <button type="submit" className="btn btn-primary button" onClick={this.createTank}>Create New Tank</button>
                             <TankList
                                 tanks={this.state.user.tanks}
                                 selectedTank={this.state.selectedTank}

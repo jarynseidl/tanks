@@ -464,6 +464,11 @@ div.mainContent {
     margin: 0px;
 }
 
+body .ace_scrollbar{
+    display: none;
+}
+
+
 /**************************************************************************
 CSS For the Scrollbar
 **************************************************************************/
@@ -479,6 +484,7 @@ CSS For the Scrollbar
 .tankPanel:hover::-webkit-scrollbar-thumb{
     background-color: #800022;
 }
+
 
 body::-webkit-scrollbar{
 	width:16px;
