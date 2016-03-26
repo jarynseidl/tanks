@@ -418,7 +418,8 @@ public class Game {
 	}
 
 	public void setCompFailureResponse(String compFailureResponse) {
-		this.compFailureResponse = compFailureResponse;
+		if(this.compFailureResponse.equals(""))
+			this.compFailureResponse = compFailureResponse;
 	}
 
 	public String getRunFailureResponse() {
@@ -426,7 +427,8 @@ public class Game {
 	}
 
 	public void setRunFailureResponse(String runFailureResponse) {
-		this.runFailureResponse = runFailureResponse;
+		if(this.runFailureResponse.equals(""))
+			this.runFailureResponse = runFailureResponse;
 	}
     
     
