@@ -235,6 +235,37 @@ CSS For the TankCard Class
 /**************************************************************************
 CSS For the GameCard Class
 **************************************************************************/
+td.gameGrid {
+    position: relative;
+}
+td.gameGrid img.placeholder {
+    position: relative;
+    z-index: -1000;
+}
+td.gameGrid img.display {
+    /* gridSize x 3 */
+    width: 63px;
+    height: 63px;
+
+    position: absolute;
+    /* gridSize */
+    top: -21px;
+    left: -21px;
+
+    z-index: 100;
+}
+
+/*
+ * Make Lasers go under the tanks
+td.gameGrid img.display[src*=Laser] {
+    z-index: 99;
+}
+*/
+
+
+/**************************************************************************
+CSS For the GameCard Class
+**************************************************************************/
 .gameCard {
     color: #E1E1E1;
     display: inline-flex;

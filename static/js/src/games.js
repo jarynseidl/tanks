@@ -157,11 +157,12 @@ var Games = React.createClass({
 	},
     watchGame: function (e) {
         e.preventDefault();
+        console.log(this.currGame);
 	  	if (this.currGame !== null) {
 	  		console.log(this.currGame);
-	  		if(this.currGame.ready==true)
+	  		if(this.currGame.ready===false)
             	this.props.history.pushState(null, '/games/' + this.currGame._id + '/watch');
-    	} else {
+        } else {
             console.error("Can't watch game...currGame is null");
         }
     },

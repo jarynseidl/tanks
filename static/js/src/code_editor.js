@@ -47,9 +47,10 @@ var Editor = React.createClass({
         })
 
     },
-    saveTank: function() {
+    saveTank: function(e) {
+        e.preventDefault();
         var self = this;
-        self.tankName = this.refs.tankName.value.trim();
+        self.tankName = this.state.name;
         self.tankCode = ace.edit(this.refs.editor).getValue();
         if(self.tankName == "" || self.tankName == undefined){
             alert("Whoops. Looks like you forgot to fill out everything.");
@@ -101,13 +102,18 @@ var Editor = React.createClass({
             borderRadius: '5px'
         };
         return (
-            <form onSubmit={this.saveTank}>
-                <div className="row">
-                    <div className="col-md-12 editor-box">
-                        <div className="input-group" ref="editor" style={editorStyle}></div>
+            <div>
+                <form onSubmit={this.saveTank}>
+                    <input ref="tankName" type="text" className="form-control" onChange={this.handleChange} value={this.state.name}/>
+                    <button type="submit" className="btn btn-primary btn-block">Save</button>
+                    <div className="row">
+                        <div className="col-md-12 editor-box">
+                            <div className="input-group" ref="editor" style={editorStyle}>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         )
     }
 });
