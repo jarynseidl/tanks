@@ -24,9 +24,7 @@ public class MoveTracker {
         if (curTurn >= listOfMoves.size()) {
             listOfMoves.add(new HashMap<Integer, TANK_MOVES>());
         }
-        if(move == TANK_MOVES.DIE){
-            diedLastTurn = true;
-        }
+
         listOfMoves.get(curTurn).put(tank, move);
 
         if(diedLastTurn == true){
@@ -34,6 +32,10 @@ public class MoveTracker {
             listOfMoves.remove(curTurn - 1 );
             listOfMoves.add(moves);
             diedLastTurn = false;
+        }
+
+        if(move == TANK_MOVES.DIE){
+            diedLastTurn = true;
         }
     }
 
