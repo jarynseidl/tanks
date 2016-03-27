@@ -93,7 +93,10 @@ CSS For the TankCard Class
     /*height: 8em;*/
     background-color: #595656;
     box-shadow: 1px 1px 1px #000000;
-    margin: 10px 0;
+    /*margin: 10px 0;*/
+    /*border-radius: 3px;*/
+    margin: 13px 3px;
+    padding: 10px;
 }
 
 .tankCard.card-selected {
@@ -370,7 +373,7 @@ CSS For the Watch Games
     padding:0 15px;
     overflow-y:auto;
 
-    
+
 }
 
 .textStuff {
