@@ -249,8 +249,7 @@ var Armory = React.createClass({
         var user_tanks = this.props.tanks;
         var editTank = this.editTank;
         var editorWrapperStyle = {
-            height: '45em',
-            padding: '10px'
+            height: '45em'
         };
         console.log("Render Armory")
         return (

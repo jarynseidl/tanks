@@ -29,8 +29,8 @@ var Test = require('./test.js');
 var App = React.createClass({
   render: function() {
       var navBarStyle = {
-          backgroundColor: '#262626',
-          borderColor: '#262626'
+          backgroundColor: '#444444',
+          borderColor: '#444444'
       };
 
       var fontStyle = {
@@ -56,14 +56,9 @@ var App = React.createClass({
 
                     <div className="collapse navbar-collapse" id="bs-navbar" >
                       <ul className="nav navbar-nav">
-
-                        {Auth.loggedIn() ? <li><Link to="games" style={fontStyle}>Join a Fight</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="your_games" style={fontStyle}>Watch My Games</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="user" style={fontStyle}>Armory</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="sandbox" style={fontStyle}>Sandbox</Link></li> : null }
+                        {Auth.loggedIn() ? <li><Link to="games_main" style={fontStyle}>Games</Link></li> : null }
                         {Auth.loggedIn() ? <li><Link to="manual" style={fontStyle}>Manual</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="games_main">Games</Link></li> : null }
-                        {Auth.loggedIn() ? <li><Link to="manual">Manual</Link></li> : null }
                       </ul>
                       <ul className="nav navbar-nav navbar-right">
                         {Auth.loggedIn() ? <li><Logout history={this.props.history} /></li> : null }

@@ -1,5 +1,9 @@
 var Auth = require('./authentication.js');
 var TankCard = require('./tank_card.js');
+var Link = require('react-router').Link
+var TankList = require('./tanks.js').List; 
+var classNames = require('classnames');
+
 
 //In the sandbox, pass into the centerpiece as a variable anything you need in there
 //In the TankLists, pass in the list of tanks you want from the state. Like other tanks or your tanks
@@ -38,6 +42,7 @@ var Games = React.createClass({
                 user_tanks: result["tanks"],
             });
         }.bind(this));
+
     },
     loadOpenGamesFromServer: function() {
         if(this.isMounted()){
@@ -48,12 +53,13 @@ var Games = React.createClass({
             }.bind(this));
         }
     },
-    joinGame: function(tank,e) {
-    	console.log("in joinGame");
-    	e.preventDefault();
+    joinGame: function(tank) {
+    	console.log(tank);
+//    	e.preventDefault();
     	var game = this.currGame;
+        console.log(game);
     	if(game==null) return;
-    	if(game.tanks.length==4)return;
+    	if(game.tankIds.length>=4)return;
         var url = "/api/games/" + game._id + "/tanks";
         $.ajax({
             url: url,
@@ -130,6 +136,36 @@ var Games = React.createClass({
         $("#" + modalName).modal('show');
         console.log("after");
     },
+    openDialog: function(game, e){
+	  //e.preventDefault();
+	  var currGame = this.currGame;
+	  if(currGame != null){
+		  var $dialog = $('<div>').dialog({
+			title: currGame.name,
+			width: 400,
+			close: function(e){
+			  React.unmountComponentAtNode($dialog);
+			  $( this ).remove();
+			}
+		  });
+		  var closeDialog = function(e){
+			//e.preventDefault();
+			$dialog.dialog('close');
+		  }
+		  React.render(<DialogContent closeDialog={closeDialog} />, $dialog[0]);
+	  }
+	},
+    watchGame: function (e) {
+        e.preventDefault();
+        console.log(this.currGame);
+	  	if (this.currGame !== null) {
+	  		console.log(this.currGame);
+	  		if(this.currGame.ready===false)
+            	this.props.history.pushState(null, '/games/' + this.currGame._id + '/watch');
+        } else {
+            console.error("Can't watch game...currGame is null");
+        }
+    },
     currGame: null,
     show_open: true,
     gamesButton: "Past Games",
@@ -139,31 +175,57 @@ var Games = React.createClass({
         return (
             <div>
             	<div className="row">
-				 	<div className="col-md-3 tankPanel dark-background">
-				 		<h1 className="white">Your Tanks</h1>
-				 		<div>
-				        	<TankList joinGame={this.joinGame} tanks={user_tanks} joinGame={this.joinGame}/>
+				 	<div className="col-md-3 armory-top flex">
+                        <button type="submit" className="btn btn-primary button">Prebuilt Tanks</button>
+				 		<div className="tankPanel dark-background">
+				        	<TankList
+                                tanks={user_tanks}
+                                selectedTank={this.state.selectedTank}
+                                onSelectTank={this.joinGame}
+                                deleteTank={this.deleteTank}
+                                uploadFile={this.uploadFile}
+                            />
 				        </div>
 				 	</div>
 				 	<div className="col-md-6">
 				 		<CenterPiece game={this.currGame}/>
 				 	</div>
-				 	<div className="col-md-3  dark-background">
-				 		<h1 className="white">Games</h1>
-				 		<div className="horizontal gameButtons">
+
+				 	<div className="col-md-3  armory-top flex">
+                        <div className="horizontal gameButtons">
                             <button type="submit" className="btn btn-primary button" onClick={this.toggleGames}>{this.gamesButton}</button>
-							{this.show_open ? null : <button type="submit" className="btn btn-primary button">Battle!</button>}
+                            {this.show_open ? null : <button type="submit" onClick={this.watchGame} className="btn btn-primary button">Battle!</button>}
                             {this.show_open ? <button type="submit" className="btn btn-primary button" onClick={this.showModal.bind(this, "CreateGameModal")}>Create Game</button> : null}
                             <CreateGameModal createGame={this.createGame} modalName="CreateGameModal"/>
                         </div>
-				 		<div className="tankPanel">
-				 			{this.show_open ? <GameList selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.open_games} />
-				 			: <GameList selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.your_games} /> }
-				 		</div>
-				 	</div>
+    				 	<div className="tankPanel dark-background">
+    			 			{this.show_open ? <GameList currGame={this.currGame} selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.open_games} />
+    			 			: <GameList currGame={this.currGame} selectGame={this.selectGame} deleteGame={this.deleteGame} deletable={!this.show_open} games={this.state.your_games} /> }
+				 	    </div>
+                    </div>
+
 				</div>
           	</div>
         )}
+});
+
+//Creates the dialog for the battle button
+var DialogContent = React.createClass({
+  handleSubmit: function(){
+    console.log('Play game?');
+  },
+  restart: function(){
+  	console.log('Replay');
+  },
+  render: function(){
+    return(
+    <div>
+      <form>
+        <button onClick = {this.restart}>Restart</button>
+      </form>
+    </div>
+    )
+  }
 });
 
 var CenterPiece = React.createClass({
@@ -173,9 +235,10 @@ var CenterPiece = React.createClass({
         	if(game != null)
         		tanks = game.tankIds;
         return (
-        	<div>
+        	<div className="centerpiece">
         		{game==null ? <h1>No game selected.</h1> : null}
-        		{game!=null && tanks.length==0 ? <h1>No players in game</h1> : null}
+                {game!=null ? <h1>{game.name}</h1> : null}
+        		{game!=null && tanks.length==0 ? <h1>Click a tank to join game.</h1> : null}
             	{game!=null ? <div className="centerPanel">
 	            	{tanks.map(function(tank,i) {
 	                       return <PlayerPanel tank={tank} key={i}/>;
@@ -204,11 +267,12 @@ var GameList = React.createClass({
 		var selectGame = this.props.selectGame;
 		var deletable = this.props.deletable;
 		var deleteGame = this.props.deleteGame;
+        var currGame = this.props.currGame;
         return (
         	<div>
             	<div>
 	            	{games.map(function(game,i) {
-	                       return <GameCard selectGame={selectGame} deleteGame={deleteGame} deletable={deletable} game={game} key={i}/>;
+	                       return <GameCard selectGame={selectGame} currGame={currGame} deleteGame={deleteGame} deletable={deletable} game={game} key={i}/>;
 	                })}
 	            </div>
             </div>
@@ -217,7 +281,7 @@ var GameList = React.createClass({
 
 //You'll need two tank lists. One for your tanks, another for the other tanks
 //Look at the tanklist in tanks.js to see how to do a for each tank in tanks
-var TankList = React.createClass({
+/*var TankList = React.createClass({
     render: function() {
 		var tanks = this.props.tanks;
 		var joinGame = this.props.joinGame;
@@ -225,41 +289,58 @@ var TankList = React.createClass({
         	<div>
             	<div>
 	            	{tanks.map(function(tank,i) {
-	                       return <TankCard onSelectTank={joinGame} tank={tank} key={i} inArmory={false} joinGame={joinGame}/>;
+	                       return <TankCard tank={tank} key={i} inArmory={false} joinGame={joinGame}/>;
 	                }.bind(this))}
 	            </div>
             </div>
         )}
 });
-
+*/
 var GameCard = React.createClass({
     render: function() {
+        console.log("Rendering Game Card")
     	var game = this.props.game;
     	var users = game.users;
     	var selectGame = this.props.selectGame;
     	var deletable = this.props.deletable;
+        var currGame = this.props.currGame;
+        var isSelected = false;
+        if(currGame!=null)
+            if(currGame._id == game._id)
+                isSelected = true;
+        var cardStyle = {
+            backgroundColor: 'white',
+            borderRadius: '3px',
+            margin: '10px 0',
+            padding: '0 10px'
+        }
+
+        var cardClass = classNames({
+            'row': true,
+            'tankCard': true,
+            'card-selected': isSelected
+        });
+        // console.log(this.props.tank)
+
         return (
-                <div onClick={selectGame.bind(null,game)}>
-                	<div className="gameCard">
-						<div className="gameCardSection1">
-							<h4>{game.name}</h4>
-							<div>
-								<img className="gameImage" src="../../images/screenshot1.png"></img>
-							</div>
-						</div>
-						<div className="players">
-							{users.map(function(user,i) {
-			                    return <span>P{i+1}: {user.userName}</span>;
-			                })}
-						</div>
-						{deletable ? 
-							<div onClick={this.props.deleteGame.bind(null,game)}>
-								<span className="glyphicon glyphicon-remove red remove"></span>
-							</div> : null}
-					</div>
+            <div className={cardClass} onClick={selectGame.bind(null,game)}>
+              <div className="gameCard">
+                    <div className="gameCardSection1">
+                        <h4>{game.name}</h4>
+                        <div>
+                            <img className="gameImage" src="../../images/screenshot1.png"></img>
+                        </div>
+                    </div>
+                    <div className="players">
+                        {users.map(function(user,i) {
+                            return <span>P{i+1}: {user.userName}</span>;
+                        })}
+                    </div>
                 </div>
+                    
+            </div>
         );
-    }
+      }
 });
 
 var CreateGameModal = React.createClass({

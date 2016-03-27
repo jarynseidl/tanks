@@ -11,7 +11,6 @@ import game.util.Coordinate;
 import game.util.MoveTracker;
 import game.util.TANK_MOVES;
 import game.util.LogItem;
-import javafx.scene.layout.Priority;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
@@ -105,15 +104,14 @@ public class Game {
                         case SHOOT:
 
                             //if tank has shot, fall to reload
-                            t.addActionPoints(t.getShootCost());
                             if(!t.getShot()){
+                                t.addActionPoints(t.getShootCost());
                                 shoot(t);
                                 t.setShot(true);
                                 break;
                             }
                             move = TANK_MOVES.RELOAD;
 
-                            break;
                         case RELOAD:
                             t.addActionPoints(t.getReloadCost());
                             t.setShot(false);
@@ -137,6 +135,10 @@ public class Game {
                             t.addActionPoints(t.getMoveCost());
                             move = move(t, false, move);
                             break;
+                        case DIE:
+                            t.takeDamage(t.getHealth());
+                            this.removeTank(t);
+                            break;
                     }
                     moves.addMove(t.getAlias(), move);
                 } catch (Exception e) {
@@ -151,7 +153,9 @@ public class Game {
             moves.newTurn();
             currentTurn += 1;
 
-            tankQueue.add(t);
+            if (t.getHealth() > 0) {
+                tankQueue.add(t);
+            }
 
             if (currentTurn > maxTurns) {
             	for (Tank tt: tanks){
@@ -263,93 +267,85 @@ public class Game {
         }
     }
 
+    // Remove the dead tank from the queue, list, and board
+    private void removeTank(Tank t) {
+        tankQueue.remove(t);
+        tanks.remove(t);
+        board.setElementAt(t.getCoord().getX(), t.getCoord().getY(), null);
+    }
+
+    // Handles the event of a bullet at coordinates (xCoord, yCoord) fired from firingTank
+    // Returns true if the bullet hit something, false if it didn't
+    private boolean handleBulletAtCoordinates(int xCoord, int yCoord, Tank firingTank) {
+        BoardElement elem = board.getElementAt(xCoord, yCoord);
+
+        // Check if the bullet hit another tank
+        boolean b1 = elem != null;
+        boolean b2 = (elem instanceof Tank);
+        boolean b3 = (Tank) elem != firingTank;
+        if (elem != null && (elem instanceof Tank) && (Tank) elem != firingTank) {
+
+            ((Tank) elem).takeDamage(firingTank.getDamage());
+
+            // Check if it killed the tank
+            if (((Tank) elem).getHealth() <= 0) {
+
+                this.removeTank((Tank) elem);
+
+                // Add a move for the dying tank
+                this.moves.addMove(((Tank) elem).getAlias(), TANK_MOVES.DIE);
+                this.moves.newTurn();
+
+                // Give credit for the kill
+                for (User user : users) {
+                    if (user.getTankID() == firingTank.getTankID()) {
+                        user.incTanksKilled();
+                        firingTank.incTanksKilled(statsPassword);
+                    }
+                }
+
+                // Give credit for the lost game to the dead tank
+                ((Tank) elem).incGamesLost(statsPassword);
+            }
+            return true;
+
+        // Check if the bullet is in the original square of the tank that fired it
+        // Don't count this as a collision
+        } else if (elem != null && (elem instanceof Tank) && (Tank) elem == firingTank) {
+            return false;
+
+        // Check if the bullet hit a wall or other kind of object
+        } else {
+            return elem != null;
+        }
+    }
+
     private void shoot(Tank t) {
         switch (t.getDir()) {
             case N:
-                for (int i = t.getCoord().getY(); i >= 0; i--) {
-                    BoardElement elem = board.getElementAt(t.getCoord().getX(), i);
-                    if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
-                        ((Tank) elem).takeDamage(t.getDamage());
-                        if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost(statsPassword);
-                            //if dead remove from queue
-                            tankQueue.remove((Tank) elem);
-                            tanks.remove(elem);
-                            board.setElementAt(t.getCoord().getX(), i, null);
-                            for (int f = 0; f < users.size(); f++) {
-                                if (users.get(f).getTankID() == t.getTankID()) {
-                                    users.get(f).incTanksKilled();
-                                    t.incTanksKilled(statsPassword);
-                                }
-                            }
-                        }
-
+                for (int y = t.getCoord().getY(); y >= 0; y--) {
+                    if (this.handleBulletAtCoordinates(t.getCoord().getX(), y, t)) {
                         break;
                     }
                 }
                 break;
             case E:
-                for (int i = t.getCoord().getX(); i < board.getSize(); i++) {
-                    BoardElement elem = board.getElementAt(i, t.getCoord().getY());
-                    if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
-                        ((Tank) elem).takeDamage(t.getDamage());
-                        if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost(statsPassword);
-                            //if dead remove from queue
-                            tankQueue.remove((Tank) elem);
-                            tanks.remove(elem);
-                            board.setElementAt(i, t.getCoord().getY(), null);
-                            for (int f = 0; f < users.size(); f++) {
-                                if (users.get(f).getTankID() == t.getTankID()) {
-                                    users.get(f).incTanksKilled();
-                                    t.incTanksKilled(statsPassword);
-                                }
-                            }
-                        }
+                for (int x = t.getCoord().getX(); x < board.getSize(); x++) {
+                    if (this.handleBulletAtCoordinates(x, t.getCoord().getY(), t)) {
                         break;
                     }
                 }
                 break;
             case S:
-                for (int i = t.getCoord().getY(); i < board.getSize(); i++) {
-                    BoardElement elem = board.getElementAt(t.getCoord().getX(), i);
-                    if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
-                        ((Tank) elem).takeDamage(t.getDamage());
-                        if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost(statsPassword);
-                            //if dead remove from queue
-                            tankQueue.remove((Tank) elem);
-                            tanks.remove(elem);
-                            board.setElementAt(t.getCoord().getX(), i, null);
-                            for (int f = 0; f < users.size(); f++) {
-                                if (users.get(f).getTankID() == t.getTankID()) {
-                                    users.get(f).incTanksKilled();
-                                    t.incTanksKilled(statsPassword);
-                                }
-                            }
-                        }
+                for (int y = t.getCoord().getY(); y < board.getSize(); y++) {
+                    if (this.handleBulletAtCoordinates(t.getCoord().getX(), y, t)) {
                         break;
                     }
                 }
                 break;
             case W:
-                for (int i = t.getCoord().getX(); i >= 0; i--) {
-                    BoardElement elem = board.getElementAt(i, t.getCoord().getY());
-                    if (elem != null && !(elem instanceof Wall) && (Tank) elem != t) {
-                        ((Tank) elem).takeDamage(t.getDamage());
-                        if (((Tank) elem).getHealth() == 0) {
-                        	((Tank) elem).incGamesLost(statsPassword);
-                            //if dead remove from queue
-                            tankQueue.remove((Tank) elem);
-                            tanks.remove(elem);
-                            board.setElementAt(i, t.getCoord().getY(), null);
-                            for (int f = 0; f < users.size(); f++) {
-                                if (users.get(f).getTankID() == t.getTankID()) {
-                                    users.get(f).incTanksKilled();
-                                    t.incTanksKilled(statsPassword);
-                                }
-                            }
-                        }
+                for (int x = t.getCoord().getX(); x >= 0; x--) {
+                    if (this.handleBulletAtCoordinates(x, t.getCoord().getY(), t)) {
                         break;
                     }
                 }
@@ -422,7 +418,8 @@ public class Game {
 	}
 
 	public void setCompFailureResponse(String compFailureResponse) {
-		this.compFailureResponse = compFailureResponse;
+		if(this.compFailureResponse.equals(""))
+			this.compFailureResponse = compFailureResponse;
 	}
 
 	public String getRunFailureResponse() {
@@ -430,7 +427,8 @@ public class Game {
 	}
 
 	public void setRunFailureResponse(String runFailureResponse) {
-		this.runFailureResponse = runFailureResponse;
+		if(this.runFailureResponse.equals(""))
+			this.runFailureResponse = runFailureResponse;
 	}
     
     
