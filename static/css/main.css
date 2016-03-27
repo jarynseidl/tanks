@@ -97,11 +97,16 @@ CSS For the TankCard Class
     color: #E1E1E1;
 }
 
+.tankCard .tank-info.tank-info-btm {
+    height: 5em;
+}
+
 .tankCard .tank-stats {
     height: 100%;
     color: #E1E1E1;
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 .tankCard .tank-info .tank-image {
@@ -154,7 +159,7 @@ CSS For the TankCard Class
 .tankCard.card-selected .edit-btn {
     height: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: flex-end;
 }
 
