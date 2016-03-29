@@ -58,7 +58,6 @@ public class Game {
     
     //this is where to get the error codes from
     private String compFailureResponse = "";
-    private String runFailureResponse = "";
     
     //this is the passphrase used to prevent the user from updating their own wins, coordinates, or dir
     private String statsPassword = "poekillsKylo33#d@rn";
@@ -141,6 +140,7 @@ public class Game {
                             break;
                     }
                     moves.addMove(t.getAlias(), move);
+                    moves.addErr("");
                 } catch (Exception e) {
                     // Send the output of e to the user for debugging
                     String tName = t.getTankName();
@@ -149,7 +149,7 @@ public class Game {
                     String eStk = e.getStackTrace()[0].toString();
                     String eErr = eCls + (eMsg == null ? "" : (": " + eMsg)) + "\n\tat " + eStk;
                     String rErr = "Runtime error!\nTank: " + tName + ", Turn: " + currentTurn + "\n" + eErr;
-                    this.setRunFailureResponse(rErr);
+                    moves.addErr(rErr);
                     System.err.format(rErr);
 
                     moves.addMove(t.getAlias(), TANK_MOVES.WAIT);
@@ -299,7 +299,9 @@ public class Game {
 
                 // Add a move for the dying tank
                 this.moves.addMove(((Tank) elem).getAlias(), TANK_MOVES.DIE);
+                this.moves.addErr("");
                 this.moves.newTurn();
+                currentTurn += 1;
 
                 // Give credit for the kill
                 for (User user : users) {
@@ -426,16 +428,6 @@ public class Game {
 		if(this.compFailureResponse.equals(""))
 			this.compFailureResponse = compFailureResponse;
 	}
-
-	public String getRunFailureResponse() {
-		return runFailureResponse;
-	}
-
-	public void setRunFailureResponse(String runFailureResponse) {
-		if(this.runFailureResponse.equals(""))
-			this.runFailureResponse = runFailureResponse;
-	}
-    
     
 }
 

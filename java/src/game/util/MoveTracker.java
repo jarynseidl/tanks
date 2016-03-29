@@ -11,11 +11,13 @@ import java.util.Map;
  */
 public class MoveTracker {
     private List<Map<Integer, TANK_MOVES>> listOfMoves;
+    private List<String> listOfErrs;
     private int curTurn;
 
     public MoveTracker() {
         curTurn = 0;
         listOfMoves = new ArrayList<Map<Integer, TANK_MOVES>>();
+        listOfErrs = new ArrayList<String>();
     }
 
     public void addMove(int tank, TANK_MOVES move) {
@@ -25,8 +27,16 @@ public class MoveTracker {
         listOfMoves.get(curTurn).put(tank, move);
     }
 
+    public void addErr(String err){
+        listOfErrs.add(err);
+    }
+
     public List<Map<Integer, TANK_MOVES>> getMoves() {
         return listOfMoves;
+    }
+
+    public List<String> getErrs(){
+        return listOfErrs;
     }
 
     public void newTurn() {
