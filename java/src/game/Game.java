@@ -143,10 +143,15 @@ public class Game {
                     moves.addMove(t.getAlias(), move);
                 } catch (Exception e) {
                     // Send the output of e to the user for debugging
-                	System.err.format("Runtime error");
-                	this.setRunFailureResponse(e.getMessage());
-                	e.printStackTrace();
-                	
+                    String tName = t.getTankName();
+                    String eCls = e.getClass().toString().substring(6);
+                    String eMsg = e.getMessage();
+                    String eStk = e.getStackTrace()[0].toString();
+                    String eErr = eCls + (eMsg == null ? "" : (": " + eMsg)) + "\n\tat " + eStk;
+                    String rErr = "Runtime error!\nTank: " + tName + ", Turn: " + currentTurn + "\n" + eErr;
+                    this.setRunFailureResponse(rErr);
+                    System.err.format(rErr);
+
                     moves.addMove(t.getAlias(), TANK_MOVES.WAIT);
                 }
             //}
