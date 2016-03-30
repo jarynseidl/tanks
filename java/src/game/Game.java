@@ -57,7 +57,7 @@ public class Game {
     private PriorityQueue<Tank> tankQueue;
     
     //this is where to get the error codes from
-    private String compFailureResponse = "";
+    private List<String> compErrs = new ArrayList<String>();
     
     //this is the passphrase used to prevent the user from updating their own wins, coordinates, or dir
     private String statsPassword = "poekillsKylo33#d@rn";
@@ -150,7 +150,7 @@ public class Game {
                     String eErr = eCls + (eMsg == null ? "" : (": " + eMsg)) + "\n\tat " + eStk;
                     String rErr = "Runtime error!\nTank: " + tName + ", Turn: " + currentTurn + "\n" + eErr;
                     moves.addErr(rErr);
-                    System.err.format(rErr);
+                    System.err.println(rErr);
 
                     moves.addMove(t.getAlias(), TANK_MOVES.WAIT);
                 }
@@ -420,13 +420,12 @@ public class Game {
         this.status = status;
     }
 
-	public String getCompFailureResponse() {
-		return compFailureResponse;
+	public List<String> getCompErrs() {
+		return compErrs;
 	}
 
-	public void setCompFailureResponse(String compFailureResponse) {
-		if(this.compFailureResponse.equals(""))
-			this.compFailureResponse = compFailureResponse;
+	public void addCompErr(String compErr) {
+		compErrs.add(compErr);
 	}
     
 }
